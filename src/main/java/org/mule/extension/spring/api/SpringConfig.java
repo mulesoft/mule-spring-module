@@ -24,7 +24,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Implementation of {@link ObjectProvider} that gives access to object to the mule artifact from an spring
+ * {@link org.springframework.context.ApplicationContext}.
+ * 
+ * @since 1.0
+ */
 public class SpringConfig extends AbstractAnnotatedObject implements ObjectProvider, Disposable {
+
+  private static final String AUTOWIRED_POST_PROCESSOR_OBJECT_KEY = "_autowiredPostProcessor";
+  private static final String ARTIFACT_PROPERTY_PLACEHOLDER_OBJECT_KEY = "_artifactPropertyPlaceholder";
 
   private Map<String, String> parameters;
   private ClassPathXmlApplicationContext applicationContext;
@@ -43,7 +52,7 @@ public class SpringConfig extends AbstractAnnotatedObject implements ObjectProvi
       protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
         DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
         defaultListableBeanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
-        defaultListableBeanFactory.registerBeanDefinition("_autowiredPostProcessor", BeanDefinitionBuilder
+        defaultListableBeanFactory.registerBeanDefinition(AUTOWIRED_POST_PROCESSOR_OBJECT_KEY, BeanDefinitionBuilder
             .rootBeanDefinition(AutowiredAnnotationBeanPostProcessor.class).getBeanDefinition());
         registerArtifactObjects(beanFactory, configuration);
         registerArtifactPropertiesPlaceholder(defaultListableBeanFactory, configuration);
@@ -56,7 +65,7 @@ public class SpringConfig extends AbstractAnnotatedObject implements ObjectProvi
     BeanDefinitionBuilder artifactPlaceholderBeanDefinitionBuilder =
         BeanDefinitionBuilder.rootBeanDefinition(ArtifactPropertiesPlaceholder.class)
             .addConstructorArgValue(configuration.getConfigurationProperties());
-    defaultListableBeanFactory.registerBeanDefinition("_artifactPropertyPlaceholder",
+    defaultListableBeanFactory.registerBeanDefinition(ARTIFACT_PROPERTY_PLACEHOLDER_OBJECT_KEY,
                                                       artifactPlaceholderBeanDefinitionBuilder.getBeanDefinition());
   }
 

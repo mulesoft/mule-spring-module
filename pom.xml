@@ -21,13 +21,14 @@
         <muleAppPluginsMavenPluginVersion>1.0.0-SNAPSHOT</muleAppPluginsMavenPluginVersion>
         <javaxInjectVersion>1</javaxInjectVersion>
         <muleVersion>4.0.0-SNAPSHOT</muleVersion>
+        <springVersion>4.1.9.RELEASE</springVersion>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>4.1.9.RELEASE</version>
+            <version>${springVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
