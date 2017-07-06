@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.mulesoft.org/schema/mule/spring"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:mule="http://www.mulesoft.org/schema/mule/core"
+            targetNamespace="http://www.mulesoft.org/schema/mule/spring"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.mulesoft.org/schema/mule/core"
+                schemaLocation="http://www.mulesoft.org/schema/mule/core/current/mule.xsd"/>
+
+
+    <xsd:element name="config" type="configType" substitutionGroup="mule:abstract-shared-extension"/>
+
+    <xsd:complexType name="configType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Spring module configuration elements to define the XML files to be used for the spring context creation.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="mule:abstractExtensionType">
+                <xsd:attribute name="files" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            Comma separated list of spring configuration files to create the spring context.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="name" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            The name of the conf
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+</xsd:schema>
