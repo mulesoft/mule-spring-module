@@ -4,25 +4,25 @@
     <parent>
         <groupId>org.mule.extensions</groupId>
         <artifactId>mule-core-modules-parent</artifactId>
-        <version>1.0.0-rc.aquaman-TEST-RELEASE</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.mule.modules</groupId>
     <artifactId>mule-spring-module</artifactId>
     <name>Spring Module</name>
     <packaging>mule-extension</packaging>
-    <version>1.0.0-rc.aquaman-TEST-RELEASE</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <commonsCodecVersion>1.9</commonsCodecVersion>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
         <javaxInjectVersion>1</javaxInjectVersion>
         <springVersion>4.1.9.RELEASE</springVersion>
+        
+        <muleAppPluginsMavenPluginVersion>1.0.0-SNAPSHOT</muleAppPluginsMavenPluginVersion>
 
-        <muleAppPluginsMavenPluginVersion>1.0.0-rc.aquaman-TEST-RELEASE</muleAppPluginsMavenPluginVersion>
-
-        <muleHttpConnectorVersion>0.9.0-rc.aquaman-TEST-RELEASE</muleHttpConnectorVersion>
-        <muleSocketsConnectorVersion>0.9.0-rc.aquaman-TEST-RELEASE</muleSocketsConnectorVersion>
+        <muleHttpConnectorVersion>1.0.0-SNAPSHOT</muleHttpConnectorVersion>
+        <muleSocketsConnectorVersion>1.0.0-SNAPSHOT</muleSocketsConnectorVersion>
     </properties>
 
     <dependencies>
