@@ -14,14 +14,15 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <httpConnectorVersion>1.0.0-SNAPSHOT</httpConnectorVersion>
-        <socketsConnectorVersion>1.0.0-SNAPSHOT</socketsConnectorVersion>
         <commonsCodecVersion>1.9</commonsCodecVersion>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
-        <muleAppPluginsMavenPluginVersion>1.0.0-SNAPSHOT</muleAppPluginsMavenPluginVersion>
         <javaxInjectVersion>1</javaxInjectVersion>
-        <muleVersion>4.0.0-SNAPSHOT</muleVersion>
         <springVersion>4.1.9.RELEASE</springVersion>
+
+        <muleAppPluginsMavenPluginVersion>1.0.0-SNAPSHOT</muleAppPluginsMavenPluginVersion>
+
+        <muleHttpConnectorVersion>1.0.0-SNAPSHOT</muleHttpConnectorVersion>
+        <muleSocketsConnectorVersion>1.0.0-SNAPSHOT</muleSocketsConnectorVersion>
     </properties>
 
     <dependencies>
@@ -40,7 +41,7 @@
         <dependency>
             <groupId>org.mule.tests</groupId>
             <artifactId>mule-tests-functional</artifactId>
-            <version>${muleVersion}</version>
+            <version>${mule.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
