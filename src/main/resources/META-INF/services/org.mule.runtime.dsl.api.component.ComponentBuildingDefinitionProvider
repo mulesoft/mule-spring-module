@@ -1,1 +1,2 @@
-org.mule.extension.spring.api.config.SpringComponentBuildingDefinitionProvider
+org.mule.extension.spring.internal.config.SpringComponentBuildingDefinitionProvider
+org.mule.extension.spring.internal.config.MuleSecurityComponentBuildingDefinitionProvider

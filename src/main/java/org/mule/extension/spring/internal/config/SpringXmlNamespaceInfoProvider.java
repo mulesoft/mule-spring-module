@@ -4,13 +4,14 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.extension.spring.api.config;
+package org.mule.extension.spring.internal.config;
+
+import static java.util.Arrays.asList;
 
 import org.mule.runtime.dsl.api.xml.XmlNamespaceInfo;
 import org.mule.runtime.dsl.api.xml.XmlNamespaceInfoProvider;
 
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * XML information for the spring module.
@@ -20,10 +21,11 @@ import java.util.Collections;
 public class SpringXmlNamespaceInfoProvider implements XmlNamespaceInfoProvider {
 
   public static final String SPRING_NAMESPACE = "spring";
+  public static final String MULE_SS_NAMESPACE = "mule-ss";
 
   @Override
   public Collection<XmlNamespaceInfo> getXmlNamespacesInfo() {
-    return Collections.singleton(new XmlNamespaceInfo() {
+    return asList(new XmlNamespaceInfo() {
 
       @Override
       public String getNamespaceUriPrefix() {
@@ -33,6 +35,17 @@ public class SpringXmlNamespaceInfoProvider implements XmlNamespaceInfoProvider 
       @Override
       public String getNamespace() {
         return SPRING_NAMESPACE;
+      }
+    }, new XmlNamespaceInfo() {
+
+      @Override
+      public String getNamespaceUriPrefix() {
+        return "http://www.mulesoft.org/schema/mule/spring-security/";
+      }
+
+      @Override
+      public String getNamespace() {
+        return MULE_SS_NAMESPACE;
       }
     });
   }

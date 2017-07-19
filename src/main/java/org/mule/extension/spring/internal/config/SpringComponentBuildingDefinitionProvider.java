@@ -4,15 +4,17 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.extension.spring.api.config;
+package org.mule.extension.spring.internal.config;
 
+import static java.util.Collections.singletonList;
+import static org.mule.extension.spring.internal.config.SpringXmlNamespaceInfoProvider.SPRING_NAMESPACE;
 import static org.mule.runtime.dsl.api.component.AttributeDefinition.Builder.fromUndefinedSimpleAttributes;
 import static org.mule.runtime.dsl.api.component.TypeDefinition.fromType;
+
 import org.mule.extension.spring.api.SpringConfig;
 import org.mule.runtime.dsl.api.component.ComponentBuildingDefinition;
 import org.mule.runtime.dsl.api.component.ComponentBuildingDefinitionProvider;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,8 +29,8 @@ public class SpringComponentBuildingDefinitionProvider implements ComponentBuild
 
   @Override
   public List<ComponentBuildingDefinition> getComponentBuildingDefinitions() {
-    return Collections.singletonList(new ComponentBuildingDefinition.Builder()
-        .withNamespace(SpringXmlNamespaceInfoProvider.SPRING_NAMESPACE)
+    return singletonList(new ComponentBuildingDefinition.Builder()
+        .withNamespace(SPRING_NAMESPACE)
         .withIdentifier("config")
         .withTypeDefinition(fromType(SpringConfig.class))
         .withSetterParameterDefinition("parameters", fromUndefinedSimpleAttributes().build())
