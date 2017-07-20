@@ -25,6 +25,7 @@
         "org.springframework.security.authentication.encoding",
         "org.springframework.security.config",
         "org.springframework.security.core",
+        "org.springframework.security.core.authority",
         "org.springframework.security.core.authority.mapping",
         "org.springframework.security.core.context",
         "org.springframework.security.core.userdetails",
@@ -34,10 +35,7 @@
       "exportedResources":[
         "META-INF/mule.schemas",
         "META-INF/mule-spring.xsd",
-        "META-INF/mule-spring-security.xsd",
-        "META-INF/mule.custom-property-editors",
-        "META-INF/spring.handlers",
-        "META-INF/spring.schemas"
+        "META-INF/mule.custom-property-editors"
       ]
     }
   }

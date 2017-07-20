@@ -6,7 +6,7 @@
  */
 package org.mule.extension.spring.internal.config;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
 
 import org.mule.runtime.dsl.api.xml.XmlNamespaceInfo;
 import org.mule.runtime.dsl.api.xml.XmlNamespaceInfoProvider;
@@ -21,11 +21,10 @@ import java.util.Collection;
 public class SpringXmlNamespaceInfoProvider implements XmlNamespaceInfoProvider {
 
   public static final String SPRING_NAMESPACE = "spring";
-  public static final String MULE_SS_NAMESPACE = "mule-ss";
 
   @Override
   public Collection<XmlNamespaceInfo> getXmlNamespacesInfo() {
-    return asList(new XmlNamespaceInfo() {
+    return singleton(new XmlNamespaceInfo() {
 
       @Override
       public String getNamespaceUriPrefix() {
@@ -35,17 +34,6 @@ public class SpringXmlNamespaceInfoProvider implements XmlNamespaceInfoProvider 
       @Override
       public String getNamespace() {
         return SPRING_NAMESPACE;
-      }
-    }, new XmlNamespaceInfo() {
-
-      @Override
-      public String getNamespaceUriPrefix() {
-        return "http://www.mulesoft.org/schema/mule/spring-security/";
-      }
-
-      @Override
-      public String getNamespace() {
-        return MULE_SS_NAMESPACE;
       }
     });
   }

@@ -23,6 +23,7 @@
         <muleVersion>4.0.0-SNAPSHOT</muleVersion>
         <springVersion>4.1.9.RELEASE</springVersion>
         <springSecurityVersion>4.0.4.RELEASE</springSecurityVersion>
+        <guavaVersion>18.0</guavaVersion>
     </properties>
 
     <dependencies>
@@ -58,6 +59,12 @@
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>${javaxInjectVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guavaVersion}</version>
         </dependency>
 
         <dependency>
@@ -103,6 +110,12 @@
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${springSecurityVersion}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
