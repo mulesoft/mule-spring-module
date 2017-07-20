@@ -6,6 +6,8 @@
  */
 package org.mule.extension.spring.internal.security;
 
+import static java.util.Collections.unmodifiableMap;
+
 import org.mule.runtime.api.security.Authentication;
 
 import java.util.Map;
@@ -26,17 +28,7 @@ public class SpringAuthenticationAdapter implements Authentication {
   public SpringAuthenticationAdapter(org.springframework.security.core.Authentication authentication,
                                      Map<String, Object> properties) {
     this.delegate = authentication;
-    this.properties = properties;
-  }
-
-  @Override
-  public void setAuthenticated(boolean authenticated) {
-    delegate.setAuthenticated(authenticated);
-  }
-
-  @Override
-  public boolean isAuthenticated() {
-    return delegate.isAuthenticated();
+    this.properties = properties != null ? unmodifiableMap(properties) : null;
   }
 
   public org.springframework.security.core.GrantedAuthority[] getAuthorities() {
@@ -81,7 +73,7 @@ public class SpringAuthenticationAdapter implements Authentication {
   }
 
   @Override
-  public void setProperties(Map<String, Object> properties) {
-    this.properties = properties;
+  public SpringAuthenticationAdapter setProperties(Map<String, Object> properties) {
+    return new SpringAuthenticationAdapter(delegate, properties);
   }
 }
