@@ -4,13 +4,14 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.extension.spring.api.config;
+package org.mule.extension.spring.internal.config;
+
+import static java.util.Collections.singleton;
 
 import org.mule.runtime.dsl.api.xml.XmlNamespaceInfo;
 import org.mule.runtime.dsl.api.xml.XmlNamespaceInfoProvider;
 
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * XML information for the spring module.
@@ -23,7 +24,7 @@ public class SpringXmlNamespaceInfoProvider implements XmlNamespaceInfoProvider 
 
   @Override
   public Collection<XmlNamespaceInfo> getXmlNamespacesInfo() {
-    return Collections.singleton(new XmlNamespaceInfo() {
+    return singleton(new XmlNamespaceInfo() {
 
       @Override
       public String getNamespaceUriPrefix() {

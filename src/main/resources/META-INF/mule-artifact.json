@@ -16,11 +16,26 @@
     "id":"maven",
     "attributes":{
       "exportedPackages":[
-        "org.mule.extension.spring.api.config"
+        "org.mule.extension.spring.api",
+        "org.mule.extension.spring.api.security",
+        "org.mule.extension.spring.api.spring.editors",
+        "org.springframework.security.access.method",
+        "org.springframework.security.authentication",
+        "org.springframework.security.authentication.dao",
+        "org.springframework.security.authentication.encoding",
+        "org.springframework.security.config",
+        "org.springframework.security.core",
+        "org.springframework.security.core.authority",
+        "org.springframework.security.core.authority.mapping",
+        "org.springframework.security.core.context",
+        "org.springframework.security.core.userdetails",
+        "org.springframework.security.core.userdetails.jdbc",
+        "org.springframework.security.provisioning"
       ],
       "exportedResources":[
         "META-INF/mule.schemas",
-        "META-INF/mule-spring.xsd"
+        "META-INF/mule-spring.xsd",
+        "META-INF/mule.custom-property-editors"
       ]
     }
   }
