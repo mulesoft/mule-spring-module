@@ -29,8 +29,6 @@ import org.mule.runtime.dsl.api.component.ComponentBuildingDefinition;
 import org.mule.runtime.dsl.api.component.ComponentBuildingDefinition.Builder;
 import org.mule.runtime.dsl.api.component.ComponentBuildingDefinitionProvider;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +46,15 @@ public class SpringComponentBuildingDefinitionProvider implements ComponentBuild
 
   @Override
   public List<ComponentBuildingDefinition> getComponentBuildingDefinitions() {
-    return ImmutableList.<ComponentBuildingDefinition>builder()
-        .add(baseDefinition.withIdentifier("config")
-            .withTypeDefinition(fromType(SpringConfig.class))
-            .withSetterParameterDefinition("parameters", fromUndefinedSimpleAttributes().build())
-            .build())
-        .addAll(getSpringSecurityDefinitions())
-        .build();
+    final List<ComponentBuildingDefinition> definitions = new ArrayList<>();
+
+    definitions.add(baseDefinition.withIdentifier("config")
+        .withTypeDefinition(fromType(SpringConfig.class))
+        .withSetterParameterDefinition("parameters", fromUndefinedSimpleAttributes().build())
+        .build());
+    definitions.addAll(getSpringSecurityDefinitions());
+
+    return definitions;
   }
 
   private List<ComponentBuildingDefinition> getSpringSecurityDefinitions() {
