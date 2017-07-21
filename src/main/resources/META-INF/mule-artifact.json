@@ -35,7 +35,8 @@
       "exportedResources":[
         "META-INF/mule.schemas",
         "META-INF/mule-spring.xsd",
-        "META-INF/mule.custom-property-editors"
+        "META-INF/mule.custom-property-editors",
+        "META-INF/org/mule/runtime/core/i18n/spring-security-messages.properties"
       ]
     }
   }
