@@ -7,7 +7,7 @@
 package org.mule.extension.spring.internal.config.dsl;
 
 import org.mule.extension.spring.internal.security.AuthorizationFilter;
-import org.mule.runtime.config.spring.privileged.dsl.processor.AbstractSecurityFilterObjectFactory;
+import org.mule.runtime.config.spring.api.dsl.processor.AbstractSecurityFilterObjectFactory;
 
 import java.util.Collection;
 
