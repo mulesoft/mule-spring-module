@@ -6,21 +6,24 @@
  */
 package org.mule.extension.spring.api;
 
+import static java.util.Collections.emptyMap;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
+import static org.mule.runtime.api.util.Preconditions.checkState;
+import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
+import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.meta.AbstractAnnotatedObject;
+import org.mule.runtime.api.meta.NamedObject;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
-import org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,57 +33,36 @@ import java.util.Optional;
  * 
  * @since 1.0
  */
-public class SpringConfig extends AbstractAnnotatedObject implements ObjectProvider, Disposable {
+public class SpringConfig extends AbstractAnnotatedObject
+    implements ConfigurableObjectProvider, Disposable, NamedObject {
 
-  private static final String AUTOWIRED_POST_PROCESSOR_OBJECT_KEY = "_autowiredPostProcessor";
-  private static final String ARTIFACT_PROPERTY_PLACEHOLDER_OBJECT_KEY = "_artifactPropertyPlaceholder";
-
+  private static final String SPRING_NAMESPACE_PREFIX = "org.springframework";
   private Map<String, String> parameters;
   private ClassPathXmlApplicationContext applicationContext;
+  private String name;
+  private ObjectProviderConfiguration configuration;
 
   public void setParameters(Map<String, String> parameters) {
+    this.name = parameters.get("name");
+    checkState(this.name != null, "spring config name cannot be null");
     this.parameters = parameters;
   }
 
   @Override
   public void configure(ObjectProviderConfiguration configuration) {
+    this.configuration = configuration;
     String files = parameters.get("files");
     String[] configFiles = files.split(",");
-    applicationContext = new ClassPathXmlApplicationContext(configFiles) {
-
-      @Override
-      protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
-        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
-        defaultListableBeanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
-        defaultListableBeanFactory.registerBeanDefinition(AUTOWIRED_POST_PROCESSOR_OBJECT_KEY, BeanDefinitionBuilder
-            .rootBeanDefinition(AutowiredAnnotationBeanPostProcessor.class).getBeanDefinition());
-        registerArtifactObjects(beanFactory, configuration);
-        registerArtifactPropertiesPlaceholder(defaultListableBeanFactory, configuration);
-      }
-    };
+    applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
+    applicationContext.refresh();
   }
 
-  private void registerArtifactPropertiesPlaceholder(DefaultListableBeanFactory defaultListableBeanFactory,
-                                                     ObjectProviderConfiguration configuration) {
-    BeanDefinitionBuilder artifactPlaceholderBeanDefinitionBuilder =
-        BeanDefinitionBuilder.rootBeanDefinition(ArtifactPropertiesPlaceholder.class)
-            .addConstructorArgValue(configuration.getConfigurationProperties());
-    defaultListableBeanFactory.registerBeanDefinition(ARTIFACT_PROPERTY_PLACEHOLDER_OBJECT_KEY,
-                                                      artifactPlaceholderBeanDefinitionBuilder.getBeanDefinition());
-  }
-
-  private void registerArtifactObjects(ConfigurableListableBeanFactory beanFactory,
-                                       ObjectProviderConfiguration configuration) {
-    configuration.getArtifactObjects().entrySet().stream()
-        .forEach(entry -> {
-          beanFactory.registerSingleton(entry.getKey(), entry.getValue());
-        });
-  }
 
   @Override
   public Optional<Object> getObject(String name) {
     try {
-      return of(applicationContext.getBean(name));
+      Object bean = applicationContext.getBean(name);
+      return of(bean);
     } catch (NoSuchBeanDefinitionException e) {
       return empty();
     }
@@ -89,10 +71,20 @@ public class SpringConfig extends AbstractAnnotatedObject implements ObjectProvi
   @Override
   public Optional<Object> getObjectByType(Class<?> objectType) {
     try {
-      return of(applicationContext.getBean(objectType));
+      if (isSpringInternalType(objectType)) {
+        return empty();
+      }
+      Object bean = applicationContext.getBean(objectType);
+      return of(bean);
     } catch (NoSuchBeanDefinitionException e) {
       return empty();
     }
+  }
+
+  private boolean isSpringInternalType(Class<?> objectType) {
+    return objectType.getClass().getName().startsWith(SPRING_NAMESPACE_PREFIX)
+        || BeanPostProcessor.class.isAssignableFrom(objectType)
+        || BeanFactoryPostProcessor.class.isAssignableFrom(objectType);
   }
 
   @Override
@@ -105,8 +97,20 @@ public class SpringConfig extends AbstractAnnotatedObject implements ObjectProvi
   }
 
   @Override
+  public boolean containsObject(String name) {
+    return applicationContext.containsBean(name);
+  }
+
+  @Override
   public <T> Map<String, T> getObjectsByType(Class<T> type) {
-    return applicationContext.getBeansOfType(type);
+    if (isSpringInternalType(type)) {
+      return emptyMap();
+    }
+    Map<String, T> filteredBeans = new HashMap<>();
+    Map<String, T> beans = applicationContext.getBeansOfType(type);
+    beans.entrySet().stream().filter(entry -> applicationContext.getBeanFactory().containsBeanDefinition(entry.getKey()))
+        .forEach(entry -> filteredBeans.put(entry.getKey(), entry.getValue()));
+    return filteredBeans;
   }
 
   @Override
@@ -115,5 +119,10 @@ public class SpringConfig extends AbstractAnnotatedObject implements ObjectProvi
       applicationContext.destroy();
       applicationContext = null;
     }
+  }
+
+  @Override
+  public String getName() {
+    return name;
   }
 }

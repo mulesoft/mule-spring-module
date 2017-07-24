@@ -8,7 +8,8 @@ package org.mule.extension.spring.test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import org.mule.functional.junit4.MuleArtifactFunctionalTestCase;
+import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
+import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import org.mule.runtime.api.artifact.ServiceDiscoverer;
 import org.mule.tck.junit4.rule.SystemProperty;
 import org.mule.tck.testmodels.fruit.Orange;
@@ -20,7 +21,12 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-public class PlaceholderTestCase extends MuleArtifactFunctionalTestCase {
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+
+@Feature(SPRING_EXTENSION)
+@Story(ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY)
+public class PlaceholderTestCase extends SpringPluginFunctionalTestCase {
 
   @Rule
   public SystemProperty systemProperty = new SystemProperty("systemProperty", "3.0");
