@@ -18,10 +18,9 @@ import static org.mule.runtime.dsl.api.component.TypeDefinition.fromType;
 
 import org.mule.extension.spring.api.SpringConfig;
 import org.mule.extension.spring.api.security.SpringProviderAdapter;
-import org.mule.extension.spring.internal.config.dsl.AuthorizationFilterObjectFactory;
+import org.mule.extension.spring.internal.security.AuthorizationFilter;
 import org.mule.extension.spring.internal.security.SecurityProperty;
 import org.mule.runtime.core.api.MuleContext;
-import org.mule.runtime.core.api.processor.Processor;
 import org.mule.runtime.core.api.security.MuleSecurityManagerConfigurator;
 import org.mule.runtime.core.api.security.SecurityManager;
 import org.mule.runtime.core.api.security.SecurityProvider;
@@ -81,8 +80,7 @@ public class SpringComponentBuildingDefinitionProvider implements ComponentBuild
             .withConstructorParameterDefinition(fromSimpleParameter("value").build()).build());
 
     componentBuildingDefinitions.add(baseDefinition.withIdentifier("authorization-filter")
-        .withTypeDefinition(fromType(Processor.class))
-        .withObjectFactoryType(AuthorizationFilterObjectFactory.class)
+        .withTypeDefinition(fromType(AuthorizationFilter.class))
         .withConstructorParameterDefinition(fromSimpleParameter("requiredAuthorities",
                                                                 (value) -> asList(((String) value).split(",")).stream()
                                                                     .map(String::trim).collect(toList())).build())
