@@ -11,7 +11,7 @@
     <artifactId>mule-spring-module</artifactId>
     <name>Spring Module</name>
     <packaging>mule-extension</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.9.0-rc.batman</version>
 
     <properties>
         <commonsCodecVersion>1.9</commonsCodecVersion>
