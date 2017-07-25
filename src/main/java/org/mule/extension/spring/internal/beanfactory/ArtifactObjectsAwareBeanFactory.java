@@ -30,6 +30,7 @@ import java.util.Set;
 public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory {
 
   private final ObjectProvider artifactObjectProvider;
+  private boolean destroying = false;
 
   public ArtifactObjectsAwareBeanFactory(BeanFactory parentBeanFactory, ObjectProvider artifactObjectProvider) {
     super(parentBeanFactory);
@@ -76,13 +77,17 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
    */
   @Override
   protected <T> T doGetBean(String name, Class<T> requiredType, Object[] args, boolean typeCheckOnly) throws BeansException {
-    if (containsBeanDefinition(name)) {
+    if (containsBeanDefinition(name) || !artifactObjectProvider.containsObject(name) || destroying) {
       return super.doGetBean(name, requiredType, args, typeCheckOnly);
-    } else if (artifactObjectProvider.containsObject(name)) {
-      return (T) artifactObjectProvider.getObject(name).get();
     } else {
-      // Lets spring fail as it would if we the artifact object provider does not contain the object.
-      return super.doGetBean(name, requiredType, args, typeCheckOnly);
+      return (T) artifactObjectProvider.getObject(name).get();
     }
+  }
+
+  /**
+   * Marks the beginning of destroy of the context.
+   */
+  public void markForDestroy() {
+    this.destroying = true;
   }
 }

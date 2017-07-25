@@ -36,6 +36,7 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
   private static final String ARTIFACT_PROPERTY_PLACEHOLDER_OBJECT_KEY = "_artifactPropertyPlaceholder";
 
   private ObjectProviderConfiguration configuration;
+  private ArtifactObjectsAwareBeanFactory beanFactory;
 
   public SpringModuleApplicationContext(String[] configLocations, ObjectProviderConfiguration configuration)
       throws BeansException {
@@ -45,7 +46,8 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
 
   @Override
   protected DefaultListableBeanFactory createBeanFactory() {
-    return new ArtifactObjectsAwareBeanFactory(getInternalParentBeanFactory(), configuration.getArtifactObjectProvider());
+    beanFactory = new ArtifactObjectsAwareBeanFactory(getInternalParentBeanFactory(), configuration.getArtifactObjectProvider());
+    return beanFactory;
   }
 
   @Override
@@ -70,4 +72,8 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
                                                       artifactPlaceholderBeanDefinitionBuilder.getBeanDefinition());
   }
 
+  @Override
+  public void destroy() {
+    beanFactory.markForDestroy();
+  }
 }

@@ -61,6 +61,9 @@ public class SpringConfig extends AbstractAnnotatedObject
   @Override
   public Optional<Object> getObject(String name) {
     try {
+      if (!applicationContext.containsBean(name)) {
+        return empty();
+      }
       Object bean = applicationContext.getBean(name);
       return of(bean);
     } catch (NoSuchBeanDefinitionException e) {
