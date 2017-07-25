@@ -24,6 +24,7 @@
 
         <muleHttpConnectorVersion>1.0.0-SNAPSHOT</muleHttpConnectorVersion>
         <muleSocketsConnectorVersion>1.0.0-SNAPSHOT</muleSocketsConnectorVersion>
+        <weaveVersion>2.0.0-SNAPSHOT</weaveVersion>
     </properties>
 
     <dependencies>
@@ -149,6 +150,13 @@
             <artifactId>mule-service-scheduler</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <classifier>mule-service</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.services</groupId>
+            <artifactId>mule-service-weave</artifactId>
+            <classifier>mule-service</classifier>
+            <version>${weaveVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

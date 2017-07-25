@@ -10,20 +10,26 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
+import static org.mule.extension.spring.AllureConstants.SpringFeature.SpringSecurityStory.SPRING_SECURITY_STORY;
 import static org.slf4j.LoggerFactory.getLogger;
-
 import org.mule.extension.spring.api.security.SpringProviderAdapter;
-import org.mule.functional.junit4.MuleArtifactFunctionalTestCase;
+import org.mule.extension.spring.test.SpringPluginFunctionalTestCase;
 import org.mule.runtime.config.spring.CustomSecurityProviderDelegate;
 import org.mule.runtime.core.api.security.SecurityManager;
 import org.mule.runtime.core.api.security.SecurityProvider;
 
-import java.util.Iterator;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 
-public class SpringSecurityNamespaceHandlerTestCase extends MuleArtifactFunctionalTestCase {
+import java.util.Iterator;
+
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+
+@Feature(SPRING_EXTENSION)
+@Story(SPRING_SECURITY_STORY)
+public class SpringSecurityNamespaceHandlerTestCase extends SpringPluginFunctionalTestCase {
 
   private static final Logger LOGGER = getLogger(SpringSecurityNamespaceHandlerTestCase.class);
 
