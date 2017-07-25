@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.LifecycleAndDependencyInjectionStory.LIFECYCLE_AND_DEPENDENCY_INJECTION;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import org.mule.extension.spring.test.SpringPluginFunctionalTestCase;
-import org.mule.runtime.api.artifact.ServiceDiscoverer;
+import org.mule.runtime.api.artifact.Registry;
 import org.mule.tck.junit4.rule.SystemProperty;
 
 import org.junit.ClassRule;
@@ -43,7 +43,7 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
   public static SystemProperty springConfig = new SystemProperty("spring.config.file", "spring-lifecycle-config.xml");
 
   @Inject
-  private ServiceDiscoverer serviceDiscoverer;
+  private Registry registry;
 
   @Override
   protected String getConfigFile() {
@@ -53,7 +53,7 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
   @Description("Tests that injection and init/dispose methods are executed in the right order and that mule lifecycle methods are not honored.")
   @Test
   public void verifyLifecycleAndInjectionOrder() {
-    SpringLifecycleObject lifecycleObject = serviceDiscoverer.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
+    SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
     muleContext.dispose();
     assertThat(lifecycleObject.getCallsBeforeInit(),
                containsInAnyOrder("serviceDiscoverer", "configurationComponentLocator"));
@@ -64,14 +64,14 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
   @Test
   public void springObjectDependingOnArtifactObject() {
     SpringLifecycleObject lifecycleObject =
-        serviceDiscoverer.<SpringLifecycleObject>lookupByName("springObjectReferencingArtifactObject").get();
+        registry.<SpringLifecycleObject>lookupByName("springObjectReferencingArtifactObject").get();
     assertThat(lifecycleObject.getReference(), instanceOf(AtomicInteger.class));
   }
 
   @Test
   public void springObjectDependingOnArtifactObjectThatDependsOnSpringObject() {
     SpringLifecycleObject lifecycleObject =
-        serviceDiscoverer.<SpringLifecycleObject>lookupByName("artifactObjectThatDependsOnSpringObject").get();
+        registry.<SpringLifecycleObject>lookupByName("artifactObjectThatDependsOnSpringObject").get();
     assertThat(lifecycleObject.getReference(), instanceOf(SpringLifecycleObject.class));
     SpringLifecycleObject springObjectThatDependsOnArtifactObject = (SpringLifecycleObject) lifecycleObject.getReference();
     assertThat(springObjectThatDependsOnArtifactObject.getReference(), instanceOf(AtomicInteger.class));
@@ -79,14 +79,14 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
 
   @Test
   public void springObjectWithOptionalInjectionAttributes() {
-    SpringLifecycleObject lifecycleObject = serviceDiscoverer.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
+    SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
     assertThat(lifecycleObject.getNonExistentOptionalObject().isPresent(), is(false));
     assertThat(lifecycleObject.getExistentExistentOptionalObject().isPresent(), is(true));
   }
 
   @Test
   public void springObjectProviderAttribute() {
-    SpringLifecycleObject lifecycleObject = serviceDiscoverer.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
+    SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
     Provider<AtomicLong> objectProvider = lifecycleObject.getObjectProvider();
     assertThat(objectProvider, notNullValue());
     assertThat(objectProvider.get(), is(not(objectProvider.get())));
@@ -94,21 +94,21 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
 
   @Test
   public void springObjectCollectionAttribute() {
-    SpringLifecycleObject lifecycleObject = serviceDiscoverer.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
+    SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
     Collection<Number> numberObjects = lifecycleObject.getNumberObjects();
     assertThat(numberObjects, hasSize(3));
   }
 
   @Test
   public void springObjectCollectionEmptyAttribute() {
-    SpringLifecycleObject lifecycleObject = serviceDiscoverer.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
+    SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
     Collection<Number> atomicDoubles = lifecycleObject.getOptionalNumberObjects();
     assertThat(atomicDoubles, hasSize(3));
   }
 
   @Test
   public void springObjectCollectionOptionalEmptyAttribute() {
-    SpringLifecycleObject lifecycleObject = serviceDiscoverer.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
+    SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
     Collection<AtomicDouble> atomicDoubles = lifecycleObject.getAtomicDoubles();
     assertThat(atomicDoubles, hasSize(0));
   }
