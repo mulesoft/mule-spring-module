@@ -75,5 +75,6 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
   @Override
   public void destroy() {
     beanFactory.markForDestroy();
+    super.destroy();
   }
 }

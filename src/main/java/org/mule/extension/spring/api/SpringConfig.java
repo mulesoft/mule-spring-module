@@ -23,9 +23,9 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link ObjectProvider} that gives access to object to the mule artifact from an spring
@@ -64,8 +64,7 @@ public class SpringConfig extends AbstractAnnotatedObject
       if (!applicationContext.containsBean(name)) {
         return empty();
       }
-      Object bean = applicationContext.getBean(name);
-      return of(bean);
+      return of(applicationContext.getBean(name));
     } catch (NoSuchBeanDefinitionException e) {
       return empty();
     }
@@ -77,8 +76,7 @@ public class SpringConfig extends AbstractAnnotatedObject
       if (isSpringInternalType(objectType)) {
         return empty();
       }
-      Object bean = applicationContext.getBean(objectType);
-      return of(bean);
+      return of(applicationContext.getBean(objectType));
     } catch (NoSuchBeanDefinitionException e) {
       return empty();
     }
@@ -109,11 +107,9 @@ public class SpringConfig extends AbstractAnnotatedObject
     if (isSpringInternalType(type)) {
       return emptyMap();
     }
-    Map<String, T> filteredBeans = new HashMap<>();
     Map<String, T> beans = applicationContext.getBeansOfType(type);
-    beans.entrySet().stream().filter(entry -> applicationContext.getBeanFactory().containsBeanDefinition(entry.getKey()))
-        .forEach(entry -> filteredBeans.put(entry.getKey(), entry.getValue()));
-    return filteredBeans;
+    return beans.entrySet().stream().filter(entry -> applicationContext.getBeanFactory().containsBeanDefinition(entry.getKey()))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   @Override

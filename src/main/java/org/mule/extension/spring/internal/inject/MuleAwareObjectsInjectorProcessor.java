@@ -14,7 +14,7 @@ import org.springframework.core.annotation.AnnotationAttributes;
  * Specialization of {@link AutowiredAnnotationBeanPostProcessor} which acts as the default injection post processors to be used
  * in Mule.
  *
- * @since 3.7.0
+ * @since 1.0
  */
 public class MuleAwareObjectsInjectorProcessor extends AutowiredAnnotationBeanPostProcessor {
 
