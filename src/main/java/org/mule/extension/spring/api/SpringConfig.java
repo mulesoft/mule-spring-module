@@ -9,6 +9,7 @@ package org.mule.extension.spring.api;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
+import static java.util.stream.Collectors.toMap;
 import static org.mule.runtime.api.util.Preconditions.checkState;
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
 import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
@@ -25,7 +26,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link ObjectProvider} that gives access to object to the mule artifact from an spring
@@ -109,7 +109,7 @@ public class SpringConfig extends AbstractAnnotatedObject
     }
     Map<String, T> beans = applicationContext.getBeansOfType(type);
     return beans.entrySet().stream().filter(entry -> applicationContext.getBeanFactory().containsBeanDefinition(entry.getKey()))
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   @Override
