@@ -77,7 +77,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
    */
   @Override
   protected <T> T doGetBean(String name, Class<T> requiredType, Object[] args, boolean typeCheckOnly) throws BeansException {
-    if (containsBeanDefinition(name) || !artifactObjectProvider.containsObject(name) || destroying) {
+    if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
       return super.doGetBean(name, requiredType, args, typeCheckOnly);
     } else {
       return (T) artifactObjectProvider.getObject(name).get();
