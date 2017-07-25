@@ -68,16 +68,12 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
     final ConfigurationDeclarer springConfig = extensionDeclarer.withConfig("config")
         .describedAs("Spring configuration that allows to define a set of spring XML files and create an application context with objects to be used in the mule artifact.");
     ParameterGroupDeclarer parameterGroupDeclarer = springConfig.onDefaultParameterGroup();
-    parameterGroupDeclarer.withRequiredParameter("name").withExpressionSupport(NOT_SUPPORTED)
-        .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
     parameterGroupDeclarer.withRequiredParameter("files").withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
 
     // spring-security
     final ConfigurationDeclarer securityManager = extensionDeclarer.withConfig("security-manager")
         .describedAs("This is the security provider type that is used to configure spring-security related functionality.");
-    securityManager.onDefaultParameterGroup().withRequiredParameter("name").withExpressionSupport(NOT_SUPPORTED)
-        .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
     securityManager.onDefaultParameterGroup().withRequiredParameter("providers").withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeBuilder.arrayType().of(typeLoader.load(SecurityProvider.class)).build());
 
