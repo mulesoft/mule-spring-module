@@ -16,11 +16,11 @@ import org.mule.runtime.api.security.SecurityException;
 import org.mule.runtime.api.security.SecurityProviderNotFoundException;
 import org.mule.runtime.api.security.UnknownAuthenticationTypeException;
 import org.mule.runtime.core.api.Event;
+import org.mule.runtime.core.api.security.AbstractSecurityFilter;
 import org.mule.runtime.core.api.security.CryptoFailureException;
 import org.mule.runtime.core.api.security.EncryptionStrategyNotFoundException;
 import org.mule.runtime.core.api.security.NotPermittedException;
 import org.mule.runtime.core.api.security.UnauthorisedException;
-import org.mule.runtime.core.api.security.AbstractSecurityFilter;
 
 import java.text.MessageFormat;
 import java.util.Arrays;

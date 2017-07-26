@@ -7,22 +7,22 @@
 package org.mule.extension.spring.test.security;
 
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SpringSecurityStory.SPRING_SECURITY_STORY;
 import static org.slf4j.LoggerFactory.getLogger;
+
 import org.mule.extension.spring.api.security.SpringProviderAdapter;
 import org.mule.extension.spring.test.SpringPluginFunctionalTestCase;
-import org.mule.runtime.config.spring.CustomSecurityProviderDelegate;
 import org.mule.runtime.core.api.security.SecurityManager;
 import org.mule.runtime.core.api.security.SecurityProvider;
 
+import java.util.Iterator;
+
 import org.junit.Test;
 import org.slf4j.Logger;
-
-import java.util.Iterator;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -64,7 +64,8 @@ public class SpringSecurityNamespaceHandlerTestCase extends SpringPluginFunction
 
   protected void knownProperties(SecurityProvider provider) {
     assertNotNull(provider);
-    assertTrue(provider instanceof CustomSecurityProviderDelegate);
+    assertThat(provider.getClass().getName(),
+               is("org.mule.runtime.config.spring.internal.CustomSecurityProviderDelegate"));
   }
 
 }
