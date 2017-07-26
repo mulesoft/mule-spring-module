@@ -7,7 +7,7 @@
 package org.mule.extension.spring.test.lifecycle;
 
 import static java.util.Collections.emptyList;
-import org.mule.runtime.api.artifact.ServiceDiscoverer;
+import org.mule.runtime.api.artifact.Registry;
 import org.mule.runtime.api.component.location.ConfigurationComponentLocator;
 import org.mule.runtime.api.exception.MuleException;
 import org.mule.runtime.api.lifecycle.InitialisationException;
@@ -32,7 +32,7 @@ public class SpringLifecycleObject implements Lifecycle {
   private List<String> injectCalls = new ArrayList<>();
   private List<String> callsBeforeInit = new ArrayList<>();
 
-  private ServiceDiscoverer serviceDiscoverer;
+  private Registry registry;
   private ConfigurationComponentLocator configurationComponentLocator;
   private Object reference;
 
@@ -85,9 +85,9 @@ public class SpringLifecycleObject implements Lifecycle {
   }
 
   @Inject
-  public void setServiceDiscoverer(ServiceDiscoverer serviceDiscoverer) {
+  public void setRegistry(Registry registry) {
     injectCalls.add("serviceDiscoverer");
-    this.serviceDiscoverer = serviceDiscoverer;
+    this.registry = registry;
   }
 
   @Inject

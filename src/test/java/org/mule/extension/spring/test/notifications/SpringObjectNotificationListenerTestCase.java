@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import org.mule.extension.spring.test.SpringPluginFunctionalTestCase;
-import org.mule.runtime.api.artifact.ServiceDiscoverer;
+import org.mule.runtime.api.artifact.Registry;
 
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ import io.qameta.allure.Story;
 public class SpringObjectNotificationListenerTestCase extends SpringPluginFunctionalTestCase {
 
   @Inject
-  private ServiceDiscoverer serviceDiscoverer;
+  private Registry registry;
 
   @Override
   protected String getConfigFile() {
@@ -35,7 +35,7 @@ public class SpringObjectNotificationListenerTestCase extends SpringPluginFuncti
   @Test
   public void notificationObjectsInSpringConfigArePickUpByMule() throws Exception {
     flowRunner("flow").run();
-    assertThat(serviceDiscoverer.lookup(ProcessorNotificationStore.class).get().getNotifications(), hasSize(2));
+    assertThat(registry.lookup(ProcessorNotificationStore.class).get().getNotifications(), hasSize(2));
   }
 
   @Override
