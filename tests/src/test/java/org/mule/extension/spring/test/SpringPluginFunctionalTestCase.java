@@ -9,6 +9,6 @@ package org.mule.extension.spring.test;
 import org.mule.functional.junit4.MuleArtifactFunctionalTestCase;
 import org.mule.test.runner.ArtifactClassLoaderRunnerConfig;
 
-@ArtifactClassLoaderRunnerConfig(sharedRuntimeLibs = {"org.springframework.security:spring-security-config"})
+@ArtifactClassLoaderRunnerConfig
 public abstract class SpringPluginFunctionalTestCase extends MuleArtifactFunctionalTestCase {
 }

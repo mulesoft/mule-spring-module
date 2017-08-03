@@ -11,6 +11,8 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toMap;
 import static org.mule.runtime.api.util.Preconditions.checkState;
+import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
+
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
 import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProvider;
@@ -19,13 +21,13 @@ import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.meta.AbstractAnnotatedObject;
 import org.mule.runtime.api.meta.NamedObject;
 
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Implementation of {@link ObjectProvider} that gives access to object to the mule artifact from an spring
@@ -40,7 +42,6 @@ public class SpringConfig extends AbstractAnnotatedObject
   private Map<String, String> parameters;
   private ClassPathXmlApplicationContext applicationContext;
   private String name;
-  private ObjectProviderConfiguration configuration;
 
   public void setParameters(Map<String, String> parameters) {
     this.name = parameters.get("name");
@@ -50,11 +51,13 @@ public class SpringConfig extends AbstractAnnotatedObject
 
   @Override
   public void configure(ObjectProviderConfiguration configuration) {
-    this.configuration = configuration;
     String files = parameters.get("files");
     String[] configFiles = files.split(",");
-    applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
-    applicationContext.refresh();
+
+    withContextClassLoader(SpringConfig.class.getClassLoader(), () -> {
+      applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
+      applicationContext.refresh();
+    });
   }
 
 

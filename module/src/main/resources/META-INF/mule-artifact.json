@@ -15,6 +15,7 @@
   "classLoaderModelLoaderDescriptor":{
     "id":"maven",
     "attributes":{
+	  "_comment": "TODO MULE-13203 remove exported spring-security packages",
       "exportedPackages":[
         "org.mule.extension.spring.api",
         "org.mule.extension.spring.api.security",

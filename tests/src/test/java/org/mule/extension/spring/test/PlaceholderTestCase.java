@@ -8,18 +8,19 @@ package org.mule.extension.spring.test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
+import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
+
 import org.mule.runtime.api.artifact.Registry;
 import org.mule.tck.junit4.rule.SystemProperty;
 import org.mule.tck.testmodels.fruit.Orange;
 
-import org.junit.Rule;
-import org.junit.Test;
-
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import org.junit.Rule;
+import org.junit.Test;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
