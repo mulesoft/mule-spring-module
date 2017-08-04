@@ -11,7 +11,6 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toMap;
 import static org.mule.runtime.api.util.Preconditions.checkState;
-import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
 
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
 import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
@@ -54,10 +53,8 @@ public class SpringConfig extends AbstractAnnotatedObject
     String files = parameters.get("files");
     String[] configFiles = files.split(",");
 
-    withContextClassLoader(SpringConfig.class.getClassLoader(), () -> {
-      applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
-      applicationContext.refresh();
-    });
+    applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
+    applicationContext.refresh();
   }
 
 
