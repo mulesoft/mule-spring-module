@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -49,6 +50,7 @@ public class PlaceholderTestCase extends SpringPluginFunctionalTestCase {
   }
 
   @Test
+  @Ignore("MULE-13203: This test tries lo load a spring class from its bean definitions file")
   public void springCanUseItOwnPlaceholder() throws Exception {
     Orange orange = registry.<Orange>lookupByName("orange").get();
     Map mapProperties = orange.getMapProperties();
