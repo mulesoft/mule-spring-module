@@ -30,6 +30,11 @@
             <artifactId>spring-context</artifactId>
             <version>${springVersion}</version>
         </dependency>
+        <dependency>
+            <groupId>com.mulesoft.mule.modules</groupId>
+            <artifactId>mule-compatibility-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>

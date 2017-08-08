@@ -7,7 +7,8 @@
 package org.mule.extension.spring.internal.security;
 
 import org.mule.runtime.api.security.Authentication;
-import org.mule.runtime.core.api.security.SecurityContext;
+
+import com.mulesoft.mule.compatibility.core.security.CompatibilitySecurityContext;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -18,14 +19,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * 
  * @since 1.0
  */
-public class SpringSecurityContext implements SecurityContext {
+public class SpringSecurityContext implements CompatibilitySecurityContext {
 
   private org.springframework.security.core.context.SecurityContext delegate;
   private SpringAuthenticationAdapter authentication;
 
-  public SpringSecurityContext(org.springframework.security.core.context.SecurityContext delegate)
-
-  {
+  public SpringSecurityContext(org.springframework.security.core.context.SecurityContext delegate) {
     this.delegate = delegate;
     SecurityContextHolder.setContext(this.delegate);
   }
