@@ -9,13 +9,12 @@ package org.mule.extension.spring.internal.security;
 import static org.mule.extension.spring.internal.config.i18n.SpringSecurityMessages.noGrantedAuthority;
 import static org.mule.extension.spring.internal.config.i18n.SpringSecurityMessages.springAuthenticationRequired;
 import static org.mule.runtime.core.api.config.i18n.CoreMessages.authNoCredentials;
-
 import org.mule.runtime.api.lifecycle.InitialisationException;
 import org.mule.runtime.api.security.Authentication;
 import org.mule.runtime.api.security.SecurityException;
 import org.mule.runtime.api.security.SecurityProviderNotFoundException;
 import org.mule.runtime.api.security.UnknownAuthenticationTypeException;
-import org.mule.runtime.core.api.Event;
+import org.mule.runtime.core.api.InternalEvent;
 import org.mule.runtime.core.api.security.AbstractSecurityFilter;
 import org.mule.runtime.core.api.security.CryptoFailureException;
 import org.mule.runtime.core.api.security.EncryptionStrategyNotFoundException;
@@ -44,7 +43,8 @@ public class AuthorizationFilter extends AbstractSecurityFilter {
   }
 
   @Override
-  public Event doFilter(Event event) throws SecurityException, UnknownAuthenticationTypeException, CryptoFailureException,
+  public InternalEvent doFilter(InternalEvent event)
+      throws SecurityException, UnknownAuthenticationTypeException, CryptoFailureException,
       SecurityProviderNotFoundException, EncryptionStrategyNotFoundException, InitialisationException {
     Authentication auth = event.getSession().getSecurityContext().getAuthentication();
     if (auth == null) {

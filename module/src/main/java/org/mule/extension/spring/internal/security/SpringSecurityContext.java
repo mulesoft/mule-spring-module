@@ -23,9 +23,7 @@ public class SpringSecurityContext implements SecurityContext {
   private org.springframework.security.core.context.SecurityContext delegate;
   private SpringAuthenticationAdapter authentication;
 
-  public SpringSecurityContext(org.springframework.security.core.context.SecurityContext delegate)
-
-  {
+  public SpringSecurityContext(org.springframework.security.core.context.SecurityContext delegate) {
     this.delegate = delegate;
     SecurityContextHolder.setContext(this.delegate);
   }
