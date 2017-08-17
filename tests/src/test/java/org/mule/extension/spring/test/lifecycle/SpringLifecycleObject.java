@@ -7,11 +7,15 @@
 package org.mule.extension.spring.test.lifecycle;
 
 import static java.util.Collections.emptyList;
+
 import org.mule.runtime.api.artifact.Registry;
 import org.mule.runtime.api.component.location.ConfigurationComponentLocator;
 import org.mule.runtime.api.exception.MuleException;
 import org.mule.runtime.api.lifecycle.InitialisationException;
 import org.mule.runtime.api.lifecycle.Lifecycle;
+import org.mule.runtime.api.meta.AbstractAnnotatedObject;
+
+import com.google.common.util.concurrent.AtomicDouble;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,9 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import com.google.common.util.concurrent.AtomicDouble;
-
-public class SpringLifecycleObject implements Lifecycle {
+public class SpringLifecycleObject extends AbstractAnnotatedObject implements Lifecycle {
 
   private List<String> lifecycleCalls = new ArrayList<>();
   private List<String> injectCalls = new ArrayList<>();
