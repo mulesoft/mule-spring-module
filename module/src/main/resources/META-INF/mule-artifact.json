@@ -2,7 +2,7 @@
   "name":"Spring",
   "minMuleVersion":"4.0.0",
   "bundleDescriptorLoader": {
-    "id": "maven",
+    "id": "mule",
     "attributes": {
     }
   },
@@ -13,7 +13,7 @@
     }
   },
   "classLoaderModelLoaderDescriptor":{
-    "id":"maven",
+    "id":"mule",
     "attributes":{
 	  "_comment": "TODO MULE-13203 remove exported spring-security packages",
       "exportedPackages":[
