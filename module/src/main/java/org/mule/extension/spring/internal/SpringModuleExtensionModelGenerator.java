@@ -10,11 +10,13 @@ import static java.lang.String.format;
 import static org.mule.metadata.java.api.JavaTypeLoader.JAVA;
 import static org.mule.runtime.api.meta.Category.COMMUNITY;
 import static org.mule.runtime.api.meta.ExpressionSupport.NOT_SUPPORTED;
+import static org.mule.runtime.api.meta.ExternalLibraryType.DEPENDENCY;
 import static org.mule.runtime.api.meta.model.parameter.ParameterRole.BEHAVIOUR;
 
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.builder.BaseTypeBuilder;
 import org.mule.runtime.api.meta.MuleVersion;
+import org.mule.runtime.api.meta.model.ExternalLibraryModel;
 import org.mule.runtime.api.meta.model.XmlDslModel;
 import org.mule.runtime.api.meta.model.declaration.fluent.ConfigurationDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.ExtensionDeclarer;
@@ -27,7 +29,7 @@ import org.mule.runtime.extension.api.loader.ExtensionLoadingDelegate;
 
 /**
  * Spring module {@link org.mule.runtime.api.meta.model.ExtensionModel} generator.
- * 
+ *
  * @since 1.0
  */
 public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDelegate {
@@ -71,6 +73,23 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
     parameterGroupDeclarer.withRequiredParameter("files").withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
 
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("spring-core")
+        .withDescription("Spring Core (http://projects.spring.io/spring-framework)")
+        .withType(DEPENDENCY).build());
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("spring-beans")
+        .withDescription("Spring Beans (http://projects.spring.io/spring-framework)")
+        .withType(DEPENDENCY).build());
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("spring-context")
+        .withDescription("Spring Context (http://projects.spring.io/spring-framework)")
+        .withType(DEPENDENCY).build());
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("spring-aop")
+        .withDescription("Spring AOP (http://projects.spring.io/spring-framework)")
+        .withType(DEPENDENCY).build());
+
     // spring-security
     final ConfigurationDeclarer securityManager = extensionDeclarer.withConfig("security-manager")
         .describedAs("This is the security provider type that is used to configure spring-security related functionality.");
@@ -84,5 +103,14 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
     authorizationFilter.onDefaultParameterGroup().withRequiredParameter("requiredAuthorities")
         .withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
+
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("spring-security-core")
+        .withDescription("http://spring.io/spring-security")
+        .withType(DEPENDENCY).build());
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("spring-security-config")
+        .withDescription("http://spring.io/spring-security")
+        .withType(DEPENDENCY).build());
   }
 }

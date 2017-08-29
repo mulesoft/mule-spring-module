@@ -15,13 +15,12 @@ import org.mule.runtime.api.artifact.Registry;
 import org.mule.tck.junit4.rule.SystemProperty;
 import org.mule.tck.testmodels.fruit.Orange;
 
+import org.junit.Rule;
+import org.junit.Test;
+
 import java.util.Map;
 
 import javax.inject.Inject;
-
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -50,7 +49,6 @@ public class PlaceholderTestCase extends SpringPluginFunctionalTestCase {
   }
 
   @Test
-  @Ignore("MULE-13203: This test tries lo load a spring class from its bean definitions file")
   public void springCanUseItOwnPlaceholder() throws Exception {
     Orange orange = registry.<Orange>lookupByName("orange").get();
     Map mapProperties = orange.getMapProperties();
