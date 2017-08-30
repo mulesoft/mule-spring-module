@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mule.extensions</groupId>
         <artifactId>mule-core-modules-parent</artifactId>
-        <version>1.0.0-rc.darkseid-SNAPSHOT</version>
+        <version>1.0.0-rc.darkseid</version>
     </parent>
 
     <groupId>org.mule.modules</groupId>
@@ -20,10 +20,10 @@
         <springVersion>4.1.9.RELEASE</springVersion>
         <springSecurityVersion>4.0.4.RELEASE</springSecurityVersion>
         
-        <muleAppPluginsMavenPluginVersion>1.0.0-rc.darkseid-SNAPSHOT</muleAppPluginsMavenPluginVersion>
+        <muleAppPluginsMavenPluginVersion>1.0.0-rc.darkseid</muleAppPluginsMavenPluginVersion>
 
-        <muleHttpConnectorVersion>0.9.0-rc.darkseid-SNAPSHOT</muleHttpConnectorVersion>
-        <muleSocketsConnectorVersion>0.9.0-rc.darkseid-SNAPSHOT</muleSocketsConnectorVersion>
+        <muleHttpConnectorVersion>0.9.0-rc.darkseid</muleHttpConnectorVersion>
+        <muleSocketsConnectorVersion>0.9.0-rc.darkseid</muleSocketsConnectorVersion>
         <weaveVersion>2.0.0-SNAPSHOT</weaveVersion>
     </properties>
 
