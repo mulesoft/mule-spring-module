@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mule.modules</groupId>
         <artifactId>mule-spring-module-parent</artifactId>
-        <version>0.9.0-rc.darkseid-SNAPSHOT</version>
+        <version>0.9.0-rc.darkseid</version>
     </parent>
     <artifactId>mule-spring-module</artifactId>
     <packaging>mule-extension</packaging>
