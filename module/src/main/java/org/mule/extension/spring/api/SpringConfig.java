@@ -17,7 +17,7 @@ import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.runtime.api.lifecycle.Disposable;
-import org.mule.runtime.api.meta.AbstractAnnotatedObject;
+import org.mule.runtime.api.meta.AbstractComponent;
 import org.mule.runtime.api.meta.NamedObject;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * 
  * @since 1.0
  */
-public class SpringConfig extends AbstractAnnotatedObject
+public class SpringConfig extends AbstractComponent
     implements ConfigurableObjectProvider, Disposable, NamedObject {
 
   private static final String SPRING_NAMESPACE_PREFIX = "org.springframework";

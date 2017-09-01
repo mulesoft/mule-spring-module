@@ -13,7 +13,7 @@ import org.mule.runtime.api.component.location.ConfigurationComponentLocator;
 import org.mule.runtime.api.exception.MuleException;
 import org.mule.runtime.api.lifecycle.InitialisationException;
 import org.mule.runtime.api.lifecycle.Lifecycle;
-import org.mule.runtime.api.meta.AbstractAnnotatedObject;
+import org.mule.runtime.api.meta.AbstractComponent;
 
 import com.google.common.util.concurrent.AtomicDouble;
 
@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-public class SpringLifecycleObject extends AbstractAnnotatedObject implements Lifecycle {
+public class SpringLifecycleObject extends AbstractComponent implements Lifecycle {
 
   private List<String> lifecycleCalls = new ArrayList<>();
   private List<String> injectCalls = new ArrayList<>();
