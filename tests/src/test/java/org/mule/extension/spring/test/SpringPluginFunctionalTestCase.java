@@ -10,11 +10,9 @@ import org.mule.functional.junit4.MuleArtifactFunctionalTestCase;
 import org.mule.test.runner.ArtifactClassLoaderRunnerConfig;
 
 @ArtifactClassLoaderRunnerConfig(sharedRuntimeLibs = {
-    "org.springframework:spring-core",
     "org.springframework:spring-beans",
     "org.springframework:spring-context",
-    "org.springframework.security:spring-security-core",
-    "org.springframework.security:spring-security-config"
+    "org.springframework.security:spring-security-core"
 })
 public abstract class SpringPluginFunctionalTestCase extends MuleArtifactFunctionalTestCase {
 }

@@ -74,20 +74,12 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
 
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
-        .withName("spring-core")
-        .withDescription("Spring Core (http://projects.spring.io/spring-framework)")
-        .withType(DEPENDENCY).build());
-    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
         .withName("spring-beans")
-        .withDescription("Spring Beans (http://projects.spring.io/spring-framework)")
+        .withDescription("Spring Beans (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
         .withType(DEPENDENCY).build());
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
         .withName("spring-context")
-        .withDescription("Spring Context (http://projects.spring.io/spring-framework)")
-        .withType(DEPENDENCY).build());
-    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
-        .withName("spring-aop")
-        .withDescription("Spring AOP (http://projects.spring.io/spring-framework)")
+        .withDescription("Spring Context (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
         .withType(DEPENDENCY).build());
 
     // spring-security
@@ -106,11 +98,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
 
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
         .withName("spring-security-core")
-        .withDescription("http://spring.io/spring-security")
-        .withType(DEPENDENCY).build());
-    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
-        .withName("spring-security-config")
-        .withDescription("http://spring.io/spring-security")
+        .withDescription("Spring Security Context (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
         .withType(DEPENDENCY).build());
   }
 }
