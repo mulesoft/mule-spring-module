@@ -30,6 +30,7 @@
     <modules>
         <module>module</module>
         <module>tests</module>
+        <module>test-plugin</module>
     </modules>
 
     <distributionManagement>

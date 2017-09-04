@@ -1,5 +1,5 @@
 {
-  "name":"Spring",
+  "name":"SpringTest",
   "minMuleVersion":"4.0.0",
   "bundleDescriptorLoader": {
     "id": "mule",
