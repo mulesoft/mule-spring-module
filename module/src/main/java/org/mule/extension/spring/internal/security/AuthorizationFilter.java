@@ -9,6 +9,7 @@ package org.mule.extension.spring.internal.security;
 import static org.mule.extension.spring.internal.config.i18n.SpringSecurityMessages.noGrantedAuthority;
 import static org.mule.extension.spring.internal.config.i18n.SpringSecurityMessages.springAuthenticationRequired;
 import static org.mule.runtime.core.api.config.i18n.CoreMessages.authNoCredentials;
+
 import org.mule.runtime.api.lifecycle.InitialisationException;
 import org.mule.runtime.api.security.Authentication;
 import org.mule.runtime.api.security.SecurityException;
@@ -21,14 +22,14 @@ import org.mule.runtime.core.api.security.EncryptionStrategyNotFoundException;
 import org.mule.runtime.core.api.security.NotPermittedException;
 import org.mule.runtime.core.api.security.UnauthorisedException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Authorizes user access based on the required authorities for a user.
@@ -46,7 +47,7 @@ public class AuthorizationFilter extends AbstractSecurityFilter {
   public InternalEvent doFilter(InternalEvent event)
       throws SecurityException, UnknownAuthenticationTypeException, CryptoFailureException,
       SecurityProviderNotFoundException, EncryptionStrategyNotFoundException, InitialisationException {
-    Authentication auth = event.getSession().getSecurityContext().getAuthentication();
+    Authentication auth = event.getSecurityContext().getAuthentication();
     if (auth == null) {
       throw new UnauthorisedException(authNoCredentials());
     }
