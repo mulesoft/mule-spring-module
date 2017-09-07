@@ -15,11 +15,12 @@ import org.mule.runtime.api.security.Authentication;
 import org.mule.runtime.api.security.SecurityException;
 import org.mule.runtime.api.security.SecurityProviderNotFoundException;
 import org.mule.runtime.api.security.UnknownAuthenticationTypeException;
-import org.mule.runtime.core.api.InternalEvent;
+import org.mule.runtime.core.api.event.BaseEvent;
 import org.mule.runtime.core.api.security.AbstractSecurityFilter;
 import org.mule.runtime.core.api.security.CryptoFailureException;
 import org.mule.runtime.core.api.security.EncryptionStrategyNotFoundException;
 import org.mule.runtime.core.api.security.NotPermittedException;
+import org.mule.runtime.core.api.security.SecurityContext;
 import org.mule.runtime.core.api.security.UnauthorisedException;
 
 import org.slf4j.Logger;
@@ -44,7 +45,7 @@ public class AuthorizationFilter extends AbstractSecurityFilter {
   }
 
   @Override
-  public InternalEvent doFilter(InternalEvent event)
+  public SecurityContext doFilter(BaseEvent event)
       throws SecurityException, UnknownAuthenticationTypeException, CryptoFailureException,
       SecurityProviderNotFoundException, EncryptionStrategyNotFoundException, InitialisationException {
     Authentication auth = event.getSecurityContext().getAuthentication();
@@ -83,7 +84,7 @@ public class AuthorizationFilter extends AbstractSecurityFilter {
       throw new NotPermittedException(noGrantedAuthority(principalName));
     }
 
-    return event;
+    return event.getSecurityContext();
   }
 
 }
