@@ -63,7 +63,6 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .fromVendor(VENDOR)
         .onVersion(VERSION)
         .withCategory(COMMUNITY)
-        .withMinMuleVersion(MIN_MULE_VERSION)
         .withXmlDsl(xmlDslModel);
 
     // config
