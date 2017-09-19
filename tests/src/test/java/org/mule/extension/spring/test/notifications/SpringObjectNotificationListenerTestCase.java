@@ -35,7 +35,7 @@ public class SpringObjectNotificationListenerTestCase extends SpringPluginFuncti
   @Test
   public void notificationObjectsInSpringConfigArePickUpByMule() throws Exception {
     flowRunner("flow").run();
-    assertThat(registry.lookup(ProcessorNotificationStore.class).get().getNotifications(), hasSize(2));
+    assertThat(registry.lookupByType(ProcessorNotificationStore.class).get().getNotifications(), hasSize(2));
   }
 
   @Override
