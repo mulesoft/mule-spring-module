@@ -19,9 +19,9 @@ import org.mule.runtime.core.api.event.BaseEvent;
 import org.mule.runtime.core.api.security.AbstractSecurityFilter;
 import org.mule.runtime.core.api.security.CryptoFailureException;
 import org.mule.runtime.core.api.security.EncryptionStrategyNotFoundException;
-import org.mule.runtime.core.api.security.NotPermittedException;
-import org.mule.runtime.core.api.security.SecurityContext;
-import org.mule.runtime.core.api.security.UnauthorisedException;
+import org.mule.runtime.api.security.NotPermittedException;
+import org.mule.runtime.api.security.SecurityContext;
+import org.mule.runtime.api.security.UnauthorisedException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
