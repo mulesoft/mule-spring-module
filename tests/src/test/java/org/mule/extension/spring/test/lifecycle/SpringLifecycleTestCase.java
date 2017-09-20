@@ -14,23 +14,23 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mule.extension.spring.AllureConstants.SpringFeature.LifecycleAndDependencyInjectionStory.LIFECYCLE_AND_DEPENDENCY_INJECTION;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
+import static org.mule.extension.spring.AllureConstants.SpringFeature.LifecycleAndDependencyInjectionStory.LIFECYCLE_AND_DEPENDENCY_INJECTION;
+
 import org.mule.extension.spring.test.SpringPluginFunctionalTestCase;
-import org.mule.runtime.api.artifact.Registry;
 import org.mule.tck.junit4.rule.SystemProperty;
 
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import com.google.common.util.concurrent.AtomicDouble;
+
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -41,9 +41,6 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
 
   @ClassRule
   public static SystemProperty springConfig = new SystemProperty("spring.config.file", "spring-lifecycle-config.xml");
-
-  @Inject
-  private Registry registry;
 
   @Override
   protected String getConfigFile() {
@@ -111,11 +108,6 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
     SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
     Collection<AtomicDouble> atomicDoubles = lifecycleObject.getAtomicDoubles();
     assertThat(atomicDoubles, hasSize(0));
-  }
-
-  @Override
-  protected boolean doTestClassInjection() {
-    return true;
   }
 
 }

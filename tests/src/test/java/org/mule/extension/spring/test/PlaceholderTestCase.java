@@ -11,7 +11,6 @@ import static org.junit.Assert.assertThat;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 
-import org.mule.runtime.api.artifact.Registry;
 import org.mule.tck.junit4.rule.SystemProperty;
 import org.mule.tck.testmodels.fruit.Orange;
 
@@ -19,8 +18,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Map;
-
-import javax.inject.Inject;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -31,9 +28,6 @@ public class PlaceholderTestCase extends SpringPluginFunctionalTestCase {
 
   @Rule
   public SystemProperty systemProperty = new SystemProperty("systemProperty", "3.0");
-
-  @Inject
-  private Registry registry;
 
   @Override
   protected String getConfigFile() {
@@ -56,8 +50,4 @@ public class PlaceholderTestCase extends SpringPluginFunctionalTestCase {
     assertThat(mapProperties.get("springPropertyB"), is("springPropertyBValue"));
   }
 
-  @Override
-  protected boolean doTestClassInjection() {
-    return true;
-  }
 }
