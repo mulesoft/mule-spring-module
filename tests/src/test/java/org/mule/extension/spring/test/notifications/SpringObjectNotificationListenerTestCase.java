@@ -8,14 +8,12 @@ package org.mule.extension.spring.test.notifications;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
-import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
+import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
+
 import org.mule.extension.spring.test.SpringPluginFunctionalTestCase;
-import org.mule.runtime.api.artifact.Registry;
 
 import org.junit.Test;
-
-import javax.inject.Inject;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -23,9 +21,6 @@ import io.qameta.allure.Story;
 @Feature(SPRING_EXTENSION)
 @Story(ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY)
 public class SpringObjectNotificationListenerTestCase extends SpringPluginFunctionalTestCase {
-
-  @Inject
-  private Registry registry;
 
   @Override
   protected String getConfigFile() {
@@ -36,11 +31,6 @@ public class SpringObjectNotificationListenerTestCase extends SpringPluginFuncti
   public void notificationObjectsInSpringConfigArePickUpByMule() throws Exception {
     flowRunner("flow").run();
     assertThat(registry.lookupByType(ProcessorNotificationStore.class).get().getNotifications(), hasSize(2));
-  }
-
-  @Override
-  protected boolean doTestClassInjection() {
-    return true;
   }
 
 }
