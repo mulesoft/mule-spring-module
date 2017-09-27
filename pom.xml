@@ -24,7 +24,7 @@
 
         <muleHttpConnectorVersion>0.9.0</muleHttpConnectorVersion>
         <muleSocketsConnectorVersion>0.9.0</muleSocketsConnectorVersion>
-        <weaveVersion>2.0.0-SNAPSHOT</weaveVersion>
+        <weaveVersion>2.0.0-rc</weaveVersion>
     </properties>
 
     <modules>
