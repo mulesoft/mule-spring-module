@@ -65,7 +65,7 @@ public class SpringSecurityNamespaceHandlerTestCase extends SpringPluginFunction
   protected void knownProperties(SecurityProvider provider) {
     assertNotNull(provider);
     assertThat(provider.getClass().getName(),
-               is("org.mule.runtime.config.spring.internal.CustomSecurityProviderDelegate"));
+               is("org.mule.runtime.config.internal.CustomSecurityProviderDelegate"));
   }
 
 }
