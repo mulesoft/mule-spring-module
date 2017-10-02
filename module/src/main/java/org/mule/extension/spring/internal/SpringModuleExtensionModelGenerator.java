@@ -44,6 +44,10 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   private static final String UNESCAPED_LOCATION_PREFIX = "http://";
   private static final String SCHEMA_LOCATION = "www.mulesoft.org/schema/mule/spring";
   private static final String SCHEMA_VERSION = "current";
+  private static final String SPRING_VERSION = "4.1.9.RELEASE";
+  private static final String SPRING_SECURITY_VERSION = "4.0.4.RELEASE";
+  private static final String SPRING_GROUP_ID = "org.springframework";
+  private static final String SPRING_SECURITY_GROUP_ID = "org.springframework.security";
 
   @Override
   public void accept(ExtensionDeclarer extensionDeclarer, ExtensionLoadingContext extensionLoadingContext) {
@@ -73,11 +77,14 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
 
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
-        .withName("spring-beans")
+        .withName("Spring Beans")
         .withDescription("Spring Beans (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
+        .withCoordinates(SPRING_GROUP_ID + ":spring-beans:" + SPRING_VERSION)
         .withType(DEPENDENCY).build());
+
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
-        .withName("spring-context")
+        .withName("Spring Context")
+        .withCoordinates(SPRING_GROUP_ID + ":spring-context:" + SPRING_VERSION)
         .withDescription("Spring Context (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
         .withType(DEPENDENCY).build());
 
@@ -96,8 +103,30 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
 
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
-        .withName("spring-security-core")
+        .withName("Spring Security Core")
+        .withCoordinates(SPRING_SECURITY_GROUP_ID + ":spring-security-core:" + SPRING_SECURITY_VERSION)
         .withDescription("Spring Security Context (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
+        .withType(DEPENDENCY).build());
+
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("Spring Security Config")
+        .isOptional(true)
+        .withCoordinates(SPRING_SECURITY_GROUP_ID + ":spring-security-config:" + SPRING_SECURITY_VERSION)
+        .withDescription("Spring Security Config (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
+        .withType(DEPENDENCY).build());
+
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("Spring Security Web")
+        .isOptional(true)
+        .withCoordinates(SPRING_SECURITY_GROUP_ID + ":spring-security-web:" + SPRING_SECURITY_VERSION)
+        .withDescription("Spring Security Web (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
+        .withType(DEPENDENCY).build());
+
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("Spring Security LDAP")
+        .isOptional(true)
+        .withCoordinates(SPRING_SECURITY_GROUP_ID + ":spring-security-ldap:" + SPRING_SECURITY_VERSION)
+        .withDescription("Spring Security LDAP (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
         .withType(DEPENDENCY).build());
   }
 }
