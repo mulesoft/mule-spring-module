@@ -11,7 +11,11 @@ import static org.mule.metadata.java.api.JavaTypeLoader.JAVA;
 import static org.mule.runtime.api.meta.Category.COMMUNITY;
 import static org.mule.runtime.api.meta.ExpressionSupport.NOT_SUPPORTED;
 import static org.mule.runtime.api.meta.ExternalLibraryType.DEPENDENCY;
+import static org.mule.runtime.api.meta.model.error.ErrorModelBuilder.newError;
 import static org.mule.runtime.api.meta.model.parameter.ParameterRole.BEHAVIOUR;
+import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.ANY;
+import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.NOT_PERMITTED;
+import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.SERVER_SECURITY;
 
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.builder.BaseTypeBuilder;
@@ -22,6 +26,7 @@ import org.mule.runtime.api.meta.model.declaration.fluent.ConfigurationDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.ExtensionDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.OperationDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.ParameterGroupDeclarer;
+import org.mule.runtime.api.meta.model.error.ErrorModel;
 import org.mule.runtime.core.api.security.SecurityProvider;
 import org.mule.runtime.extension.api.declaration.type.ExtensionsTypeLoaderFactory;
 import org.mule.runtime.extension.api.loader.ExtensionLoadingContext;
@@ -94,8 +99,12 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
     securityManager.onDefaultParameterGroup().withRequiredParameter("providers").withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeBuilder.arrayType().of(typeLoader.load(SecurityProvider.class)).build());
 
+    ErrorModel anyError = newError(ANY).build();
     final OperationDeclarer authorizationFilter = extensionDeclarer.withOperation("authorization-filter")
-        .describedAs("Authorize users against a required set of authorities.");
+        .describedAs("Authorize users against a required set of authorities.")
+        .withErrorModel(newError(SERVER_SECURITY).withParent(anyError).build())
+        .withErrorModel(newError(NOT_PERMITTED).withParent(anyError).build());
+
     authorizationFilter.withOutput().ofType(typeBuilder.voidType().build());
     authorizationFilter.withOutputAttributes().ofType(typeBuilder.voidType().build());
     authorizationFilter.onDefaultParameterGroup().withRequiredParameter("requiredAuthorities")
