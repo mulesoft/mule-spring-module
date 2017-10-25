@@ -50,6 +50,7 @@ public class SpringComponentBuildingDefinitionProvider implements ComponentBuild
     definitions.add(baseDefinition.withIdentifier("config")
         .withTypeDefinition(fromType(SpringConfig.class))
         .withSetterParameterDefinition("parameters", fromUndefinedSimpleAttributes().build())
+        .alwaysEnabled(true)
         .build());
     definitions.addAll(getSpringSecurityDefinitions());
 
