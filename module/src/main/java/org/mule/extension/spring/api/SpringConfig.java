@@ -11,13 +11,12 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toMap;
 import static org.mule.runtime.api.util.Preconditions.checkState;
-
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
+import org.mule.runtime.api.component.AbstractComponent;
 import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.runtime.api.lifecycle.Disposable;
-import org.mule.runtime.api.component.AbstractComponent;
 import org.mule.runtime.api.meta.NamedObject;
 
 import java.util.Map;
