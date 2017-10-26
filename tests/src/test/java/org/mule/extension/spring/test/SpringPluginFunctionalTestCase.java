@@ -9,11 +9,14 @@ package org.mule.extension.spring.test;
 import org.mule.functional.junit4.MuleArtifactFunctionalTestCase;
 import org.mule.test.runner.ArtifactClassLoaderRunnerConfig;
 
-@ArtifactClassLoaderRunnerConfig(sharedRuntimeLibs = {
-    "org.mule.tests:mule-tests-unit",
+@ArtifactClassLoaderRunnerConfig(applicationSharedRuntimeLibs = {
+    "org.springframework:spring-core",
     "org.springframework:spring-beans",
     "org.springframework:spring-context",
-    "org.springframework.security:spring-security-core"
+    "org.springframework:spring-aop",
+    "org.springframework.security:spring-security-core",
+    "org.springframework.security:spring-security-config",
+    "org.mule.tests:mule-tests-model"
 })
 public abstract class SpringPluginFunctionalTestCase extends MuleArtifactFunctionalTestCase {
 }
