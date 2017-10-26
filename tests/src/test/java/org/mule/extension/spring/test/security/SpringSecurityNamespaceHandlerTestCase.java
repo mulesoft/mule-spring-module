@@ -16,6 +16,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import org.mule.extension.spring.api.security.SpringProviderAdapter;
 import org.mule.extension.spring.test.SpringPluginFunctionalTestCase;
+import org.mule.runtime.api.security.Authentication;
+import org.mule.runtime.api.security.SecurityContext;
+import org.mule.runtime.api.security.SecurityException;
+import org.mule.runtime.api.security.UnknownAuthenticationTypeException;
+import org.mule.runtime.core.api.security.AbstractSecurityProvider;
 import org.mule.runtime.core.api.security.SecurityManager;
 import org.mule.runtime.core.api.security.SecurityProvider;
 
@@ -66,6 +71,43 @@ public class SpringSecurityNamespaceHandlerTestCase extends SpringPluginFunction
     assertNotNull(provider);
     assertThat(provider.getClass().getName(),
                is("org.mule.runtime.config.internal.CustomSecurityProviderDelegate"));
+  }
+
+  public static class CustomSecurityProvider implements SecurityProvider {
+
+    private String name;
+
+    public CustomSecurityProvider() {
+      this("dummyProvider");
+    }
+
+    public CustomSecurityProvider(String name) {
+      setName(name);
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws SecurityException {
+      return null;
+    }
+
+    @Override
+    public boolean supports(Class<?> aClass) {
+      return false;
+    }
+
+    @Override
+    public String getName() {
+      return this.name;
+    }
+
+    @Override
+    public SecurityContext createSecurityContext(Authentication auth) throws UnknownAuthenticationTypeException {
+      return null;
+    }
   }
 
 }

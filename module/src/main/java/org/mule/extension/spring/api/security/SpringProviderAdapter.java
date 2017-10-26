@@ -101,4 +101,5 @@ public class SpringProviderAdapter extends AbstractSecurityProvider implements A
   public void setAuthenticationProvider(SpringAuthenticationProvider authenticationProvider) {
     this.authenticationProvider = authenticationProvider;
   }
+
 }

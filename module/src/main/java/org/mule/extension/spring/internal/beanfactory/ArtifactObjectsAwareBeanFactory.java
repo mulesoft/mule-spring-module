@@ -7,11 +7,18 @@
 package org.mule.extension.spring.internal.beanfactory;
 
 import org.mule.runtime.api.ioc.ObjectProvider;
+import org.mule.runtime.api.lifecycle.Disposable;
+import org.mule.runtime.api.lifecycle.Initialisable;
+import org.mule.runtime.api.lifecycle.Lifecycle;
+import org.mule.runtime.api.lifecycle.Startable;
+import org.mule.runtime.api.lifecycle.Stoppable;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.TypeConverter;
+import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
@@ -82,6 +89,42 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     } else {
       return (T) artifactObjectProvider.getObject(name).get();
     }
+  }
+
+  /**
+   * Overrides spring method to first check if the bean to be registered is a valid one. As for now, we are not supporting
+   * beans with a class that implements mule Lifecycle.
+   * @param beanName
+   * @param beanDefinition
+   * @throws BeanDefinitionStoreException
+   */
+  @Override
+  public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) throws BeanDefinitionStoreException {
+    if (implementsLifecycle(beanDefinition)) {
+      throw new BeanDefinitionStoreException(String
+          .format("%s should not implement mule Lifecycle (Initialisable, Startable, Stoppable, Disposable)", beanName));
+    }
+    super.registerBeanDefinition(beanName, beanDefinition);
+  }
+
+  /*
+   Evaluates if the class in the bean definition implements mule lifecycle
+   */
+  private boolean implementsLifecycle(BeanDefinition beanDefinition) {
+    if (beanDefinition.getBeanClassName() == null) {
+      //There is no class to check
+      return false;
+    }
+    try {
+      Class<?> beanClass = Class.forName(beanDefinition.getBeanClassName());
+      return Initialisable.class.isAssignableFrom(beanClass) ||
+          Startable.class.isAssignableFrom(beanClass) ||
+          Stoppable.class.isAssignableFrom(beanClass) ||
+          Disposable.class.isAssignableFrom(beanClass);
+    } catch (ClassNotFoundException e) {
+      //Do nothing, let the parsers handle this.
+    }
+    return false;
   }
 
   /**
