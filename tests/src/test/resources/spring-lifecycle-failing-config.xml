@@ -15,6 +15,4 @@
     <!--This bean should cause failure-->
     <bean name="muleLifecycleObject" class="org.mule.extension.spring.test.lifecycle.MuleLifecycleSpringObject"/>
 
-
-
 </beans>

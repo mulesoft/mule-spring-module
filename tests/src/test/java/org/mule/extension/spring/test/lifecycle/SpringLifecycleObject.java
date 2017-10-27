@@ -10,7 +10,6 @@ import static java.util.Collections.emptyList;
 
 import org.mule.runtime.api.artifact.Registry;
 import org.mule.runtime.api.component.location.ConfigurationComponentLocator;
-import org.mule.runtime.api.lifecycle.InitialisationException;
 import org.mule.runtime.api.component.AbstractComponent;
 
 import com.google.common.util.concurrent.AtomicDouble;
@@ -26,7 +25,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.springframework.beans.factory.FactoryBean;
 
 public class SpringLifecycleObject extends AbstractComponent {
 
@@ -114,6 +112,5 @@ public class SpringLifecycleObject extends AbstractComponent {
   public Collection<Number> getOptionalNumberObjects() {
     return optionalNumberObjects.orElse(emptyList());
   }
-
 
 }
