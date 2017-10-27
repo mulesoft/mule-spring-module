@@ -10,9 +10,6 @@ import static java.util.Collections.emptyList;
 
 import org.mule.runtime.api.artifact.Registry;
 import org.mule.runtime.api.component.location.ConfigurationComponentLocator;
-import org.mule.runtime.api.exception.MuleException;
-import org.mule.runtime.api.lifecycle.InitialisationException;
-import org.mule.runtime.api.lifecycle.Lifecycle;
 import org.mule.runtime.api.component.AbstractComponent;
 
 import com.google.common.util.concurrent.AtomicDouble;
@@ -28,9 +25,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-public class SpringLifecycleObject extends AbstractComponent implements Lifecycle {
 
-  private List<String> lifecycleCalls = new ArrayList<>();
+public class SpringLifecycleObject extends AbstractComponent {
+
+  protected List<String> lifecycleCalls = new ArrayList<>();
   private List<String> injectCalls = new ArrayList<>();
   private List<String> callsBeforeInit = new ArrayList<>();
 
@@ -63,21 +61,6 @@ public class SpringLifecycleObject extends AbstractComponent implements Lifecycl
   }
 
 
-  @Override
-  public void stop() throws MuleException {
-    lifecycleCalls.add("stop");
-  }
-
-  @Override
-  public void dispose() {
-    lifecycleCalls.add("dispose");
-  }
-
-  @Override
-  public void start() throws MuleException {
-    lifecycleCalls.add("start");
-  }
-
   public List<String> getLifecycleCalls() {
     return lifecycleCalls;
   }
@@ -96,11 +79,6 @@ public class SpringLifecycleObject extends AbstractComponent implements Lifecycl
   public void setConfigurationComponentLocator(ConfigurationComponentLocator configurationComponentLocator) {
     injectCalls.add("configurationComponentLocator");
     this.configurationComponentLocator = configurationComponentLocator;
-  }
-
-  @Override
-  public void initialise() throws InitialisationException {
-    lifecycleCalls.add("initialise");
   }
 
   public Object getReference() {
@@ -134,4 +112,5 @@ public class SpringLifecycleObject extends AbstractComponent implements Lifecycl
   public Collection<Number> getOptionalNumberObjects() {
     return optionalNumberObjects.orElse(emptyList());
   }
+
 }

@@ -47,7 +47,7 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
     return "mule-spring-config.xml";
   }
 
-  @Description("Tests that injection and init/dispose methods are executed in the right order and that mule lifecycle methods are not honored.")
+  @Description("Tests that injection and init/dispose methods are executed in the right order")
   @Test
   public void verifyLifecycleAndInjectionOrder() {
     SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
@@ -109,5 +109,4 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
     Collection<AtomicDouble> atomicDoubles = lifecycleObject.getAtomicDoubles();
     assertThat(atomicDoubles, hasSize(0));
   }
-
 }
