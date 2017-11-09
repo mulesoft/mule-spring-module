@@ -11,6 +11,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toMap;
 import static org.mule.runtime.api.util.Preconditions.checkState;
+import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
 import org.mule.runtime.api.component.AbstractComponent;
 import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
@@ -19,13 +20,13 @@ import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.meta.NamedObject;
 
-import java.util.Map;
-import java.util.Optional;
-
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Implementation of {@link ObjectProvider} that gives access to object to the mule artifact from an spring
@@ -49,13 +50,14 @@ public class SpringConfig extends AbstractComponent
 
   @Override
   public void configure(ObjectProviderConfiguration configuration) {
-    String files = parameters.get("files");
-    String[] configFiles = files.split(",");
-
-    applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
-    applicationContext.refresh();
+    withContextClassLoader(SpringConfig.class.getClassLoader(), () -> {
+      String files = parameters.get("files");
+      String[] configFiles = files.split(",");
+      applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
+      applicationContext.setClassLoader(SpringConfig.class.getClassLoader());
+      applicationContext.refresh();
+    });
   }
-
 
   @Override
   public Optional<Object> getObject(String name) {
