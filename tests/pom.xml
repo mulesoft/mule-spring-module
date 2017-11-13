@@ -40,7 +40,7 @@
             <groupId>org.mule.services</groupId>
             <artifactId>mule-service-weave</artifactId>
             <classifier>mule-service</classifier>
-            <version>${weaveVersion}</version>
+            <version>${mule.weave.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
