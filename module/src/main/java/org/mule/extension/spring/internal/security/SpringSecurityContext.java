@@ -20,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class SpringSecurityContext implements SecurityContext {
 
+  private static final long serialVersionUID = 1721127514499593129L;
+
   private org.springframework.security.core.context.SecurityContext delegate;
   private SpringAuthenticationAdapter authentication;
 
