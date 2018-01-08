@@ -21,7 +21,7 @@
                 <groupId>org.mule.runtime.plugins</groupId>
                 <artifactId>mule-plugin-maven-plugin</artifactId>
                 <extensions>true</extensions>
-                <version>${muleAppPluginsMavenPluginVersion}</version>
+                <version>${mule.app.plugins.maven.plugin.version}</version>
             </plugin>
         </plugins>
     </build>
