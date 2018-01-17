@@ -9,8 +9,8 @@
     <artifactId>mule-spring-module-tests</artifactId>
 
     <properties>
-        <commonsHttpClient.version>3.1</commonsHttpClient.version>
-    
+        <httpcommons.httpclient.version>4.5.3</httpcommons.httpclient.version>
+
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
     </properties>
 
@@ -76,9 +76,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <version>${commonsHttpClient.version}</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpcommons.httpclient.version}</version>
             <scope>test</scope>
         </dependency>
 
