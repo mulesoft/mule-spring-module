@@ -21,7 +21,7 @@
         <springSecurityVersion>4.0.4.RELEASE</springSecurityVersion>
         
         <muleHttpConnectorVersion>1.1.0</muleHttpConnectorVersion>
-        <muleSocketsConnectorVersion>1.1.0-SNAPSHOT</muleSocketsConnectorVersion>
+        <muleSocketsConnectorVersion>1.1.0</muleSocketsConnectorVersion>
     </properties>
 
     <modules>
