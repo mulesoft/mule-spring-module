@@ -11,6 +11,7 @@
 
     <properties>
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
+        <minMuleVersion>${mule.version}</minMuleVersion>
     </properties>
 
     <build>
@@ -33,6 +34,28 @@
                 <artifactId>mule-plugin-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <version>${mule.app.plugins.maven.plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>${project.build.directory}/classes/META-INF/mule-artifact/mule-artifact.json</file>
+                    <replacements>
+                        <replacement>
+                            <token>%MIN_MULE_VERSION%</token>
+                            <value>${minMuleVersion}</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
             </plugin>
         </plugins>
     </build>
