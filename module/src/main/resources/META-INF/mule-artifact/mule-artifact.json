@@ -1,6 +1,6 @@
 {
   "name":"Spring",
-  "minMuleVersion":"4.0.0",
+  "minMuleVersion": "%MIN_MULE_VERSION%",
   "bundleDescriptorLoader": {
     "id": "mule",
     "attributes": {
