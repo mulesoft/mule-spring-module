@@ -16,19 +16,28 @@ import static org.mule.runtime.api.meta.model.parameter.ParameterRole.BEHAVIOUR;
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.ANY;
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.NOT_PERMITTED;
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.SERVER_SECURITY;
-
+import static org.mule.runtime.extension.api.stereotype.MuleStereotypes.APP_CONFIG;
 import org.mule.metadata.api.ClassTypeLoader;
+import org.mule.metadata.api.annotation.TypeAliasAnnotation;
 import org.mule.metadata.api.builder.BaseTypeBuilder;
+import org.mule.metadata.api.builder.ObjectTypeBuilder;
+import org.mule.metadata.java.api.annotation.ClassInformationAnnotation;
 import org.mule.runtime.api.meta.MuleVersion;
 import org.mule.runtime.api.meta.model.ExternalLibraryModel;
+import org.mule.runtime.api.meta.model.ParameterDslConfiguration;
 import org.mule.runtime.api.meta.model.XmlDslModel;
 import org.mule.runtime.api.meta.model.declaration.fluent.ConfigurationDeclarer;
+import org.mule.runtime.api.meta.model.declaration.fluent.ConstructDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.ExtensionDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.OperationDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.ParameterGroupDeclarer;
+import org.mule.runtime.api.meta.model.display.DisplayModel;
+import org.mule.runtime.api.meta.model.display.LayoutModel;
 import org.mule.runtime.api.meta.model.error.ErrorModel;
-import org.mule.runtime.core.api.security.SecurityProvider;
+import org.mule.runtime.api.meta.model.stereotype.StereotypeModelBuilder;
 import org.mule.runtime.extension.api.declaration.type.ExtensionsTypeLoaderFactory;
+import org.mule.runtime.extension.api.declaration.type.annotation.DisplayTypeAnnotation;
+import org.mule.runtime.extension.api.declaration.type.annotation.ExpressionSupportAnnotation;
 import org.mule.runtime.extension.api.loader.ExtensionLoadingContext;
 import org.mule.runtime.extension.api.loader.ExtensionLoadingDelegate;
 
@@ -43,7 +52,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   public static final String PREFIX_NAME = "spring";
   public static final String EXTENSION_DESCRIPTION = "Spring Module Plugin";
   public static final String VENDOR = "Mulesoft";
-  public static final String VERSION = "1.0.0-SNAPSHOT";
+  public static final String VERSION = "1.2.0-SNAPSHOT";
   public static final MuleVersion MIN_MULE_VERSION = new MuleVersion("4.0");
   public static final String XSD_FILE_NAME = "mule-spring.xsd";
   private static final String UNESCAPED_LOCATION_PREFIX = "http://";
@@ -74,31 +83,68 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withCategory(COMMUNITY)
         .withXmlDsl(xmlDslModel);
 
-    // config
+    declareConfig(extensionDeclarer, typeLoader);
+    declareSecurityManager(extensionDeclarer, typeBuilder, typeLoader);
+    declareAuthorizationFilter(extensionDeclarer, typeLoader, typeBuilder);
+    declareExternalLibraries(extensionDeclarer);
+  }
+
+  private void declareConfig(ExtensionDeclarer extensionDeclarer, ClassTypeLoader typeLoader) {
     final ConfigurationDeclarer springConfig = extensionDeclarer.withConfig("config")
         .describedAs("Spring configuration that allows to define a set of spring XML files and create an application context with objects to be used in the mule artifact.");
     ParameterGroupDeclarer parameterGroupDeclarer = springConfig.onDefaultParameterGroup();
     parameterGroupDeclarer.withRequiredParameter("files").withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
+  }
 
-    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
-        .withName("Spring Beans")
-        .withDescription("Spring Beans (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
-        .withCoordinates(SPRING_GROUP_ID + ":spring-beans:" + SPRING_VERSION)
-        .withType(DEPENDENCY).build());
+  private void declareSecurityManager(ExtensionDeclarer extensionDeclarer, BaseTypeBuilder typeBuilder,
+                                      ClassTypeLoader typeLoader) {
+    ConstructDeclarer securityManager = extensionDeclarer.withConstruct("securityManager")
+        .withStereotype(StereotypeModelBuilder.newStereotype("SECURITY_MANAGER", "SPRING").withParent(APP_CONFIG).build())
+        .describedAs("Security manager that allows configuring Spring security providers.");
 
-    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
-        .withName("Spring Context")
-        .withCoordinates(SPRING_GROUP_ID + ":spring-context:" + SPRING_VERSION)
-        .withDescription("Spring Context (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
-        .withType(DEPENDENCY).build());
+    ObjectTypeBuilder securityProviderType = typeBuilder.objectType()
+        .id(SpringSecurityProvider.class.getName())
+        .with(new ClassInformationAnnotation(SpringSecurityProvider.class))
+        .with(new TypeAliasAnnotation("DelegateSecurityProvider"));
 
-    // spring-security
-    final ConfigurationDeclarer securityManager = extensionDeclarer.withConfig("security-manager")
-        .describedAs("This is the security provider type that is used to configure spring-security related functionality.");
-    securityManager.onDefaultParameterGroup().withRequiredParameter("providers").withExpressionSupport(NOT_SUPPORTED)
-        .withRole(BEHAVIOUR).ofType(typeBuilder.arrayType().of(typeLoader.load(SecurityProvider.class)).build());
+    securityProviderType.addField()
+        .key("name")
+        .description("Provider name to allow referencing it.")
+        .value(typeLoader.load(String.class))
+        .with(new ExpressionSupportAnnotation(NOT_SUPPORTED))
+        .required();
 
+    securityProviderType.addField()
+        .key("delegate-ref")
+        .with(new DisplayTypeAnnotation(DisplayModel.builder().displayName("Delegate Reference").build()))
+        .description("Reference to a Spring Security Manager to use.")
+        .value(typeLoader.load(String.class))
+        .with(new ExpressionSupportAnnotation(NOT_SUPPORTED))
+        .required();
+
+    securityProviderType.addField()
+        .key("authenticationProvider-ref")
+        .with(new DisplayTypeAnnotation(DisplayModel.builder().displayName("Authentication Provider Reference").build()))
+        .description("Reference to an authentication provider to use.")
+        .value(typeLoader.load(String.class))
+        .with(new ExpressionSupportAnnotation(NOT_SUPPORTED))
+        .required(false);
+
+    securityManager.onDefaultParameterGroup().withRequiredParameter("delegateSecurityProvider")
+        .ofType(securityProviderType.build())
+        .withDsl(ParameterDslConfiguration.builder()
+            .allowsInlineDefinition(true)
+            .allowsReferences(false)
+            .allowTopLevelDefinition(false)
+            .build())
+        .withExpressionSupport(NOT_SUPPORTED)
+        .withRole(BEHAVIOUR)
+        .withLayout(LayoutModel.builder().order(1).build());
+  }
+
+  private void declareAuthorizationFilter(ExtensionDeclarer extensionDeclarer, ClassTypeLoader typeLoader,
+                                          BaseTypeBuilder typeBuilder) {
     ErrorModel anyError = newError(ANY).build();
     final OperationDeclarer authorizationFilter = extensionDeclarer.withOperation("authorization-filter")
         .describedAs("Authorize users against a required set of authorities.")
@@ -110,6 +156,20 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
     authorizationFilter.onDefaultParameterGroup().withRequiredParameter("requiredAuthorities")
         .withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
+  }
+
+  private void declareExternalLibraries(ExtensionDeclarer extensionDeclarer) {
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("Spring Beans")
+        .withDescription("Spring Beans (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
+        .withCoordinates(SPRING_GROUP_ID + ":spring-beans:" + SPRING_VERSION)
+        .withType(DEPENDENCY).build());
+
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("Spring Context")
+        .withCoordinates(SPRING_GROUP_ID + ":spring-context:" + SPRING_VERSION)
+        .withDescription("Spring Context (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
+        .withType(DEPENDENCY).build());
 
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
         .withName("Spring Security Core")
@@ -138,4 +198,5 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withDescription("Spring Security LDAP (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
         .withType(DEPENDENCY).build());
   }
+
 }
