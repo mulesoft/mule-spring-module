@@ -20,13 +20,13 @@ import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.meta.NamedObject;
 
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Implementation of {@link ObjectProvider} that gives access to object to the mule artifact from an spring
