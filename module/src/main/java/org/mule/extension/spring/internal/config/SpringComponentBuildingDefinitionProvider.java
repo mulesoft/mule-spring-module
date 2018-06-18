@@ -61,6 +61,7 @@ public class SpringComponentBuildingDefinitionProvider implements ComponentBuild
     List<ComponentBuildingDefinition> componentBuildingDefinitions = new ArrayList<>();
 
     componentBuildingDefinitions.add(baseDefinition.withIdentifier("security-manager")
+        .alwaysEnabled(true)
         .withTypeDefinition(fromType(SecurityManager.class)).withObjectFactoryType(MuleSecurityManagerConfigurator.class)
         .withSetterParameterDefinition("muleContext", fromReferenceObject(MuleContext.class).build())
         .withSetterParameterDefinition("name", fromSimpleParameter("name").build())
