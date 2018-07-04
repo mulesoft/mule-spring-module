@@ -88,7 +88,7 @@ public class ResourceDelegate implements Resource {
     try {
       return delegate.getInputStream();
     } catch (Exception e) {
-      getResourceOrFail(getFilename());
+      getResourceOrFail(getFilename(), false);
       throw e;
     }
   }
