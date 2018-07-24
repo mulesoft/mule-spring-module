@@ -160,6 +160,12 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
 
   private void declareExternalLibraries(ExtensionDeclarer extensionDeclarer) {
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("Spring Core")
+        .withDescription("Spring Core (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
+        .withCoordinates(SPRING_GROUP_ID + ":spring-core:" + SPRING_VERSION)
+        .withType(DEPENDENCY).build());
+
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
         .withName("Spring Beans")
         .withDescription("Spring Beans (http://projects.spring.io/spring-framework). Based on the application usage of the Spring Framework, other spring dependencies may be required.")
         .withCoordinates(SPRING_GROUP_ID + ":spring-beans:" + SPRING_VERSION)
@@ -179,7 +185,6 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
 
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
         .withName("Spring Security Config")
-        .isOptional(true)
         .withCoordinates(SPRING_SECURITY_GROUP_ID + ":spring-security-config:" + SPRING_SECURITY_VERSION)
         .withDescription("Spring Security Config (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
         .withType(DEPENDENCY).build());
