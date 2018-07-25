@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mule.extensions</groupId>
         <artifactId>mule-core-modules-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.1</version>
     </parent>
 
     <groupId>org.mule.modules</groupId>
@@ -18,7 +18,6 @@
         <javaxInjectVersion>1</javaxInjectVersion>
         <springVersion>4.3.17.RELEASE</springVersion>
         <springSecurityVersion>4.2.6.RELEASE</springSecurityVersion>
-        
     </properties>
 
     <modules>
