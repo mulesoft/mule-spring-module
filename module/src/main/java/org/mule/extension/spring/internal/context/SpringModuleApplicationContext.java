@@ -8,25 +8,18 @@ package org.mule.extension.spring.internal.context;
 
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 import static org.springframework.context.annotation.AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME;
-
-import java.io.IOException;
-
 import org.mule.extension.spring.api.ArtifactPropertiesPlaceholder;
 import org.mule.extension.spring.internal.beanfactory.ArtifactObjectsAwareBeanFactory;
 import org.mule.extension.spring.internal.inject.MuleAwareObjectsInjectorProcessor;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.xml.ResourceEntityResolver;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.Resource;
 
 /**
  * {@link ClassPathXmlApplicationContext} extension that configures {@link org.springframework.beans.factory.BeanFactory} to use
@@ -49,23 +42,6 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
       throws BeansException {
     super(configLocations, false);
     this.configuration = configuration;
-  }
-
-  @Override
-  protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
-    // To ensure that we wrap the resource not found exception from spring.
-    XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory) {
-
-      @Override
-      public int loadBeanDefinitions(Resource resource) throws BeanDefinitionStoreException {
-        return super.loadBeanDefinitions(new ResourceDelegate(resource));
-      }
-    };
-    beanDefinitionReader.setEnvironment(this.getEnvironment());
-    beanDefinitionReader.setResourceLoader(this);
-    beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
-    this.initBeanDefinitionReader(beanDefinitionReader);
-    this.loadBeanDefinitions(beanDefinitionReader);
   }
 
   @Override
