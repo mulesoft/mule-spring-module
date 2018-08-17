@@ -12,4 +12,6 @@
 
     <bean name="objectProvider" class="java.util.concurrent.atomic.AtomicLong" scope="prototype"/>
 
+    <bean name="springObjectAware" class="org.mule.extension.spring.test.lifecycle.SpringAwareObject" />
+
 </beans>
