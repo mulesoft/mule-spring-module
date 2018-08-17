@@ -20,6 +20,7 @@ import static org.mule.extension.spring.AllureConstants.SpringFeature.LifecycleA
 import org.mule.extension.spring.test.SpringPluginFunctionalTestCase;
 import org.mule.tck.junit4.rule.SystemProperty;
 
+import org.hamcrest.core.IsNull;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -108,5 +109,16 @@ public class SpringLifecycleTestCase extends SpringPluginFunctionalTestCase {
     SpringLifecycleObject lifecycleObject = registry.<SpringLifecycleObject>lookupByName("lifecycleObject").get();
     Collection<AtomicDouble> atomicDoubles = lifecycleObject.getAtomicDoubles();
     assertThat(atomicDoubles, hasSize(0));
+  }
+
+  @Test
+  public void objectAwareOfSpringInjectableInterfaces() {
+    SpringAwareObject springObjectAware = registry.<SpringAwareObject>lookupByName("springObjectAware").get();
+    assertThat(springObjectAware.getApplicationContext(), notNullValue());
+    assertThat(springObjectAware.getApplicationEventPublisher(), notNullValue());
+    assertThat(springObjectAware.getEmbeddedValueResolver(), notNullValue());
+    assertThat(springObjectAware.getEnvironment(), notNullValue());
+    assertThat(springObjectAware.getMessageSource(), notNullValue());
+    assertThat(springObjectAware.getResourceLoader(), notNullValue());
   }
 }
