@@ -52,6 +52,7 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
 
   @Override
   protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+    super.prepareBeanFactory(beanFactory);
     DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
     defaultListableBeanFactory.registerBeanDefinition(AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME,
                                                       rootBeanDefinition(MuleAwareObjectsInjectorProcessor.class)

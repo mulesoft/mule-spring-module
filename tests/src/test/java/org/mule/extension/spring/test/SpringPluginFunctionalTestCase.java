@@ -14,6 +14,7 @@ import org.mule.test.runner.ArtifactClassLoaderRunnerConfig;
     "org.springframework:spring-beans",
     "org.springframework:spring-context",
     "org.springframework:spring-aop",
+    "org.springframework:spring-expression",
     "org.springframework.security:spring-security-core",
     "org.springframework.security:spring-security-config",
     "org.mule.tests:mule-tests-model"
