@@ -9,9 +9,14 @@ package org.mule.extension.spring.internal.beanfactory;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.lifecycle.Initialisable;
-import org.mule.runtime.api.lifecycle.Lifecycle;
 import org.mule.runtime.api.lifecycle.Startable;
 import org.mule.runtime.api.lifecycle.Stoppable;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.TypeConverter;
@@ -21,12 +26,6 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * {@link DefaultListableBeanFactory} implementation that takes into account the objects provided by the mule artifact for
@@ -57,11 +56,12 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     }
     if (springDependency == null) {
       return artifactObjectProvider.getObjectByType(descriptor.getDependencyType()).orElse(null);
-    } else if (descriptor.getCollectionType() != null) {
+    } else if (Collection.class.isAssignableFrom(descriptor.getDependencyType())) {
       // When a found dependency is a collection then we must also search for all the possible objects in the
       // artifact ObjectProvider.
-      Class<?> dependencyType = Collection.class.isAssignableFrom(descriptor.getDependencyType()) ? descriptor.getCollectionType()
-          : descriptor.getDependencyType();
+      Class<?> dependencyType = descriptor.getResolvableType().getGenerics().length == 1
+          ? descriptor.getResolvableType().getGenerics()[0].getRawClass()
+          : Object.class;
       Map<String, ?> objects = artifactObjectProvider.getObjectsByType(dependencyType);
       if (springDependency instanceof Collection) {
         List collectionValue = new ArrayList();
@@ -92,8 +92,9 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   }
 
   /**
-   * Overrides spring method to first check if the bean to be registered is a valid one. As for now, we are not supporting
-   * beans with a class that implements mule Lifecycle.
+   * Overrides spring method to first check if the bean to be registered is a valid one. As for now, we are not supporting beans
+   * with a class that implements mule Lifecycle.
+   * 
    * @param beanName
    * @param beanDefinition
    * @throws BeanDefinitionStoreException
@@ -108,11 +109,11 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   }
 
   /*
-   Evaluates if the class in the bean definition implements mule lifecycle
+   * Evaluates if the class in the bean definition implements mule lifecycle
    */
   private boolean implementsLifecycle(BeanDefinition beanDefinition) {
     if (beanDefinition.getBeanClassName() == null) {
-      //There is no class to check
+      // There is no class to check
       return false;
     }
     try {
@@ -122,7 +123,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
           Stoppable.class.isAssignableFrom(beanClass) ||
           Disposable.class.isAssignableFrom(beanClass);
     } catch (ClassNotFoundException e) {
-      //Do nothing, let the parsers handle this.
+      // Do nothing, let the parsers handle this.
     }
     return false;
   }
