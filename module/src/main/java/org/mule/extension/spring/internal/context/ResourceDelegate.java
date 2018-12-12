@@ -6,11 +6,13 @@
  */
 package org.mule.extension.spring.internal.context;
 
-import static org.mule.runtime.core.api.util.ClassUtils.getResourceOrFail;
+import org.mule.runtime.core.api.util.ClassUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 
@@ -88,7 +90,14 @@ public class ResourceDelegate implements Resource {
     try {
       return delegate.getInputStream();
     } catch (Exception e) {
-      getResourceOrFail(getFilename(), false);
+      try {
+        //Calling this method by reflection to support 4.1.x
+        Class<? extends Class> clazz = ClassUtils.class.getClass();
+        Method method = clazz.getMethod("getResourceOrFail");
+        method.invoke(null, getFilename(), false);
+      } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e2) {
+        // Do nothing, just re-throw original exception since we are running in an older mule runtime.
+      }
       throw e;
     }
   }
