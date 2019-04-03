@@ -16,8 +16,8 @@
     <properties>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
         <javaxInjectVersion>1</javaxInjectVersion>
-        <springVersion>5.1.0.RELEASE</springVersion>
-        <springSecurityVersion>5.1.0.RELEASE</springSecurityVersion>
+        <springVersion>5.1.6.RELEASE</springVersion>
+        <springSecurityVersion>5.1.5.RELEASE</springSecurityVersion>
         <mule.version>4.1.6-SNAPSHOT</mule.version>
     </properties>
 
