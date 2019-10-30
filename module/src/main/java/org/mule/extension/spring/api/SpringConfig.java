@@ -31,7 +31,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Implementation of {@link ObjectProvider} that gives access to object to the mule artifact from an spring
  * {@link org.springframework.context.ApplicationContext}.
- *
+ * 
  * @since 1.0
  */
 public class SpringConfig extends AbstractComponent
