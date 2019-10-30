@@ -6,6 +6,7 @@
  */
 package org.mule.extension.spring.api;
 
+import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -19,6 +20,7 @@ import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.meta.NamedObject;
+import org.mule.runtime.module.artifact.api.classloader.RegionClassLoader;
 
 import java.util.Map;
 import java.util.Optional;
@@ -48,15 +50,32 @@ public class SpringConfig extends AbstractComponent
     this.parameters = parameters;
   }
 
+  private Optional<ClassLoader> getRegionClassLoader() {
+    ClassLoader contextClassLoader = currentThread().getContextClassLoader();
+    while (contextClassLoader != null) {
+      if (RegionClassLoader.class.isAssignableFrom(contextClassLoader.getClass())) {
+        return of(contextClassLoader);
+      }
+      contextClassLoader = contextClassLoader.getParent();
+    }
+    return empty();
+  }
+
   @Override
   public void configure(ObjectProviderConfiguration configuration) {
-    withContextClassLoader(SpringConfig.class.getClassLoader(), () -> {
-      String files = parameters.get("files");
-      String[] configFiles = files.split(",");
-      applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
-      applicationContext.setClassLoader(SpringConfig.class.getClassLoader());
-      applicationContext.refresh();
-    });
+    getRegionClassLoader().ifPresent(
+                                     rcl -> withContextClassLoader(
+                                                                   rcl,
+                                                                   () -> {
+                                                                     String files = parameters.get("files");
+                                                                     String[] configFiles = files.split(",");
+                                                                     applicationContext =
+                                                                         new SpringModuleApplicationContext(configFiles,
+                                                                                                            configuration);
+                                                                     applicationContext
+                                                                         .setClassLoader(rcl);
+                                                                     applicationContext.refresh();
+                                                                   }));
   }
 
   @Override

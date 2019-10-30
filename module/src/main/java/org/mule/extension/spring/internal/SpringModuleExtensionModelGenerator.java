@@ -7,6 +7,8 @@
 package org.mule.extension.spring.internal;
 
 import static java.lang.String.format;
+import static org.mule.extension.spring.internal.utils.MavenUtils.getArtifactVersion;
+import static org.mule.extension.spring.internal.utils.MavenUtils.getMavenProperty;
 import static org.mule.metadata.java.api.JavaTypeLoader.JAVA;
 import static org.mule.runtime.api.meta.Category.COMMUNITY;
 import static org.mule.runtime.api.meta.ExpressionSupport.NOT_SUPPORTED;
@@ -17,11 +19,17 @@ import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Ha
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.NOT_PERMITTED;
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.SERVER_SECURITY;
 import static org.mule.runtime.extension.api.stereotype.MuleStereotypes.APP_CONFIG;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.function.Supplier;
+
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.annotation.TypeAliasAnnotation;
 import org.mule.metadata.api.builder.BaseTypeBuilder;
 import org.mule.metadata.api.builder.ObjectTypeBuilder;
 import org.mule.metadata.java.api.annotation.ClassInformationAnnotation;
+import org.mule.runtime.api.exception.MuleRuntimeException;
 import org.mule.runtime.api.meta.MuleVersion;
 import org.mule.runtime.api.meta.model.ExternalLibraryModel;
 import org.mule.runtime.api.meta.model.ParameterDslConfiguration;
@@ -52,16 +60,44 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   public static final String PREFIX_NAME = "spring";
   public static final String EXTENSION_DESCRIPTION = "Spring Module Plugin";
   public static final String VENDOR = "Mulesoft";
-  public static final String VERSION = "1.4.0-SNAPSHOT";
   public static final MuleVersion MIN_MULE_VERSION = new MuleVersion("4.0");
   public static final String XSD_FILE_NAME = "mule-spring.xsd";
   private static final String UNESCAPED_LOCATION_PREFIX = "http://";
   private static final String SCHEMA_LOCATION = "www.mulesoft.org/schema/mule/spring";
   private static final String SCHEMA_VERSION = "current";
-  private static final String SPRING_VERSION = "5.1.0.RELEASE";
-  private static final String SPRING_SECURITY_VERSION = "5.1.0.RELEASE";
   private static final String SPRING_GROUP_ID = "org.springframework";
   private static final String SPRING_SECURITY_GROUP_ID = "org.springframework.security";
+
+  private static final String SPRING_VERSION_PROPERTY = "springVersion";
+  private static final String SPRING_SECURITY_VERSION_PROPERTY = "springSecurityVersion";
+
+  public static final String VERSION;
+  private static final String SPRING_VERSION;
+  private static final String SPRING_SECURITY_VERSION;
+
+  static {
+    Supplier<File> pomSupplier = () -> {
+      try {
+        return new File(
+                        SpringModuleExtensionModelGenerator.class
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .toURI())
+                                .getParentFile()
+                                .getParentFile()
+                                .getParentFile();
+      } catch (URISyntaxException e) {
+        throw new MuleRuntimeException(e);
+      }
+    };
+
+    VERSION = getArtifactVersion(pomSupplier);
+    SPRING_VERSION = getMavenProperty(SPRING_VERSION_PROPERTY, pomSupplier)
+        .orElseThrow(() -> new RuntimeException("Could not find " + SPRING_VERSION_PROPERTY + " in pom"));
+    SPRING_SECURITY_VERSION = getMavenProperty(SPRING_VERSION_PROPERTY, pomSupplier)
+        .orElseThrow(() -> new RuntimeException("Could not find " + SPRING_SECURITY_VERSION_PROPERTY + " in pom"));
+  }
 
   @Override
   public void accept(ExtensionDeclarer extensionDeclarer, ExtensionLoadingContext extensionLoadingContext) {
