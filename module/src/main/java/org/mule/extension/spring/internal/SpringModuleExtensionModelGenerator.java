@@ -17,6 +17,7 @@ import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Ha
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.NOT_PERMITTED;
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.SERVER_SECURITY;
 import static org.mule.runtime.extension.api.stereotype.MuleStereotypes.APP_CONFIG;
+
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.annotation.TypeAliasAnnotation;
 import org.mule.metadata.api.builder.BaseTypeBuilder;
@@ -30,6 +31,7 @@ import org.mule.runtime.api.meta.model.declaration.fluent.ConfigurationDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.ConstructDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.ExtensionDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.OperationDeclarer;
+import org.mule.runtime.api.meta.model.declaration.fluent.ParameterDeclarer;
 import org.mule.runtime.api.meta.model.declaration.fluent.ParameterGroupDeclarer;
 import org.mule.runtime.api.meta.model.display.DisplayModel;
 import org.mule.runtime.api.meta.model.display.LayoutModel;
@@ -40,6 +42,9 @@ import org.mule.runtime.extension.api.declaration.type.annotation.DisplayTypeAnn
 import org.mule.runtime.extension.api.declaration.type.annotation.ExpressionSupportAnnotation;
 import org.mule.runtime.extension.api.loader.ExtensionLoadingContext;
 import org.mule.runtime.extension.api.loader.ExtensionLoadingDelegate;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Spring module {@link org.mule.runtime.api.meta.model.ExtensionModel} generator.
@@ -100,6 +105,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   private void declareSecurityManager(ExtensionDeclarer extensionDeclarer, BaseTypeBuilder typeBuilder,
                                       ClassTypeLoader typeLoader) {
     ConstructDeclarer securityManager = extensionDeclarer.withConstruct("securityManager")
+        .allowingTopLevelDefinition()
         .withStereotype(StereotypeModelBuilder.newStereotype("SECURITY_MANAGER", "SPRING").withParent(APP_CONFIG).build())
         .describedAs("Security manager that allows configuring Spring security providers.");
 
@@ -131,7 +137,21 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .with(new ExpressionSupportAnnotation(NOT_SUPPORTED))
         .required(false);
 
-    securityManager.onDefaultParameterGroup().withRequiredParameter("delegateSecurityProvider")
+    ParameterDeclarer nameParam = securityManager.onDefaultParameterGroup()
+        .withRequiredParameter("name")
+        .ofType(typeLoader.load(String.class))
+        .withExpressionSupport(NOT_SUPPORTED);
+
+    try {
+      final Method declaredMethod = ParameterDeclarer.class.getDeclaredMethod("asComponentId");
+      nameParam = (ParameterDeclarer) declaredMethod.invoke(nameParam);
+    } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+        | InvocationTargetException e) {
+      // mule version lower than 4.2, continue without setting the name as componentId
+    }
+
+    securityManager.onDefaultParameterGroup()
+        .withRequiredParameter("delegateSecurityProvider")
         .ofType(securityProviderType.build())
         .withDsl(ParameterDslConfiguration.builder()
             .allowsInlineDefinition(true)
