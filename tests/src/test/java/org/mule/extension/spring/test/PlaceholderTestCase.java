@@ -11,6 +11,7 @@ import static org.junit.Assert.assertThat;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import org.mule.tck.junit4.rule.SystemProperty;
+import org.mule.tck.testmodels.fruit.GrapeFruit;
 import org.mule.tck.testmodels.fruit.Orange;
 
 import java.util.Map;
@@ -46,6 +47,15 @@ public class PlaceholderTestCase extends SpringPluginFunctionalTestCase {
     Map mapProperties = orange.getMapProperties();
     assertThat(mapProperties.get("springPropertyA"), is("springPropertyAValue"));
     assertThat(mapProperties.get("springPropertyB"), is("springPropertyBValue"));
+  }
+
+  @Test
+  public void spelCanBeUsedInSpringBeans() throws Exception {
+    GrapeFruit grapeFruit = registry.<GrapeFruit>lookupByName("grapefruit").get();
+    assertThat(grapeFruit.getBrand(), is("123"));
+    assertThat(grapeFruit.getRadius(), is(1.2));
+    assertThat(grapeFruit.getSegments(), is(3));
+    assertThat(grapeFruit.isRed(), is(true));
   }
 
 }
