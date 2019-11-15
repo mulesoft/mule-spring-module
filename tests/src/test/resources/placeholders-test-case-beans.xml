@@ -22,4 +22,11 @@
         </property>
     </bean>
 
+    <bean name="grapefruit" class="org.mule.tck.testmodels.fruit.GrapeFruit">
+        <property name="segments" value="#{T(java.lang.Math).addExact(1, 2)}"/>
+        <property name="radius" value="#{T(java.lang.Math).abs(1.2)}"/>
+        <property name="brand" value="#{T(java.lang.String).valueOf(123)}"/>
+        <property name="red" value="#{true || false}"/>
+    </bean>
+
 </beans>
