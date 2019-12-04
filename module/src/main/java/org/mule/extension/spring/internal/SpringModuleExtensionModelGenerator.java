@@ -64,7 +64,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   private static final String SCHEMA_LOCATION = "www.mulesoft.org/schema/mule/spring";
   private static final String SCHEMA_VERSION = "current";
   private static final String SPRING_VERSION = "5.2.2.RELEASE";
-  private static final String SPRING_SECURITY_VERSION = "5.1.5.RELEASE";
+  private static final String SPRING_SECURITY_VERSION = "5.2.1.RELEASE";
   private static final String SPRING_GROUP_ID = "org.springframework";
   private static final String SPRING_SECURITY_GROUP_ID = "org.springframework.security";
 
