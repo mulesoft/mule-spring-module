@@ -50,11 +50,12 @@ public class SpringConfig extends AbstractComponent
 
   @Override
   public void configure(ObjectProviderConfiguration configuration) {
-    withContextClassLoader(SpringConfig.class.getClassLoader(), () -> {
+    final ClassLoader artifactClassLoader = Thread.currentThread().getContextClassLoader();
+    withContextClassLoader(artifactClassLoader, () -> {
       String files = parameters.get("files");
       String[] configFiles = files.split(",");
       applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
-      applicationContext.setClassLoader(SpringConfig.class.getClassLoader());
+      applicationContext.setClassLoader(artifactClassLoader);
       applicationContext.refresh();
     });
   }
