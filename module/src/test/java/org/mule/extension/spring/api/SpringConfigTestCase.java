@@ -6,15 +6,18 @@
  */
 package org.mule.extension.spring.api;
 
-
+import static java.lang.Thread.currentThread;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.junit.rules.ExpectedException.none;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
-import static java.lang.Thread.currentThread;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
@@ -28,6 +31,7 @@ import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.config.internal.ImmutableObjectProviderConfiguration;
 import org.mule.tck.junit4.AbstractMuleTestCase;
 
+import java.io.FileNotFoundException;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,8 +82,11 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
       config.configure(configuration);
       fail("Expected exception");
     } catch (MuleRuntimeException e) {
-      // ignore
+      assertEquals(FileNotFoundException.class, getRootCause(e).getClass());
     }
+
+    verify(fakeClassLoader, atLeastOnce()).getResourceAsStream(anyString());
+
     // Restore context ClassLoader
     currentThread().setContextClassLoader(originalClassLoader);
     config.configure(configuration);

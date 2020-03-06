@@ -6,6 +6,7 @@
  */
 package org.mule.extension.spring.api;
 
+import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -50,7 +51,7 @@ public class SpringConfig extends AbstractComponent
 
   @Override
   public void configure(ObjectProviderConfiguration configuration) {
-    final ClassLoader artifactClassLoader = Thread.currentThread().getContextClassLoader();
+    final ClassLoader artifactClassLoader = currentThread().getContextClassLoader();
     withContextClassLoader(artifactClassLoader, () -> {
       String files = parameters.get("files");
       String[] configFiles = files.split(",");
