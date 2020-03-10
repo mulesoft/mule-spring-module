@@ -24,6 +24,7 @@ import org.mule.runtime.api.meta.NamedObject;
 import java.util.Map;
 import java.util.Optional;
 
+import org.mule.runtime.module.artifact.api.classloader.RegionClassLoader;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -51,14 +52,27 @@ public class SpringConfig extends AbstractComponent
 
   @Override
   public void configure(ObjectProviderConfiguration configuration) {
-    final ClassLoader artifactClassLoader = currentThread().getContextClassLoader();
-    withContextClassLoader(artifactClassLoader, () -> {
+    // Use RegionClassLoader to ensure Spring module right access to resources and only access classes exported in the application
+    // Using MuleArtifactClassLoader fails on get Spring module resources when it's defined on both application and domain.
+    ClassLoader artifactClassLoader = currentThread().getContextClassLoader();
+    final ClassLoader regionClassLoader = getRegionClassLoader(artifactClassLoader, artifactClassLoader);
+    withContextClassLoader(regionClassLoader, () -> {
       String files = parameters.get("files");
       String[] configFiles = files.split(",");
       applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
-      applicationContext.setClassLoader(artifactClassLoader);
+      applicationContext.setClassLoader(regionClassLoader);
       applicationContext.refresh();
     });
+  }
+
+  private ClassLoader getRegionClassLoader(ClassLoader base, ClassLoader current) {
+    if (current instanceof RegionClassLoader) {
+      return current;
+    }
+    if (current.getParent() == null) {
+      return base;
+    }
+    return getRegionClassLoader(base, current.getParent());
   }
 
   @Override
