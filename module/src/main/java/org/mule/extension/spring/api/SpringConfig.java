@@ -54,8 +54,7 @@ public class SpringConfig extends AbstractComponent
   public void configure(ObjectProviderConfiguration configuration) {
     // Use RegionClassLoader to ensure Spring module right access to resources and only access classes exported in the application
     // Using MuleArtifactClassLoader fails on get Spring module resources when it's defined on both application and domain.
-    ClassLoader artifactClassLoader = currentThread().getContextClassLoader();
-    final ClassLoader regionClassLoader = getRegionClassLoader(artifactClassLoader, artifactClassLoader);
+    final ClassLoader regionClassLoader = getRegionClassLoader();
     withContextClassLoader(regionClassLoader, () -> {
       String files = parameters.get("files");
       String[] configFiles = files.split(",");
@@ -65,6 +64,26 @@ public class SpringConfig extends AbstractComponent
     });
   }
 
+  /**
+   * Find RegionClassLoader based on ArtifactClassLoader.
+   * If RegionClassLoader is not found on ArtifactClassLoader's hierarchy ArtifactClassLoader will be returned instead.
+   * This ensure Spring module only access to exported classes and resources.
+   *
+   * Using Thread.currentContext.getContextClassLoader() enables access to NOT exported classes.
+   * @return RegionClassLoader
+   */
+  private ClassLoader getRegionClassLoader() {
+    ClassLoader artifactClassLoader = currentThread().getContextClassLoader();
+    return getRegionClassLoader(artifactClassLoader, artifactClassLoader);
+  }
+
+  /**
+   * Try to find RegionClassLoader based on <code>current</code> argument.
+   *
+   * @param base Default classLoader to be returned if RegionClassLoader is not found on <code>current</code> argument
+   * @param current The initial ClassLoader.
+   * @return RegionClassLoader or <code>base</code> argument if RegionClassLoader is not found on <code>current</code> argument classloader's hierarchy
+   */
   private ClassLoader getRegionClassLoader(ClassLoader base, ClassLoader current) {
     if (current instanceof RegionClassLoader) {
       return current;
