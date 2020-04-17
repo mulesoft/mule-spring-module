@@ -8,27 +8,21 @@ package org.mule.extension.spring.api;
 
 import static java.lang.Thread.currentThread;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Story;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.mule.runtime.api.component.ConfigurationProperties;
 import org.mule.runtime.api.exception.MuleRuntimeException;
 import org.mule.runtime.api.ioc.ObjectProvider;
-import org.mule.runtime.config.internal.ImmutableObjectProviderConfiguration;
+import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.tck.junit4.AbstractMuleTestCase;
 
 import java.io.FileNotFoundException;
@@ -36,6 +30,14 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 
 @Feature(SPRING_EXTENSION)
 @Story(ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY)
@@ -75,7 +77,7 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
 
     ConfigurationProperties configurationProperties = mock(ConfigurationProperties.class);
     ObjectProvider artifactObjectProvider = mock(ObjectProvider.class);
-    ImmutableObjectProviderConfiguration configuration =
+    ObjectProviderConfiguration configuration =
         new ImmutableObjectProviderConfiguration(configurationProperties, artifactObjectProvider);
 
     try {
@@ -110,6 +112,32 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
     public String getName() {
       return name;
     }
+  }
+
+  /**
+   * Immutable implementation of {@link ObjectProviderConfiguration}
+   */
+  public class ImmutableObjectProviderConfiguration implements ObjectProviderConfiguration {
+
+    private final ObjectProvider artifactObjectProvider;
+    private final ConfigurationProperties configurationProperties;
+
+    public ImmutableObjectProviderConfiguration(ConfigurationProperties configurationProperties,
+                                                ObjectProvider artifactObjectProvider) {
+      this.configurationProperties = configurationProperties;
+      this.artifactObjectProvider = artifactObjectProvider;
+    }
+
+    @Override
+    public ObjectProvider getArtifactObjectProvider() {
+      return artifactObjectProvider;
+    }
+
+    @Override
+    public ConfigurationProperties getConfigurationProperties() {
+      return configurationProperties;
+    }
+
   }
 }
 
