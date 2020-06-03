@@ -96,6 +96,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
 
   private void declareConfig(ExtensionDeclarer extensionDeclarer, ClassTypeLoader typeLoader) {
     final ConfigurationDeclarer springConfig = extensionDeclarer.withConfig("config")
+        .withStereotype(StereotypeModelBuilder.newStereotype("CONFIG", "SPRING").withParent(APP_CONFIG).build())
         .describedAs("Spring configuration that allows to define a set of spring XML files and create an application context with objects to be used in the mule artifact.");
     ParameterGroupDeclarer parameterGroupDeclarer = springConfig.onDefaultParameterGroup();
     parameterGroupDeclarer.withRequiredParameter("files").withExpressionSupport(NOT_SUPPORTED)
