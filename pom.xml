@@ -15,7 +15,6 @@
 
     <properties>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
-        <javaxInjectVersion>1</javaxInjectVersion>
 
         <springVersion>5.1.6.RELEASE</springVersion>
         <springSecurityVersion>5.1.5.RELEASE</springSecurityVersion>
