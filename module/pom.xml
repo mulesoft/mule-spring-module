@@ -97,11 +97,5 @@
             <version>${springSecurityVersion}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>${javaxInjectVersion}</version>
-        </dependency>
     </dependencies>
 </project>
