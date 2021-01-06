@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<!-- Generic cache manager based on the JDK ConcurrentMap -->
+	<bean id="springObjectReferencingArtifactObject" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean
+					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+					<property name="name" value="currencyCache" />
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+	<cache:advice id="ratesCachingBehavior" cache-manager="springObjectReferencingArtifactObject">
+		<cache:caching cache="currencyCache">
+			<cache:cacheable method="getCurrencyRate" key="#numeratorCcy" />
+			<cache:cache-evict method="triggerRatesCacheEviction"
+				all-entries="true" />
+		</cache:caching>
+	</cache:advice>
+
+
+</beans>
