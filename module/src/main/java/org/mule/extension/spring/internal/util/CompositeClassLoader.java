@@ -6,7 +6,6 @@
  */
 package org.mule.extension.spring.internal.util;
 
-import static java.lang.System.identityHashCode;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -57,37 +56,15 @@ public class CompositeClassLoader extends ClassLoader {
     delegates = unmodifiableList(delegates);
   }
 
-  private static List<Integer> getKey(ClassLoader... classLoaders) {
-    List<Integer> key = new ArrayList<>(classLoaders.length);
-    for (ClassLoader cl : classLoaders) {
-      if (cl != null) {
-        key.add(identityHashCode(cl));
-      }
-    }
-    return key;
-  }
-
-  private static List<Integer> getKey(ClassLoader first, ClassLoader second) {
-    if (first != null && second != null) {
-      return asList(identityHashCode(first), identityHashCode(second));
-    } else if (first != null) {
-      return singletonList(identityHashCode(first));
-    } else if (second != null) {
-      return singletonList(identityHashCode(second));
-    } else {
-      return emptyList();
-    }
-  }
-
   /**
-  * Overrides the loadClass in order to support scenarios where a custom class loader is created in a plugin
-  * and these calls to this method explicitly.
-  *
-  * @param name    The <a href="#name">binary name</a> of the class
-  * @param resolve If <tt>true</tt> then resolve the class
-  * @return The resulting <tt>Class</tt> object
-  * @throws ClassNotFoundException If the class could not be found
-  */
+   * Overrides the loadClass in order to support scenarios where a custom class loader is created in a plugin and these calls to
+   * this method explicitly.
+   *
+   * @param name The <a href="#name">binary name</a> of the class
+   * @param resolve If <tt>true</tt> then resolve the class
+   * @return The resulting <tt>Class</tt> object
+   * @throws ClassNotFoundException If the class could not be found
+   */
   @Override
   public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
     ClassNotFoundException firstException = null;
