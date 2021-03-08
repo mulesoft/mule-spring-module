@@ -7,25 +7,22 @@
 package org.mule.extension.spring.api;
 
 import static java.lang.Thread.currentThread;
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 
 import org.mule.runtime.api.component.ConfigurationProperties;
-import org.mule.runtime.api.exception.MuleRuntimeException;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.tck.junit4.AbstractMuleTestCase;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +34,7 @@ import org.junit.Test;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
 import io.qameta.allure.Story;
 
 @Feature(SPRING_EXTENSION)
@@ -64,10 +62,46 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
 
   @Description("SpringConfig should use current thread Context ClassLoader to load resources")
   @Test
-  public void springConfigShouldUseThreadContextClassLoader() {
+  public void springConfigShouldUseThreadContextClassLoader() throws ClassNotFoundException, IOException {
     // Mock class loader
     URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
+    when(fakeClassLoader.getResources(anyString()))
+        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgumentAt(0, String.class)));
+    when(fakeClassLoader.getResourceAsStream("other-cl-" + FILE_NAME))
+        .thenAnswer(inv -> originalClassLoader.getResourceAsStream(FILE_NAME));
+    when(fakeClassLoader.loadClass(anyString()))
+        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgumentAt(0, String.class)));
     currentThread().setContextClassLoader(fakeClassLoader);
+
+    // Set parameters
+    Map<String, String> parameters = new HashMap<>();
+    parameters.put(NAME, CONFIG_NAME);
+    parameters.put(FILES, "other-cl-" + FILE_NAME);
+    config.setParameters(parameters);
+
+    ConfigurationProperties configurationProperties = mock(ConfigurationProperties.class);
+    ObjectProvider artifactObjectProvider = mock(ObjectProvider.class);
+    ObjectProviderConfiguration configuration =
+        new ImmutableObjectProviderConfiguration(configurationProperties, artifactObjectProvider);
+
+    config.configure(configuration);
+
+    verify(fakeClassLoader, atLeastOnce()).getResourceAsStream(anyString());
+
+    Optional<Object> customer = config.getObject("customer");
+
+    assertThat(CONFIG_NAME, is(config.getName()));
+    assertThat("customer name", is(((Customer) customer.get()).getName()));
+  }
+
+  @Test
+  @Issue("SPRM-203")
+  public void classloaderFallbackToPlugin() throws ClassNotFoundException {
+    URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
+    currentThread().setContextClassLoader(fakeClassLoader);
+
+    when(fakeClassLoader.loadClass(anyString()))
+        .thenThrow(new ClassNotFoundException("anyClass"));
 
     // Set parameters
     Map<String, String> parameters = new HashMap<>();
@@ -80,17 +114,6 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
     ObjectProviderConfiguration configuration =
         new ImmutableObjectProviderConfiguration(configurationProperties, artifactObjectProvider);
 
-    try {
-      config.configure(configuration);
-      fail("Expected exception");
-    } catch (MuleRuntimeException e) {
-      assertEquals(FileNotFoundException.class, getRootCause(e).getClass());
-    }
-
-    verify(fakeClassLoader, atLeastOnce()).getResourceAsStream(anyString());
-
-    // Restore context ClassLoader
-    currentThread().setContextClassLoader(originalClassLoader);
     config.configure(configuration);
 
     Optional<Object> customer = config.getObject("customer");
