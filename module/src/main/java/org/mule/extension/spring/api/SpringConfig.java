@@ -13,18 +13,20 @@ import static java.util.Optional.of;
 import static java.util.stream.Collectors.toMap;
 import static org.mule.runtime.api.util.Preconditions.checkState;
 import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
+
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
+import org.mule.extension.spring.internal.util.CompositeClassLoader;
 import org.mule.runtime.api.component.AbstractComponent;
 import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.meta.NamedObject;
+import org.mule.runtime.module.artifact.api.classloader.RegionClassLoader;
 
 import java.util.Map;
 import java.util.Optional;
 
-import org.mule.runtime.module.artifact.api.classloader.RegionClassLoader;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -33,7 +35,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Implementation of {@link ObjectProvider} that gives access to object to the mule artifact from an spring
  * {@link org.springframework.context.ApplicationContext}.
- * 
+ *
  * @since 1.0
  */
 public class SpringConfig extends AbstractComponent
@@ -55,11 +57,20 @@ public class SpringConfig extends AbstractComponent
     // Use RegionClassLoader to ensure Spring module right access to resources and only access classes exported in the application
     // Using MuleArtifactClassLoader fails on get Spring module resources when it's defined on both application and domain.
     final ClassLoader regionClassLoader = getRegionClassLoader();
-    withContextClassLoader(regionClassLoader, () -> {
+    final ClassLoader springClassLoader = SpringModuleApplicationContext.class.getSuperclass().getClassLoader();
+
+    ClassLoader springAppCtxClassLoader;
+    if (!springClassLoader.equals(regionClassLoader)) {
+      springAppCtxClassLoader = new CompositeClassLoader(regionClassLoader, springClassLoader);
+    } else {
+      springAppCtxClassLoader = regionClassLoader;
+    }
+
+    withContextClassLoader(springAppCtxClassLoader, () -> {
       String files = parameters.get("files");
       String[] configFiles = files.split(",");
       applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
-      applicationContext.setClassLoader(regionClassLoader);
+      applicationContext.setClassLoader(springAppCtxClassLoader);
       applicationContext.refresh();
     });
   }
