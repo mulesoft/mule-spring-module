@@ -9,7 +9,7 @@
     <artifactId>mule-spring-module-tests</artifactId>
 
     <properties>
-        <httpcommons.httpclient.version>4.5.3</httpcommons.httpclient.version>
+        <httpcommons.httpclient.version>4.5.13</httpcommons.httpclient.version>
 
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
     </properties>
