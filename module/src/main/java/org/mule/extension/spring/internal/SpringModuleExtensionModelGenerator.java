@@ -25,6 +25,7 @@ import org.mule.metadata.api.builder.ObjectTypeBuilder;
 import org.mule.metadata.java.api.annotation.ClassInformationAnnotation;
 import org.mule.runtime.api.meta.MuleVersion;
 import org.mule.runtime.api.meta.model.ExternalLibraryModel;
+import org.mule.runtime.api.meta.model.ModelProperty;
 import org.mule.runtime.api.meta.model.ParameterDslConfiguration;
 import org.mule.runtime.api.meta.model.XmlDslModel;
 import org.mule.runtime.api.meta.model.declaration.fluent.ConfigurationDeclarer;
@@ -151,17 +152,36 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
       // mule version lower than 4.2, continue without setting the name as componentId
     }
 
-    securityManager.onDefaultParameterGroup()
-        .withRequiredParameter("delegateSecurityProvider")
-        .ofType(securityProviderType.build())
-        .withDsl(ParameterDslConfiguration.builder()
-            .allowsInlineDefinition(true)
-            .allowsReferences(false)
-            .allowTopLevelDefinition(false)
-            .build())
-        .withExpressionSupport(NOT_SUPPORTED)
-        .withRole(BEHAVIOUR)
-        .withLayout(LayoutModel.builder().order(1).build());
+    try {
+      final Class<?> forName =
+          Class.forName("org.mule.runtime.extension.api.property.NoWrapperModelProperty");
+      ParameterDeclarer delegateSecurityProviders = securityManager.onDefaultParameterGroup()
+          .withRequiredParameter("delegateSecurityProviders")
+          .ofType(typeBuilder.arrayType().of(securityProviderType.build()).build())
+          .withDsl(ParameterDslConfiguration.builder()
+              .allowsInlineDefinition(true)
+              .allowsReferences(false)
+              .allowTopLevelDefinition(false)
+              .build())
+          .withExpressionSupport(NOT_SUPPORTED)
+          .withRole(BEHAVIOUR)
+          .withLayout(LayoutModel.builder().order(1).build());
+      delegateSecurityProviders.withModelProperty((ModelProperty) forName.newInstance());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+        | SecurityException e) {
+      // mule version lower than 4.4, keep previous version of the model
+      ParameterDeclarer delegateSecurityProviders = securityManager.onDefaultParameterGroup()
+          .withRequiredParameter("delegateSecurityProvider")
+          .ofType(securityProviderType.build())
+          .withDsl(ParameterDslConfiguration.builder()
+              .allowsInlineDefinition(true)
+              .allowsReferences(false)
+              .allowTopLevelDefinition(false)
+              .build())
+          .withExpressionSupport(NOT_SUPPORTED)
+          .withRole(BEHAVIOUR)
+          .withLayout(LayoutModel.builder().order(1).build());
+    }
   }
 
   private void declareAuthorizationFilter(ExtensionDeclarer extensionDeclarer, ClassTypeLoader typeLoader,
