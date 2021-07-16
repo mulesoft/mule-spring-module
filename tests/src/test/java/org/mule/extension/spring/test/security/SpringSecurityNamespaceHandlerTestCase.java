@@ -7,7 +7,6 @@
 package org.mule.extension.spring.test.security;
 
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
@@ -20,11 +19,8 @@ import org.mule.runtime.api.security.Authentication;
 import org.mule.runtime.api.security.SecurityContext;
 import org.mule.runtime.api.security.SecurityException;
 import org.mule.runtime.api.security.UnknownAuthenticationTypeException;
-import org.mule.runtime.core.api.security.AbstractSecurityProvider;
 import org.mule.runtime.core.api.security.SecurityManager;
 import org.mule.runtime.core.api.security.SecurityProvider;
-
-import java.util.Iterator;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -55,24 +51,6 @@ public class SpringSecurityNamespaceHandlerTestCase extends SpringPluginFunction
     return securityManager.getProvider(providerName);
   }
 
-  @Test
-  public void testCustom() {
-    Iterator<SecurityProvider> providers = muleContext.getSecurityManager().getProviders().iterator();
-    while (providers.hasNext()) {
-      SecurityProvider provider = providers.next();
-      LOGGER.debug(provider.getName());
-    }
-
-    knownProperties(getProvider("willAlsoOverwriteName"));
-    knownProperties(getProvider("willOverwriteName"));
-  }
-
-  protected void knownProperties(SecurityProvider provider) {
-    assertNotNull(provider);
-    assertThat(provider.getClass().getName(),
-               is("org.mule.runtime.config.internal.CustomSecurityProviderDelegate"));
-  }
-
   public static class CustomSecurityProvider implements SecurityProvider {
 
     private String name;
@@ -85,6 +63,7 @@ public class SpringSecurityNamespaceHandlerTestCase extends SpringPluginFunction
       setName(name);
     }
 
+    @Override
     public void setName(String name) {
       this.name = name;
     }
