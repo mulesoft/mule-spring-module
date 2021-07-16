@@ -12,12 +12,4 @@
         <spring:delegate-security-provider name="memory-dao" delegate-ref="authenticationManager"/>
     </spring:security-manager>
 
-    <security-manager>
-        <custom-security-provider name="willAlsoOverwriteName" provider-ref="explicitCreation1"/>
-    </security-manager>
-
-    <security-manager>
-        <custom-security-provider name="willOverwriteName" provider-ref="explicitCreation2"/>
-    </security-manager>
-
 </mule>
