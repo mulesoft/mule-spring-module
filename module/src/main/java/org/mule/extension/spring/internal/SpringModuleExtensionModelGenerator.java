@@ -6,7 +6,6 @@
  */
 package org.mule.extension.spring.internal;
 
-import static java.lang.String.format;
 import static org.mule.metadata.java.api.JavaTypeLoader.JAVA;
 import static org.mule.runtime.api.meta.Category.COMMUNITY;
 import static org.mule.runtime.api.meta.ExpressionSupport.NOT_SUPPORTED;
@@ -18,10 +17,14 @@ import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Ha
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.SERVER_SECURITY;
 import static org.mule.runtime.extension.api.stereotype.MuleStereotypes.APP_CONFIG;
 
+import static java.lang.String.format;
+
+import org.mule.extension.spring.api.validation.SpringModuleValidationsProvider;
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.annotation.TypeAliasAnnotation;
 import org.mule.metadata.api.builder.BaseTypeBuilder;
 import org.mule.metadata.api.builder.ObjectTypeBuilder;
+import org.mule.metadata.api.model.ObjectType;
 import org.mule.metadata.java.api.annotation.ClassInformationAnnotation;
 import org.mule.runtime.api.meta.MuleVersion;
 import org.mule.runtime.api.meta.model.ExternalLibraryModel;
@@ -69,6 +72,8 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   private static final String SPRING_GROUP_ID = "org.springframework";
   private static final String SPRING_SECURITY_GROUP_ID = "org.springframework.security";
 
+  public static final String CONFIG_FILES_PARAM = "files";
+
   @Override
   public void accept(ExtensionDeclarer extensionDeclarer, ExtensionLoadingContext extensionLoadingContext) {
     XmlDslModel xmlDslModel = XmlDslModel.builder()
@@ -89,6 +94,12 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withCategory(COMMUNITY)
         .withXmlDsl(xmlDslModel);
 
+    extensionDeclarer.withType((ObjectType) typeLoader.load(SpringModuleValidationsProvider.class));
+    extensionDeclarer.withResource("META-INF/services/org.mule.runtime.ast.api.validation.ValidationsProvider");
+    // extensionDeclarer
+    // .withModelProperty(new ExportedClassNamesModelProperty(Collections
+    // .singleton(SpringModuleValidationsProvider.class.getName())));
+
     declareConfig(extensionDeclarer, typeLoader);
     declareSecurityManager(extensionDeclarer, typeBuilder, typeLoader);
     declareAuthorizationFilter(extensionDeclarer, typeLoader, typeBuilder);
@@ -100,7 +111,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withStereotype(StereotypeModelBuilder.newStereotype("CONFIG", "SPRING").withParent(APP_CONFIG).build())
         .describedAs("Spring configuration that allows to define a set of spring XML files and create an application context with objects to be used in the mule artifact.");
     ParameterGroupDeclarer parameterGroupDeclarer = springConfig.onDefaultParameterGroup();
-    parameterGroupDeclarer.withRequiredParameter("files").withExpressionSupport(NOT_SUPPORTED)
+    parameterGroupDeclarer.withRequiredParameter(CONFIG_FILES_PARAM).withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
   }
 

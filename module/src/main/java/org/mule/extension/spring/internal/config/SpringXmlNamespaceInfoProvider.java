@@ -21,6 +21,7 @@ import java.util.Collection;
 public class SpringXmlNamespaceInfoProvider implements XmlNamespaceInfoProvider {
 
   public static final String SPRING_NAMESPACE = "spring";
+  public static final String SPRING_NAMESPACE_URI = "http://www.mulesoft.org/schema/mule/spring/";
 
   @Override
   public Collection<XmlNamespaceInfo> getXmlNamespacesInfo() {
@@ -28,7 +29,7 @@ public class SpringXmlNamespaceInfoProvider implements XmlNamespaceInfoProvider 
 
       @Override
       public String getNamespaceUriPrefix() {
-        return "http://www.mulesoft.org/schema/mule/spring/";
+        return SPRING_NAMESPACE_URI;
       }
 
       @Override

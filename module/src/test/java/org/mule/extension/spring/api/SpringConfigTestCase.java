@@ -6,16 +6,18 @@
  */
 package org.mule.extension.spring.api;
 
+import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
+import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
+
 import static java.lang.Thread.currentThread;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mule.extension.spring.AllureConstants.SpringFeature.SPRING_EXTENSION;
-import static org.mule.extension.spring.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 
 import org.mule.runtime.api.component.ConfigurationProperties;
 import org.mule.runtime.api.ioc.ObjectProvider;
@@ -66,11 +68,11 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
     // Mock class loader
     URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
     when(fakeClassLoader.getResources(anyString()))
-        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgumentAt(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgument(0, String.class)));
     when(fakeClassLoader.getResourceAsStream("other-cl-" + FILE_NAME))
         .thenAnswer(inv -> originalClassLoader.getResourceAsStream(FILE_NAME));
     when(fakeClassLoader.loadClass(anyString()))
-        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgumentAt(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgument(0, String.class)));
     currentThread().setContextClassLoader(fakeClassLoader);
 
     // Set parameters
