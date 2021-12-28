@@ -15,7 +15,7 @@
 
     <properties>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
-        <springVersion>5.3.13</springVersion>
+        <springVersion>5.3.14</springVersion>
         <springSecurityVersion>5.4.2</springSecurityVersion>
         <mule.version>4.1.5</mule.version>
     </properties>
