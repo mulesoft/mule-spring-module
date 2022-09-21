@@ -64,8 +64,8 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   private static final String UNESCAPED_LOCATION_PREFIX = "http://";
   private static final String SCHEMA_LOCATION = "www.mulesoft.org/schema/mule/spring";
   private static final String SCHEMA_VERSION = "current";
-  private static final String SPRING_VERSION = "5.3.2";
-  private static final String SPRING_SECURITY_VERSION = "5.4.2";
+  private static final String SPRING_VERSION = "5.3.22";
+  private static final String SPRING_SECURITY_VERSION = "5.7.3";
   private static final String SPRING_GROUP_ID = "org.springframework";
   private static final String SPRING_SECURITY_GROUP_ID = "org.springframework.security";
 
@@ -221,6 +221,12 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
         .withName("Spring Security Core")
         .withCoordinates(SPRING_SECURITY_GROUP_ID + ":spring-security-core:" + SPRING_SECURITY_VERSION)
+        .withDescription("Spring Security Context (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
+        .withType(DEPENDENCY).build());
+
+    extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
+        .withName("Spring Security Crypto")
+        .withCoordinates(SPRING_SECURITY_GROUP_ID + ":spring-security-crypto:" + SPRING_SECURITY_VERSION)
         .withDescription("Spring Security Context (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
         .withType(DEPENDENCY).build());
 
