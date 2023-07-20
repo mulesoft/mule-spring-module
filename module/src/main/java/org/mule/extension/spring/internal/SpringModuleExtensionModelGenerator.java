@@ -230,7 +230,6 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withDescription("Spring Security Context (http://spring.io/spring-security). Based on the application usage of the Spring Framework, other spring/spring-security dependencies may be required.")
         .withType(DEPENDENCY).build());
 
-
     extensionDeclarer.withExternalLibrary(ExternalLibraryModel.builder()
         .withName("Spring Security Config")
         .withCoordinates(SPRING_SECURITY_GROUP_ID + ":spring-security-config:" + SPRING_SECURITY_VERSION)
