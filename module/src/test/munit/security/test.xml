@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<mule xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd">
+    <spring:config name="springConfig" files="beans.xml" />
+
+    <http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="eaee8d56-faa7-440f-b1bc-f4c68506008a" >
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <flow name="springtestprojectFlow" doc:id="0472a4b4-9a8c-4c16-9aa1-4fd444450d90" >
+        <http:listener doc:name="Listener" doc:id="1e1286ed-858d-45c9-a856-ed2006aaca09" config-ref="HTTP_Listener_config" path="springListener"/>
+        <http:basic-security-filter doc:name="Basic security filter" doc:id="4946a2ac-6a87-491e-bc95-88144c44548e" realm="mule"/>
+        <spring:authorization-filter doc:name="Authorization filter" doc:id="7a03b324-29f8-46a1-9a26-83e1d792093c" requiredAuthorities="ROLE_ADMIN"/>
+    </flow>
+</mule>
+
+
