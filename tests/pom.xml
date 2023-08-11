@@ -34,7 +34,7 @@
             <version>${project.version}</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-    
+
         <dependency>
             <groupId>org.mule.services</groupId>
             <artifactId>mule-service-http</artifactId>
@@ -75,7 +75,14 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
+      <dependency>
+        <groupId>org.mule.modules</groupId>
+        <artifactId>mule-spring-test-plugin</artifactId>
+        <version>1.4.0-SNAPSHOT</version>
+        <scope>provided</scope>
+      </dependency>
+
         <dependency>
             <groupId>org.mule.tests</groupId>
             <artifactId>mule-tests-runner</artifactId>
