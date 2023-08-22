@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mule.extensions</groupId>
         <artifactId>mule-core-modules-parent</artifactId>
-        <version>1.1.8</version>
+        <version>1.1.9</version>
     </parent>
 
     <groupId>org.mule.modules</groupId>
@@ -15,8 +15,8 @@
 
     <properties>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
-        <springVersion>5.3.22</springVersion>
-        <springSecurityVersion>5.7.8</springSecurityVersion>
+        <springVersion>5.3.29</springVersion>
+        <springSecurityVersion>5.8.6</springSecurityVersion>
         <mule.version>4.1.5</mule.version>
         <gsonVersion>2.9.1</gsonVersion>
     </properties>
@@ -81,10 +81,10 @@
 	            </exclusions>
 	        </dependency>
 	        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-crypto</artifactId>
-            <version>${springSecurityVersion}</version>
-        </dependency>
+            	<groupId>org.springframework.security</groupId>
+            	<artifactId>spring-security-crypto</artifactId>
+            	<version>${springSecurityVersion}</version>
+        	</dependency>
 	    </dependencies>
 	</dependencyManagement>
 
