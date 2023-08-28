@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+		http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+	<munit:config name="jndi-test-suite.xml" />
+
+  <spring:config files="jndi/jndi-beans.xml" name="jndiSpringConfig"/>
+  <flow name="dummy-jndi-flow" doc:id="e40beab0-27b6-4aca-8d1d-1cc76aa051dc" >
+    <logger level="INFO" doc:name="Logger" doc:id="12ea8ec5-6953-414a-bcd3-deddbaf62f70" />
+  </flow>
+
+	<munit:test name="TestJndi" doc:id="2a6713e6-515f-4023-8b32-606972c47630" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to dummy-jndi-flow" doc:id="21106e2d-73c2-495f-9f85-a1cfb9b28a86" name="dummy-jndi-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert bean 1 is not null" doc:id="b2901ba9-f4ce-47dc-abbf-d14560a59905" is='#[MunitTools::notNullValue()]' expression="#[app.registry.jndiApple]" />
+
+			<java:validate-type doc:name="Validate type of bean 1" doc:id="37b1854f-6b22-4406-944d-ca347beaeb42" instance="#[app.registry.jndiApple]" class="org.mule.tck.testmodels.fruit.Apple"/>
+			<munit-tools:assert-that doc:name="Assert bean 2 is not null" doc:id="63967173-dbee-42ac-b5f9-a803ddf34181" is="#[MunitTools::notNullValue()]" expression="#[app.registry.jndiOrange]" />
+			<java:validate-type doc:name="Validate type of bean 2" doc:id="8f2bb388-c71b-4904-b68e-73437511b46b" class="org.mule.tck.testmodels.fruit.Orange" instance="#[app.registry.jndiOrange]" />
+			<munit-tools:assert-that doc:name="Assert bean 2 field 1" doc:id="c3e46575-294a-40a2-b87c-ed736043c754" expression="#[app.registry.jndiOrange.segments]" is='#[MunitTools::equalTo(8)]' />
+			<munit-tools:assert-that doc:name="Assert bean 2 field 2" doc:id="864cc442-4ce5-447a-9279-8d485edcf398" expression="#[app.registry.jndiOrange.brand]" is='#[MunitTools::equalToIgnoringCase("Florida Sunny")]' />
+		</munit:validation>
+	</munit:test>
+
+</mule>

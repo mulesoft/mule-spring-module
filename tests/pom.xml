@@ -12,7 +12,57 @@
         <httpcommons.httpclient.version>4.5.13</httpcommons.httpclient.version>
 
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
+
+      <munit.version>2.2.5</munit.version>
+      <munit.extensions.maven.plugin.version>1.0.0</munit.extensions.maven.plugin.version>
+      <mtf.tools.version>1.1.1</mtf.tools.version>
     </properties>
+
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>com.mulesoft.munit</groupId>
+          <artifactId>munit-extensions-maven-plugin</artifactId>
+          <version>${munit.extensions.maven.plugin.version}</version>
+          <executions>
+            <execution>
+              <id>test</id>
+              <phase>integration-test</phase>
+              <goals>
+                <goal>test</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <argLines>
+              <argLine>
+                -javaagent:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${session.executionRootDirectory}/target/jacoco-munit.exec
+              </argLine>
+            </argLines>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.mulesoft.munit</groupId>
+              <artifactId>munit-runner</artifactId>
+              <version>${munit.version}</version>
+              <classifier>mule-plugin</classifier>
+            </dependency>
+            <dependency>
+              <groupId>com.mulesoft.munit</groupId>
+              <artifactId>munit-tools</artifactId>
+              <version>${munit.version}</version>
+              <classifier>mule-plugin</classifier>
+            </dependency>
+            <dependency>
+              <groupId>com.mulesoft.munit</groupId>
+              <artifactId>mtf-tools</artifactId>
+              <version>${mtf.tools.version}</version>
+              <classifier>mule-plugin</classifier>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </build>
 
     <dependencies>
         <dependency>
@@ -34,7 +84,7 @@
             <version>${project.version}</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-    
+
         <dependency>
             <groupId>org.mule.services</groupId>
             <artifactId>mule-service-http</artifactId>
@@ -75,7 +125,7 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.mule.tests</groupId>
             <artifactId>mule-tests-runner</artifactId>
