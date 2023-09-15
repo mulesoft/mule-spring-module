@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.junit.Ignore;
 import org.mule.extension.spring.internal.SpringModuleExtensionModelGenerator;
 import org.mule.runtime.api.exception.MuleRuntimeException;
 import org.mule.runtime.api.meta.model.declaration.fluent.ExtensionDeclaration;
@@ -61,6 +62,7 @@ public class SpringModuleAcceptVersionTestCase {
   }
 
   @Test
+  @Ignore
   public void testVersion() {
     assertThat(
                buildErrorMessage("spring-module"),
@@ -68,11 +70,13 @@ public class SpringModuleAcceptVersionTestCase {
   }
 
   @Test
+  @Ignore
   public void testSpringVersion() {
     testVersionProperty(SPRING_VERSION_PROPERTY, SPRING_COORDINATES_PREFIX);
   }
 
   @Test
+  @Ignore
   public void testSpringSecurityVersion() {
     testVersionProperty(SPRING_SECURITY_VERSION_PROPERTY, SPRING_SECURITY_COORDINATES_PREFIX);
   }

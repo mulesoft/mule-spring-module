@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+	<munit:config name="CacheTestCases.xml" />
+
+  <spring:config name="springCacheConfig" files="cache/spring-cache-config.xml"/>
+
+  <object name="artifactObject" class="java.util.concurrent.atomic.AtomicInteger"/>
+
+  <object name="artifactObjectThatDependsOnSpringObject" class="org.mule.extension.spring.lifecycle.SpringLifecycleObject">
+    <property key="reference" value-ref="springObjectReferencingArtifactObject"/>
+  </object>
+  <flow name="dummy-springCache-flow" doc:id="4d3bc47e-5083-44b4-9345-2be7715df65a">
+    <logger level="INFO" doc:name="Logger" doc:id="b576a898-1cff-41e8-8861-a16dadeaa29d" />
+  </flow>
+
+  <munit:test name="SpringCacheTest" doc:id="f70750e8-dbfa-4844-8841-8937bb1a0761" description="Check that the beans config file that uses the cache namespace can be properly parsed">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to dummy-springCache-flow" doc:id="3f34bae2-2387-46d3-9501-0b23806b4a69" name="dummy-springCache-flow"/>
+		</munit:execution>
+	</munit:test>
+
+</mule>
