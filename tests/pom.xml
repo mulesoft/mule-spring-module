@@ -25,6 +25,8 @@
       <munit.version>2.2.5</munit.version>
 
       <mavenResourcesVersion>3.0.2</mavenResourcesVersion>
+
+      <mule.maven.plugin.version>3.7.1</mule.maven.plugin.version>
     </properties>
 
   <build>
@@ -84,6 +86,35 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <!-- Configure the Spring dependencies as Shared Libraries -->
+          <sharedLibraries>
+            <sharedLibrary>
+              <groupId>org.springframework.security</groupId>
+              <artifactId>spring-security-core</artifactId>
+            </sharedLibrary>
+            <sharedLibrary>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-beans</artifactId>
+            </sharedLibrary>
+            <sharedLibrary>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-context</artifactId>
+            </sharedLibrary>
+            <sharedLibrary>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-core</artifactId>
+            </sharedLibrary>
+            <sharedLibrary>
+              <groupId>org.springframework.security</groupId>
+              <artifactId>spring-security-config</artifactId>
+            </sharedLibrary>
+            <sharedLibrary>
+              <groupId>org.mule.tests</groupId>
+              <artifactId>mule-tests-model</artifactId>
+            </sharedLibrary>
+          </sharedLibraries>
+        </configuration>
 <!--        <configuration>-->
 <!--          <argLines>-->
 <!--            <argLine>-->
@@ -112,6 +143,38 @@
           </dependency>
         </dependencies>
       </plugin>
+
+<!--      <plugin>-->
+<!--        <groupId>org.mule.tools.maven</groupId>-->
+<!--        <artifactId>mule-maven-plugin</artifactId>-->
+<!--        <version>3.7.1</version>-->
+<!--        <extensions>true</extensions>-->
+<!--        <configuration>-->
+<!--          &lt;!&ndash; Configure the Spring dependencies as Shared Libraries &ndash;&gt;-->
+<!--          <sharedLibraries>-->
+<!--            <sharedLibrary>-->
+<!--              <groupId>org.springframework.security</groupId>-->
+<!--              <artifactId>spring-security-core</artifactId>-->
+<!--            </sharedLibrary>-->
+<!--            <sharedLibrary>-->
+<!--              <groupId>org.springframework</groupId>-->
+<!--              <artifactId>spring-beans</artifactId>-->
+<!--            </sharedLibrary>-->
+<!--            <sharedLibrary>-->
+<!--              <groupId>org.springframework</groupId>-->
+<!--              <artifactId>spring-context</artifactId>-->
+<!--            </sharedLibrary>-->
+<!--            <sharedLibrary>-->
+<!--              <groupId>org.springframework</groupId>-->
+<!--              <artifactId>spring-core</artifactId>-->
+<!--            </sharedLibrary>-->
+<!--            <sharedLibrary>-->
+<!--              <groupId>org.springframework.security</groupId>-->
+<!--              <artifactId>spring-security-config</artifactId>-->
+<!--            </sharedLibrary>-->
+<!--          </sharedLibraries>-->
+<!--        </configuration>-->
+<!--      </plugin>-->
     </plugins>
   </build>
 
@@ -120,6 +183,7 @@
             <groupId>org.mule.runtime</groupId>
             <artifactId>mule-api</artifactId>
             <version>${mule.api.version}</version>
+          <scope>provided</scope>
         </dependency>
 
 		<dependency>
@@ -177,11 +241,11 @@
             <scope>provided</scope>
         </dependency>
 
-      <dependency>
-        <groupId>org.mule.modules</groupId>
-        <artifactId>mule-spring-test-plugin</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
-      </dependency>
+<!--      <dependency>-->
+<!--        <groupId>org.mule.modules</groupId>-->
+<!--        <artifactId>mule-spring-test-plugin</artifactId>-->
+<!--        <version>1.4.0-SNAPSHOT</version>-->
+<!--      </dependency>-->
 
         <dependency>
             <groupId>org.mule.tests</groupId>
@@ -256,5 +320,19 @@
             <version>${mule.version}</version>
             <scope>test</scope>
         </dependency>
+      <dependency>
+        <groupId>org.mule.module</groupId>
+        <artifactId>mule-java-module</artifactId>
+        <version>1.2.10</version>
+        <classifier>mule-plugin</classifier>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>mule-public</id>
+      <url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

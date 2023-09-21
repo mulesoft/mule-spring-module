@@ -120,5 +120,9 @@
             <name>Mule Repository</name>
             <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
         </pluginRepository>
+        <pluginRepository>
+          <id>mule-public</id>
+          <url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
+        </pluginRepository>
     </pluginRepositories>
 </project>
