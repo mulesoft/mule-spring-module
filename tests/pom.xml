@@ -114,14 +114,12 @@
               <artifactId>mule-tests-model</artifactId>
             </sharedLibrary>
           </sharedLibraries>
-        </configuration>
-<!--        <configuration>-->
 <!--          <argLines>-->
 <!--            <argLine>-->
 <!--              -javaagent:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${session.executionRootDirectory}/target/jacoco-munit.exec-->
 <!--            </argLine>-->
 <!--          </argLines>-->
-<!--        </configuration>-->
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>com.mulesoft.munit</groupId>
@@ -143,38 +141,6 @@
           </dependency>
         </dependencies>
       </plugin>
-
-<!--      <plugin>-->
-<!--        <groupId>org.mule.tools.maven</groupId>-->
-<!--        <artifactId>mule-maven-plugin</artifactId>-->
-<!--        <version>3.7.1</version>-->
-<!--        <extensions>true</extensions>-->
-<!--        <configuration>-->
-<!--          &lt;!&ndash; Configure the Spring dependencies as Shared Libraries &ndash;&gt;-->
-<!--          <sharedLibraries>-->
-<!--            <sharedLibrary>-->
-<!--              <groupId>org.springframework.security</groupId>-->
-<!--              <artifactId>spring-security-core</artifactId>-->
-<!--            </sharedLibrary>-->
-<!--            <sharedLibrary>-->
-<!--              <groupId>org.springframework</groupId>-->
-<!--              <artifactId>spring-beans</artifactId>-->
-<!--            </sharedLibrary>-->
-<!--            <sharedLibrary>-->
-<!--              <groupId>org.springframework</groupId>-->
-<!--              <artifactId>spring-context</artifactId>-->
-<!--            </sharedLibrary>-->
-<!--            <sharedLibrary>-->
-<!--              <groupId>org.springframework</groupId>-->
-<!--              <artifactId>spring-core</artifactId>-->
-<!--            </sharedLibrary>-->
-<!--            <sharedLibrary>-->
-<!--              <groupId>org.springframework.security</groupId>-->
-<!--              <artifactId>spring-security-config</artifactId>-->
-<!--            </sharedLibrary>-->
-<!--          </sharedLibraries>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
     </plugins>
   </build>
 
@@ -240,13 +206,6 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-
-<!--      <dependency>-->
-<!--        <groupId>org.mule.modules</groupId>-->
-<!--        <artifactId>mule-spring-test-plugin</artifactId>-->
-<!--        <version>1.4.0-SNAPSHOT</version>-->
-<!--      </dependency>-->
-
         <dependency>
             <groupId>org.mule.tests</groupId>
             <artifactId>mule-tests-runner</artifactId>
