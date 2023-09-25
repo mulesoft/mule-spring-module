@@ -55,7 +55,7 @@
 <!--          manually copy mule-artifact.json-->
           <execution>
             <id>copy-mule-artifact-json</id>
-            <phase>process-test-resources</phase>
+            <phase>compile</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
