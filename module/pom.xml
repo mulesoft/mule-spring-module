@@ -12,6 +12,10 @@
     <properties>
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
         <minMuleVersion>${mule.version}</minMuleVersion>
+
+        <munit.version>2.2.5</munit.version>
+        <munit.extensions.maven.plugin.version>1.0.0</munit.extensions.maven.plugin.version>
+        <mtf.tools.version>1.1.1</mtf.tools.version>
     </properties>
 
     <build>
@@ -57,6 +61,69 @@
                     </replacements>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.mulesoft.munit</groupId>
+                <artifactId>munit-extensions-maven-plugin</artifactId>
+                <version>${munit.extensions.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <argLines>
+                        <argLine>
+                            -javaagent:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${session.executionRootDirectory}/target/jacoco-munit.exec
+                        </argLine>
+                    </argLines>
+                    <sharedLibraries>
+                        <sharedLibrary>
+                            <groupId>org.springframework.security</groupId>
+                            <artifactId>spring-security-core</artifactId>
+                        </sharedLibrary>
+                        <sharedLibrary>
+                            <groupId>org.springframework.security</groupId>
+                            <artifactId>spring-security-config</artifactId>
+                        </sharedLibrary>
+                        <sharedLibrary>
+                            <groupId>org.springframework.security</groupId>
+                            <artifactId>spring-security-crypto</artifactId>
+                        </sharedLibrary>
+                        <sharedLibrary>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-beans</artifactId>
+                        </sharedLibrary>
+                        <sharedLibrary>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-context</artifactId>
+                        </sharedLibrary>
+                    </sharedLibraries>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.mulesoft.munit</groupId>
+                        <artifactId>munit-runner</artifactId>
+                        <version>${munit.version}</version>
+                        <classifier>mule-plugin</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.mulesoft.munit</groupId>
+                        <artifactId>munit-tools</artifactId>
+                        <version>${munit.version}</version>
+                        <classifier>mule-plugin</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.mulesoft.munit</groupId>
+                        <artifactId>mtf-tools</artifactId>
+                        <version>${mtf.tools.version}</version>
+                        <classifier>mule-plugin</classifier>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -64,6 +131,18 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+            <version>${springVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${springVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
             <version>${springVersion}</version>
             <scope>provided</scope>
         </dependency>
@@ -97,5 +176,13 @@
             <version>${springSecurityVersion}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.mule.module</groupId>
+            <artifactId>mule-java-module</artifactId>
+            <version>1.2.10</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+
     </dependencies>
 </project>
