@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd">
+  <munit:config name="JndiTestCases.xml" />
+
+  <spring:config files="jndi/jndi-beans.xml" name="jndiSpringConfig"/>
+  <flow name="dummy-jndi-flow">
+    <logger level="INFO" doc:name="Logger" />
+  </flow>
+
+  <munit:test name="TestJndi" description="Test">
+    <munit:execution >
+      <flow-ref doc:name="Flow-ref to dummy-jndi-flow" name="dummy-jndi-flow"/>
+    </munit:execution>
+    <munit:validation >
+      <munit-tools:assert-that doc:name="Assert bean 1 is not null" is='#[MunitTools::notNullValue()]' expression="#[app.registry.jndiApple]" />
+
+      <java:validate-type doc:name="Validate type of bean 1" instance="#[app.registry.jndiApple]" class="org.mule.tck.testmodels.fruit.Apple"/>
+      <munit-tools:assert-that doc:name="Assert bean 2 is not null" is="#[MunitTools::notNullValue()]" expression="#[app.registry.jndiOrange]" />
+      <java:validate-type doc:name="Validate type of bean 2" class="org.mule.tck.testmodels.fruit.Orange" instance="#[app.registry.jndiOrange]" />
+      <munit-tools:assert-that doc:name="Assert bean 2 field 1" expression="#[app.registry.jndiOrange.segments]" is='#[MunitTools::equalTo(8)]' />
+      <munit-tools:assert-that doc:name="Assert bean 2 field 2" expression="#[app.registry.jndiOrange.brand]" is='#[MunitTools::equalToIgnoringCase("Florida Sunny")]' />
+    </munit:validation>
+  </munit:test>
+
+</mule>
