@@ -122,6 +122,12 @@
             <artifactId>munit-runner</artifactId>
             <version>${munit.version}</version>
             <classifier>mule-plugin</classifier>
+<!--            <exclusions>-->
+<!--              <exclusion>-->
+<!--                <groupId>org.springframework</groupId>-->
+<!--                <artifactId>spring-beans</artifactId>-->
+<!--              </exclusion>-->
+<!--            </exclusions>-->
           </dependency>
           <dependency>
             <groupId>com.mulesoft.munit</groupId>
@@ -224,5 +230,6 @@
       <version>${mule.version}</version>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 </project>
