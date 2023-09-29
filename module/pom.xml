@@ -116,6 +116,7 @@
           <!--            </argLine>-->
           <!--          </argLines>-->
         </configuration>
+
         <dependencies>
           <dependency>
             <groupId>com.mulesoft.munit</groupId>
@@ -167,6 +168,16 @@
 <!--      </plugin>-->
     </plugins>
   </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>5.3.29</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -232,4 +243,5 @@
     </dependency>
 
   </dependencies>
+
 </project>
