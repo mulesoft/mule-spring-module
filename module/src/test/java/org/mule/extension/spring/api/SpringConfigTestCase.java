@@ -66,11 +66,11 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
     // Mock class loader
     URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
     when(fakeClassLoader.getResources(anyString()))
-        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgumentAt(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgument(0, String.class)));
     when(fakeClassLoader.getResourceAsStream("other-cl-" + FILE_NAME))
         .thenAnswer(inv -> originalClassLoader.getResourceAsStream(FILE_NAME));
     when(fakeClassLoader.loadClass(anyString()))
-        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgumentAt(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgument(0, String.class)));
     currentThread().setContextClassLoader(fakeClassLoader);
 
     // Set parameters
