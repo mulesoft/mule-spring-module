@@ -4,21 +4,11 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.extension.spring.scan;
-
-import org.mule.extension.spring.scan.inner.ScanInnerObject;
-
-import javax.inject.Inject;
+package org.mule.extension.spring.test.scan.inner;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class ScanObject {
+public class ScanInnerObject {
 
-  @Inject
-  private ScanInnerObject innerObject;
-
-  public ScanInnerObject getInnerObject() {
-    return innerObject;
-  }
 }

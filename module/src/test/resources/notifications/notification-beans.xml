@@ -4,6 +4,6 @@
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean name="notificationLogger" class="org.mule.extension.spring.notifications.ProcessorNotificationStore"/>
+    <bean name="notificationLogger" class="org.mule.extension.spring.test.notifications.ProcessorNotificationStore"/>
 
 </beans>

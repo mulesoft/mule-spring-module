@@ -4,7 +4,7 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.extension.spring.api;
+package org.mule.extension.spring.test.api;
 
 import static java.lang.Thread.currentThread;
 import static org.hamcrest.CoreMatchers.is;
@@ -14,9 +14,8 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mule.extension.spring.api.AllureConstants.SpringFeature.SPRING_EXTENSION;
-import static org.mule.extension.spring.api.AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY;
 
+import org.mule.extension.spring.api.SpringConfig;
 import org.mule.runtime.api.component.ConfigurationProperties;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
@@ -37,8 +36,8 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
 import io.qameta.allure.Story;
 
-@Feature(SPRING_EXTENSION)
-@Story(ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY)
+@Feature(AllureConstants.SpringFeature.SPRING_EXTENSION)
+@Story(AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY)
 public class SpringConfigTestCase extends AbstractMuleTestCase {
 
   private static final String NAME = "name";

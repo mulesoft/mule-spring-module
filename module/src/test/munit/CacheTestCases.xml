@@ -17,11 +17,11 @@ http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/s
 
   <object name="artifactObject" class="java.util.concurrent.atomic.AtomicInteger"/>
 
-  <object name="artifactObjectThatDependsOnSpringObject" class="org.mule.extension.spring.lifecycle.SpringLifecycleObject">
+  <object name="artifactObjectThatDependsOnSpringObject" class="org.mule.extension.spring.test.lifecycle.SpringLifecycleObject">
     <property key="reference" value-ref="springObjectReferencingArtifactObject"/>
   </object>
-  <flow name="dummy-springCache-flow" doc:id="4d3bc47e-5083-44b4-9345-2be7715df65a">
-    <logger level="INFO" doc:name="Logger" doc:id="b576a898-1cff-41e8-8861-a16dadeaa29d" />
+  <flow name="dummy-springCache-flow">
+    <logger level="INFO" doc:name="Logger"/>
   </flow>
 
   <munit:test name="SpringCacheTest"  description="Check that the beans config file that uses the cache namespace can be properly parsed">

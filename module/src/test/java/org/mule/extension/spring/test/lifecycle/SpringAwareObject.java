@@ -4,7 +4,7 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.extension.spring.lifecycle;
+package org.mule.extension.spring.test.lifecycle;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

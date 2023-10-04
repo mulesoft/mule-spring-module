@@ -22,10 +22,10 @@
          through a custom provider.  in normal use it should be set just once, through
          the spring-security schema - this is just for extra test coverage -->
 
-    <bean id="explicitCreation1" class="org.mule.extension.spring.security.CustomSecurityProvider">
+    <bean id="explicitCreation1" class="org.mule.extension.spring.test.security.CustomSecurityProvider">
         <property name="name" value="customProvider"/>
     </bean>
 
-    <bean id="explicitCreation2" class="org.mule.extension.spring.security.CustomSecurityProvider"/>
+    <bean id="explicitCreation2" class="org.mule.extension.spring.test.security.CustomSecurityProvider"/>
 
 </beans>

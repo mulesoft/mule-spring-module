@@ -4,7 +4,7 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.extension.spring.security;
+package org.mule.extension.spring.test.security;
 
 import org.mule.runtime.api.security.Authentication;
 import org.mule.runtime.api.security.SecurityContext;
