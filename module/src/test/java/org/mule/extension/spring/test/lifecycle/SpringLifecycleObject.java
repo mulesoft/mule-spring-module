@@ -36,20 +36,6 @@ public class SpringLifecycleObject extends AbstractComponent {
   private ConfigurationComponentLocator configurationComponentLocator;
   private Object reference;
 
-  //  @Inject
-  //  private Optional<AtomicBoolean> nonExistentOptionalObject;
-  //  @Inject
-  //  private Optional<AtomicInteger> existentExistentOptionalObject;
-  //  @Inject
-  //  private Provider<AtomicLong> objectProvider;
-  //  @Inject
-  //  private Collection<Number> numberObjects;
-  //  @Inject
-  //  private Optional<Collection<AtomicDouble>> atomicDoubles;
-  //  @Inject
-  //  private Optional<Collection<Number>> optionalNumberObjects;
-
-
   public void init() {
     callsBeforeInit.addAll(injectCalls);
     callsBeforeInit.addAll(lifecycleCalls);
@@ -88,29 +74,5 @@ public class SpringLifecycleObject extends AbstractComponent {
   public void setReference(Object reference) {
     this.reference = reference;
   }
-
-  //  public Optional<AtomicBoolean> getNonExistentOptionalObject() {
-  //    return nonExistentOptionalObject;
-  //  }
-  //
-  //  public Optional<AtomicInteger> getExistentExistentOptionalObject() {
-  //    return existentExistentOptionalObject;
-  //  }
-  //
-  //  public Provider<AtomicLong> getObjectProvider() {
-  //    return objectProvider;
-  //  }
-  //
-  //  public Collection<Number> getNumberObjects() {
-  //    return numberObjects;
-  //  }
-  //
-  //  public Collection<AtomicDouble> getAtomicDoubles() {
-  //    return atomicDoubles.orElse(emptyList());
-  //  }
-  //
-  //  public Collection<Number> getOptionalNumberObjects() {
-  //    return optionalNumberObjects.orElse(emptyList());
-  //  }
 
 }
