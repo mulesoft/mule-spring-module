@@ -13,6 +13,7 @@ import org.mule.runtime.api.security.UnknownAuthenticationTypeException;
 import org.mule.runtime.core.api.security.SecurityProvider;
 
 public class CustomSecurityProvider implements SecurityProvider {
+
   private String name;
 
   public CustomSecurityProvider() {
