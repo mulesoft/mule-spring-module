@@ -14,7 +14,7 @@ http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/jav
       xmlns:spring="http://www.mulesoft.org/schema/mule/spring">
 	<munit:config name="SecurityHandlerTestCases.xml" />
 
-  <spring:config name="springConfig" files="security/spring-security-namespace-config-beans.xml"/>
+  <spring:config name="springSecurityConfig" files="security/spring-security-namespace-config-beans.xml"/>
 
   <spring:security-manager>
     <spring:delegate-security-provider name="memory-dao" delegate-ref="authenticationManager"/>
