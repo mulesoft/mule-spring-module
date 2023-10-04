@@ -17,7 +17,7 @@ http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/jav
   <spring:config name="springSecurityConfig" files="security/spring-security-namespace-config-beans.xml"/>
 
   <spring:security-manager>
-    <spring:delegate-security-provider name="memory-dao" delegate-ref="authenticationManager"/>
+    <spring:delegate-security-provider name="memoryDao" delegate-ref="authenticationManager"/>
   </spring:security-manager>
 
   <flow name="dummy-security-flow">
