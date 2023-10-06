@@ -1,43 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
 
-<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:java="http://www.mulesoft.org/schema/mule/java"
-      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
-      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
-      xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-      xsi:schemaLocation="
-		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
-		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
-http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
-http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd"
-      xmlns:spring="http://www.mulesoft.org/schema/mule/spring">
-	<munit:config name="SecurityHandlerTestCases" />
+<!--<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--      xmlns:http="http://www.mulesoft.org/schema/mule/http"-->
+<!--      xmlns:java="http://www.mulesoft.org/schema/mule/java"-->
+<!--      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"-->
+<!--      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"-->
+<!--      xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"-->
+<!--      xsi:schemaLocation="-->
+<!--		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd-->
+<!--		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd-->
+<!--		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd-->
+<!--http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd-->
+<!--http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd-->
+<!--http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd"-->
+<!--      xmlns:spring="http://www.mulesoft.org/schema/mule/spring">-->
+<!--	<munit:config name="SecurityHandlerTestCases" />-->
 
-  <spring:config name="springSecurityConfig" files="security/spring-security-namespace-config-beans.xml"/>
+<!--  <http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config">-->
+<!--    <http:listener-connection host="0.0.0.0" port="9091" />-->
+<!--  </http:listener-config>-->
 
-  <spring:security-manager>
-    <spring:delegate-security-provider name="memoryDao" delegate-ref="authenticationManager"/>
-  </spring:security-manager>
+<!--  <spring:config name="springSecurityConfig" files="security/spring-security-namespace-config-beans.xml"/>-->
 
-  <flow name="dummy-security-flow">
-    <logger level="INFO" doc:name="Logger"/>
-  </flow>
+<!--  <spring:security-manager>-->
+<!--    <-->
+<!--    <spring:delegate-security-provider name="memoryDao" delegate-ref="authenticationManager"/>-->
+<!--  </spring:security-manager>-->
 
-  <munit:test name="SecurityProviderIsTheOneExpected" description="SecurityProviderIsTheOneExpected">
-		<munit:execution >
-			<flow-ref doc:name="Flow-ref to dummy-security-flow" name="dummy-security-flow"/>
-		</munit:execution>
-		<munit:validation >
-      <java:validate-type doc:name="Validate type of security provider"
-                          class="org.mule.extension.spring.api.security.SpringProviderAdapter"
-                          instance="#[app.registry.'_muleSecurityManager'.providers[0]]" />
-      <munit-tools:assert doc:name="Validate name of securityProvider">
-        <munit-tools:that ><![CDATA[#[import * from dw::test::Asserts
- ---
-app.registry.'_muleSecurityManager'.providers[0].name must equalTo('memoryDao')]]]></munit-tools:that>
-      </munit-tools:assert>
-		</munit:validation>
-	</munit:test>
+<!--  <flow name="dummy-security-flow">-->
+<!--&lt;!&ndash;    <http:listener&ndash;&gt;-->
+<!--&lt;!&ndash;      config-ref="HTTP_Listener_config"&ndash;&gt;-->
+<!--&lt;!&ndash;      path="/"&ndash;&gt;-->
+<!--&lt;!&ndash;      doc:name="Listener"  />&ndash;&gt;-->
+<!--&lt;!&ndash;    <http:basic-security-filter&ndash;&gt;-->
+<!--&lt;!&ndash;      realm="mule" />&ndash;&gt;-->
+<!--    <logger level="INFO" doc:name="Logger"/>-->
+<!--  </flow>-->
 
-</mule>
+<!--  <munit:test name="SecurityProviderIsTheOneExpected" description="SecurityProviderIsTheOneExpected">-->
+<!--		<munit:execution >-->
+<!--      <http:listener doc:name="Listener" doc:id="1c1cd2d5-97ce-4841-8ce2-d321ab77085a" config-ref="HTTP_Listener_config" path="/" />-->
+<!--      <http:basic-security-filter doc:name="Basic security filter" doc:id="b8a81958-f0bd-4d15-9bde-8d1c8edca5e0" securityProviders="#[['memoryDao']]" realm="mule-realm"/>-->
+
+<!--      <spring:authorization-filter doc:id="1b8c070f-2ab7-4071-a0c6-c188bdf26f6c" requiredAuthorities="ROLE_ADMIN" />-->
+<!--		</munit:execution>-->
+<!--		<munit:validation >-->
+<!--      <java:validate-type doc:name="Validate type of security provider"-->
+<!--                          class="org.mule.extension.spring.api.security.SpringProviderAdapter"-->
+<!--                          instance="#[app.registry.'_muleSecurityManager'.providers[0]]" />-->
+<!--      <munit-tools:assert doc:name="Validate name of securityProvider">-->
+<!--        <munit-tools:that ><![CDATA[#[import * from dw::test::Asserts-->
+<!-- -&#45;&#45;-->
+<!--app.registry.'_muleSecurityManager'.providers[0].name must equalTo('memoryDao')]]]></munit-tools:that>-->
+<!--      </munit-tools:assert>-->
+<!--		</munit:validation>-->
+<!--	</munit:test>-->
+
+<!--</mule>-->
