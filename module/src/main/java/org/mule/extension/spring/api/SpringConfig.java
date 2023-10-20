@@ -66,7 +66,7 @@ public class SpringConfig extends AbstractComponent
       springAppCtxClassLoader = regionClassLoader;
     }
 
-    withContextClassLoader(springAppCtxClassLoader, () -> {
+    withContextClassLoader(springClassLoader, () -> {
       String files = parameters.get("files");
       String[] configFiles = files.split(",");
       applicationContext = new SpringModuleApplicationContext(configFiles, configuration);
