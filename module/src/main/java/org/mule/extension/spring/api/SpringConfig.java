@@ -171,4 +171,20 @@ public class SpringConfig extends AbstractComponent
   public String getName() {
     return name;
   }
+
+  public Map<String, String> getParameters() {
+    return parameters;
+  }
+
+  public ClassPathXmlApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
+
+  public void setApplicationContext(ClassPathXmlApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }

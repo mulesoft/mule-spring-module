@@ -44,4 +44,8 @@ public class ArtifactPropertiesPlaceholder extends PropertyPlaceholderConfigurer
   public int getOrder() {
     return HIGHEST_PRECEDENCE;
   }
+
+  public ConfigurationProperties getConfigurationProperties() {
+    return configurationProperties;
+  }
 }
