@@ -46,21 +46,11 @@ public class CompositeClassLoader extends ClassLoader {
     }
   }
 
-  public CompositeClassLoader(ClassLoader... classLoaders) {
-    delegates = new ArrayList<>(classLoaders.length);
-    for (ClassLoader cl : classLoaders) {
-      if (cl != null) {
-        delegates.add(cl);
-      }
-    }
-    delegates = unmodifiableList(delegates);
-  }
-
   /**
    * Overrides the loadClass in order to support scenarios where a custom class loader is created in a plugin and these calls to
    * this method explicitly.
    *
-   * @param name The <a href="#name">binary name</a> of the class
+   * @param name    The <a href="#name">binary name</a> of the class
    * @param resolve If <tt>true</tt> then resolve the class
    * @return The resulting <tt>Class</tt> object
    * @throws ClassNotFoundException If the class could not be found

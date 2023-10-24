@@ -16,6 +16,7 @@ import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
 
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
 import org.mule.extension.spring.internal.util.CompositeClassLoader;
+import org.mule.extension.spring.internal.util.ExcludeFromGeneratedCoverage;
 import org.mule.runtime.api.component.AbstractComponent;
 import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProvider;
@@ -76,11 +77,11 @@ public class SpringConfig extends AbstractComponent
   }
 
   /**
-   * Find RegionClassLoader based on ArtifactClassLoader.
-   * If RegionClassLoader is not found on ArtifactClassLoader's hierarchy ArtifactClassLoader will be returned instead.
-   * This ensure Spring module only access to exported classes and resources.
+   * Find RegionClassLoader based on ArtifactClassLoader. If RegionClassLoader is not found on ArtifactClassLoader's hierarchy
+   * ArtifactClassLoader will be returned instead. This ensure Spring module only access to exported classes and resources.
    *
    * Using Thread.currentContext.getContextClassLoader() enables access to NOT exported classes.
+   * 
    * @return RegionClassLoader
    */
   private ClassLoader getRegionClassLoader() {
@@ -91,9 +92,10 @@ public class SpringConfig extends AbstractComponent
   /**
    * Try to find RegionClassLoader based on <code>current</code> argument.
    *
-   * @param base Default classLoader to be returned if RegionClassLoader is not found on <code>current</code> argument
+   * @param base    Default classLoader to be returned if RegionClassLoader is not found on <code>current</code> argument
    * @param current The initial ClassLoader.
-   * @return RegionClassLoader or <code>base</code> argument if RegionClassLoader is not found on <code>current</code> argument classloader's hierarchy
+   * @return RegionClassLoader or <code>base</code> argument if RegionClassLoader is not found on <code>current</code> argument
+   *         classloader's hierarchy
    */
   private ClassLoader getRegionClassLoader(ClassLoader base, ClassLoader current) {
     if (current instanceof RegionClassLoader) {
@@ -170,5 +172,24 @@ public class SpringConfig extends AbstractComponent
   @Override
   public String getName() {
     return name;
+  }
+
+  @ExcludeFromGeneratedCoverage
+  public Map<String, String> getParameters() {
+    return parameters;
+  }
+
+  @ExcludeFromGeneratedCoverage
+  public ClassPathXmlApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
+
+  @ExcludeFromGeneratedCoverage
+  public void setApplicationContext(ClassPathXmlApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 }
