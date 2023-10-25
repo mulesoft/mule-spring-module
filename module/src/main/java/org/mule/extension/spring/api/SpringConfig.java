@@ -16,6 +16,7 @@ import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
 
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
 import org.mule.extension.spring.internal.util.CompositeClassLoader;
+import org.mule.extension.spring.internal.util.ExcludeFromGeneratedCoverage;
 import org.mule.runtime.api.component.AbstractComponent;
 import org.mule.runtime.api.ioc.ConfigurableObjectProvider;
 import org.mule.runtime.api.ioc.ObjectProvider;
@@ -172,14 +173,17 @@ public class SpringConfig extends AbstractComponent
     return name;
   }
 
+  @ExcludeFromGeneratedCoverage
   public Map<String, String> getParameters() {
     return parameters;
   }
 
+  @ExcludeFromGeneratedCoverage
   public ClassPathXmlApplicationContext getApplicationContext() {
     return applicationContext;
   }
 
+  @ExcludeFromGeneratedCoverage
   public void setApplicationContext(ClassPathXmlApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }

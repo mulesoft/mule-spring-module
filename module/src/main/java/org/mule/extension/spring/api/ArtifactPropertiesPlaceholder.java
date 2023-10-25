@@ -6,6 +6,7 @@
  */
 package org.mule.extension.spring.api;
 
+import org.mule.extension.spring.internal.util.ExcludeFromGeneratedCoverage;
 import org.mule.runtime.api.component.ConfigurationProperties;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -45,6 +46,7 @@ public class ArtifactPropertiesPlaceholder extends PropertyPlaceholderConfigurer
     return HIGHEST_PRECEDENCE;
   }
 
+  @ExcludeFromGeneratedCoverage
   public ConfigurationProperties getConfigurationProperties() {
     return configurationProperties;
   }
