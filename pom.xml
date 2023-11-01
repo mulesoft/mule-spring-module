@@ -33,7 +33,7 @@
 	        <dependency>
 	            <artifactId>mule-api</artifactId>
 	            <groupId>org.mule.runtime</groupId>
-	            <version>1.1.1</version>
+	            <version>1.6.0-20231025</version>
 	            <exclusions>
 	                <exclusion>
 	                    <groupId>com.google.code.gson</groupId>
