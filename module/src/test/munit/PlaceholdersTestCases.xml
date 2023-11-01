@@ -16,7 +16,7 @@ http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/s
 
   <global-property name="propertyA" value="propertyAValue"/>
 
-  <spring:config name="springConfig" files="placeholders/placeholders-beans.xml"/>
+  <spring:config name="springConfigForPlaceholderTests" files="placeholders/placeholders-beans.xml"/>
 
   <flow name="dummy-placeholders-flow">
     <logger level="INFO" doc:name="Logger"/>
