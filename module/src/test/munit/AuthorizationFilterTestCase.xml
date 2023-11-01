@@ -78,6 +78,27 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
         </munit:execution>
     </munit:test>
 
+    <!-- Login with bad:bad -->
+    <munit:test name="whenInvalidCredentials_thenThrowException" expectedErrorType="HTTP:UNAUTHORIZED">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="basic" />
+        </munit:enable-flow-sources>
+
+        <munit:execution >
+            <logger level="INFO" message="#['Start']"/>
+
+            <http:request method="GET" config-ref="request_to_basic_path" path="/" >
+                <http:headers ><![CDATA[#[
+                    output application/java
+                    ---
+                    {
+                        "Authorization" : "Basic YmFkOmJhZA=="
+                    }]]]>
+                </http:headers>
+            </http:request>
+        </munit:execution>
+    </munit:test>
+
     <flow name="basic">
         <http:listener config-ref="HTTP_Listener_config" path="/">
             <http:response>
