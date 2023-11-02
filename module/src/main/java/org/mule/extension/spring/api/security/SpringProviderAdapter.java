@@ -9,6 +9,7 @@ package org.mule.extension.spring.api.security;
 import org.mule.extension.spring.internal.security.SecurityProperty;
 import org.mule.extension.spring.internal.security.SpringAuthenticationAdapter;
 import org.mule.extension.spring.internal.security.SpringSecurityContextFactory;
+import org.mule.extension.spring.internal.util.ExcludeFromGeneratedCoverage;
 import org.mule.runtime.api.lifecycle.InitialisationException;
 import org.mule.runtime.api.security.Authentication;
 import org.mule.runtime.api.security.SecurityException;
@@ -101,4 +102,10 @@ public class SpringProviderAdapter extends AbstractSecurityProvider implements A
   public void setAuthenticationProvider(SpringAuthenticationProvider authenticationProvider) {
     this.authenticationProvider = authenticationProvider;
   }
+
+  @ExcludeFromGeneratedCoverage
+  public void setSecurityProperties(Map securityProperties) {
+    this.securityProperties = securityProperties;
+  }
+
 }
