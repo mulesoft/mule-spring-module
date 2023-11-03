@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd"
+      xmlns:spring="http://www.mulesoft.org/schema/mule/spring">
+	<munit:config name="NotificationsTestCases" />
+
+  <spring:config name="springNotificationsConfig" files="notifications/notification-beans.xml"/>
+
+  <notifications>
+    <notification event="MESSAGE-PROCESSOR"/>
+  </notifications>
+
+  <notifications>
+    <notification-listener ref="notificationLogger"/>
+  </notifications>
+
+  <flow name="dummy-notifications-flow">
+    <set-payload value="0.8.1"/>
+  </flow>
+
+  <munit:test name="NotificationObjectsInSpringConfigArePickUpByMule" description="NotificationObjectsInSpringConfigArePickUpByMule">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to dummy-notifications-flow" name="dummy-notifications-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Bean 1 is not null" is="#[MunitTools::notNullValue()]" expression="#[app.registry.notificationLogger.notifications[0]]" />
+			<munit-tools:assert-that doc:name="Bean 2 is not null" expression="#[app.registry.notificationLogger.notifications[1]]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+
+</mule>

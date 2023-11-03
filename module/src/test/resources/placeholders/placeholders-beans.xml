@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>placeholders/spring-properties.properties</value>
+        </property>
+    </bean>
+
+    <bean name="orange" class="org.mule.tck.testmodels.fruit.Orange">
+        <property name="brand" value="${propertyA}"/>
+        <property name="segments" value="${propertyB}"/>
+        <property name="mapProperties">
+            <map>
+                <entry key="springPropertyA" value="${springPropertyA}"/>
+                <entry key="springPropertyB" value="${springPropertyB}"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean name="grapefruit" class="org.mule.tck.testmodels.fruit.GrapeFruit">
+        <property name="segments" value="#{T(java.lang.Math).addExact(1, 2)}"/>
+        <property name="radius" value="#{T(java.lang.Math).abs(1.2)}"/>
+        <property name="brand" value="#{T(java.lang.String).valueOf(123)}"/>
+        <property name="red" value="#{true || false}"/>
+    </bean>
+
+</beans>
