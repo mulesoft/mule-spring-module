@@ -7,12 +7,113 @@
         <version>1.4.0-SNAPSHOT</version>
     </parent>
     <artifactId>mule-spring-module-tests</artifactId>
+  <packaging>mule-extension</packaging>
 
     <properties>
         <httpcommons.httpclient.version>4.5.13</httpcommons.httpclient.version>
 
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
+
+      <munit.input.directory>src/test/munit</munit.input.directory>
+      <munit.output.directory>${basedir}/target/test-mule/munit</munit.output.directory>
+
+      <munit.extensions.maven.plugin.version>1.1.2</munit.extensions.maven.plugin.version>
+      <munit.version>2.3.15</munit.version>
+      <mavenResources.version>3.3.0</mavenResources.version>
+      <mtf.version>1.1.1</mtf.version>
+      <mtf.tools.version>1.1.1</mtf.tools.version>
+      <munit.version>2.2.5</munit.version>
+
+      <mavenResourcesVersion>3.0.2</mavenResourcesVersion>
     </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${mavenResourcesVersion}</version>
+        <executions>
+          <execution>
+            <id>copy-munit-resources</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${munit.output.directory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${munit.input.directory}</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+<!--          manually copy mule-artifact.json-->
+          <execution>
+            <id>copy-mule-artifact-json</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/classes/META-INF/mule-artifact</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/test/resources/mule-artifact</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.mulesoft.munit</groupId>
+        <artifactId>munit-extensions-maven-plugin</artifactId>
+        <version>${munit.extensions.maven.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>test</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+<!--        <configuration>-->
+<!--          <argLines>-->
+<!--            <argLine>-->
+<!--              -javaagent:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${session.executionRootDirectory}/target/jacoco-munit.exec-->
+<!--            </argLine>-->
+<!--          </argLines>-->
+<!--        </configuration>-->
+        <dependencies>
+          <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-runner</artifactId>
+            <version>${munit.version}</version>
+            <classifier>mule-plugin</classifier>
+          </dependency>
+          <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-tools</artifactId>
+            <version>${munit.version}</version>
+            <classifier>mule-plugin</classifier>
+          </dependency>
+          <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>mtf-tools</artifactId>
+            <version>${mtf.tools.version}</version>
+            <classifier>mule-plugin</classifier>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
 
     <dependencies>
         <dependency>
@@ -34,7 +135,7 @@
             <version>${project.version}</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-    
+
         <dependency>
             <groupId>org.mule.services</groupId>
             <artifactId>mule-service-http</artifactId>
@@ -75,7 +176,13 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
+      <dependency>
+        <groupId>org.mule.modules</groupId>
+        <artifactId>mule-spring-test-plugin</artifactId>
+        <version>1.4.0-SNAPSHOT</version>
+      </dependency>
+
         <dependency>
             <groupId>org.mule.tests</groupId>
             <artifactId>mule-tests-runner</artifactId>
