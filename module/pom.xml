@@ -12,6 +12,12 @@
     <properties>
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
         <minMuleVersion>${mule.version}</minMuleVersion>
+      <munit.extensions.maven.plugin.version>1.1.2</munit.extensions.maven.plugin.version>
+      <munit.version>2.3.15</munit.version>
+
+      <munit.input.directory>src/test/munit</munit.input.directory>
+      <munit.output.directory>${basedir}/target/test-mule/munit</munit.output.directory>
+      <mavenResourcesVersion>3.2.0</mavenResourcesVersion>
     </properties>
 
     <build>
@@ -57,6 +63,50 @@
                     </replacements>
                 </configuration>
             </plugin>
+
+          <plugin>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-extensions-maven-plugin</artifactId>
+            <version>${munit.extensions.maven.plugin.version}</version>
+            <dependencies>
+              <!-- MUnit Dependencies -->
+              <dependency>
+                <groupId>com.mulesoft.munit</groupId>
+                <artifactId>munit-runner</artifactId>
+                <version>${munit.version}</version>
+                <classifier>mule-plugin</classifier>
+              </dependency>
+              <dependency>
+                <groupId>com.mulesoft.munit</groupId>
+                <artifactId>munit-tools</artifactId>
+                <version>${munit.version}</version>
+                <classifier>mule-plugin</classifier>
+              </dependency>
+            </dependencies>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>${mavenResourcesVersion}</version>
+            <executions>
+              <execution>
+                <id>copy-munit-resources</id>
+                <phase>process-test-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${munit.output.directory}</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${munit.input.directory}</directory>
+                      <filtering>true</filtering>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
     </build>
 
