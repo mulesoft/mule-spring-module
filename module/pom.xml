@@ -162,17 +162,17 @@
     </plugins>
   </build>
 
-<!--  <dependencyManagement>-->
-<!--    <dependencies>-->
-<!--      <dependency>-->
-<!--        <groupId>org.mule</groupId>-->
-<!--        <artifactId>mule-javaee-runtime-bom</artifactId>-->
-<!--        <version>${muleJavaEeBomVersion}</version>-->
-<!--        <type>pom</type>-->
-<!--        <scope>import</scope>-->
-<!--      </dependency>-->
-<!--    </dependencies>-->
-<!--  </dependencyManagement>-->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.mule</groupId>
+        <artifactId>mule-javaee-runtime-bom</artifactId>
+        <version>4.6.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -275,17 +275,9 @@
       <version>0.7.0-rc12</version>
     </dependency>
 
-<!--    <dependency>-->
-<!--      <groupId>com.sun.activation</groupId>-->
-<!--      <artifactId>jakarta.activation</artifactId>-->
-<!--    </dependency>-->
-
     <dependency>
       <groupId>com.sun.activation</groupId>
       <artifactId>jakarta.activation</artifactId>
-      <version>1.2.2</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
 
   </dependencies>
