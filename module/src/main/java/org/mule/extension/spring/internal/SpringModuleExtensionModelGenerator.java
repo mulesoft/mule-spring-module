@@ -17,6 +17,7 @@ import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Ha
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.NOT_PERMITTED;
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.SERVER_SECURITY;
 import static org.mule.runtime.extension.api.stereotype.MuleStereotypes.APP_CONFIG;
+import static org.mule.runtime.extension.api.ExtensionConstants.ALL_SUPPORTED_JAVA_VERSIONS;
 
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.annotation.TypeAliasAnnotation;
@@ -86,6 +87,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .describedAs(EXTENSION_DESCRIPTION)
         .fromVendor(VENDOR)
         .onVersion(VERSION)
+        .supportingJavaVersions(ALL_SUPPORTED_JAVA_VERSIONS)
         .withCategory(COMMUNITY)
         .withXmlDsl(xmlDslModel);
 
