@@ -1,8 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
+ * Copyright 2023 Salesforce, Inc. All rights reserved.
  */
 package org.mule.extension.spring.internal.security;
 
@@ -17,7 +14,7 @@ public class SecurityProperty {
   private String value;
 
   /**
-   * @param name property name
+   * @param name  property name
    * @param value property value
    */
   public SecurityProperty(String name, String value) {
