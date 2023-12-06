@@ -21,6 +21,7 @@
         <mule.version>4.3.0</mule.version>
 		<minMuleVersion>4.3.0</minMuleVersion>
         <gsonVersion>2.9.1</gsonVersion>
+		<mule.api.version>1.5.0</mule.api.version>
     </properties>
 
     <modules>
@@ -33,7 +34,7 @@
 	        <dependency>
 	            <artifactId>mule-api</artifactId>
 	            <groupId>org.mule.runtime</groupId>
-	            <version>1.5.0</version>
+	            <version>${mule.api.version}</version>
 	            <exclusions>
 	                <exclusion>
 	                    <groupId>com.google.code.gson</groupId>
@@ -44,7 +45,7 @@
 	        <dependency>
 	            <artifactId>mule-metadata-model-json</artifactId>
 	            <groupId>org.mule.runtime</groupId>
-				<version>1.5.0</version>
+				<version>${mule.api.version}</version>
 	            <exclusions>
 	                <exclusion>
 	                    <groupId>com.google.code.gson</groupId>
@@ -55,7 +56,7 @@
 	        <dependency>
 	            <groupId>org.mule.runtime</groupId>
             	<artifactId>mule-module-service</artifactId>
-				<version>4.3.0</version>
+				<version>${mule.version}</version>
 	            <exclusions>
 	                <exclusion>
 	                    <groupId>com.google.code.gson</groupId>
@@ -66,7 +67,7 @@
 	        <dependency>
 	            <groupId>org.mule.runtime</groupId>
             	<artifactId>mule-module-extensions-spring-support</artifactId>
-				<version>4.3.0</version>
+				<version>${mule.version}</version>
 	            <exclusions>
 	                <exclusion>
 	                    <groupId>com.google.code.gson</groupId>
