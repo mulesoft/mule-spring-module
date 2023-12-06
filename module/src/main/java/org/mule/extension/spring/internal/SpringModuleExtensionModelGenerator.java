@@ -1,8 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
+ * Copyright 2023 Salesforce, Inc. All rights reserved.
  */
 package org.mule.extension.spring.internal;
 
@@ -17,6 +14,7 @@ import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Ha
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.NOT_PERMITTED;
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.SERVER_SECURITY;
 import static org.mule.runtime.extension.api.stereotype.MuleStereotypes.APP_CONFIG;
+import static org.mule.runtime.extension.api.ExtensionConstants.ALL_SUPPORTED_JAVA_VERSIONS;
 
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.annotation.TypeAliasAnnotation;
@@ -46,6 +44,7 @@ import org.mule.runtime.extension.api.loader.ExtensionLoadingDelegate;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * Spring module {@link org.mule.runtime.api.meta.model.ExtensionModel} generator.
@@ -96,9 +95,14 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   }
 
   private void declareConfig(ExtensionDeclarer extensionDeclarer, ClassTypeLoader typeLoader) {
-    final ConfigurationDeclarer springConfig = extensionDeclarer.withConfig("config")
+    final ConfigurationDeclarer springConfig = hasJavaSupportingMethod(extensionDeclarer) ? extensionDeclarer
+        .supportingJavaVersions(ALL_SUPPORTED_JAVA_VERSIONS)
+        .withConfig("config")
         .withStereotype(StereotypeModelBuilder.newStereotype("CONFIG", "SPRING").withParent(APP_CONFIG).build())
-        .describedAs("Spring configuration that allows to define a set of spring XML files and create an application context with objects to be used in the mule artifact.");
+        .describedAs("Spring configuration that allows to define a set of spring XML files and create an application context with objects to be used in the mule artifact.")
+        : extensionDeclarer.withConfig("config")
+            .withStereotype(StereotypeModelBuilder.newStereotype("CONFIG", "SPRING").withParent(APP_CONFIG).build())
+            .describedAs("Spring configuration that allows to define a set of spring XML files and create an application context with objects to be used in the mule artifact.");
     ParameterGroupDeclarer parameterGroupDeclarer = springConfig.onDefaultParameterGroup();
     parameterGroupDeclarer.withRequiredParameter("files").withExpressionSupport(NOT_SUPPORTED)
         .withRole(BEHAVIOUR).ofType(typeLoader.load(String.class));
@@ -252,4 +256,8 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
         .withType(DEPENDENCY).build());
   }
 
+  private boolean hasJavaSupportingMethod(ExtensionDeclarer extensionDeclarer) {
+    return Arrays.stream(extensionDeclarer.getClass().getMethods())
+        .anyMatch(method -> method.getName().equals("supportingJavaVersions"));
+  }
 }

@@ -1,8 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
+ * Copyright 2023 Salesforce, Inc. All rights reserved.
  */
 package org.mule.extension.spring.internal.util;
 
@@ -39,6 +36,7 @@ public class CompoundEnumeration<E> implements Enumeration<E> {
 
   /**
    * Checks if the enumeration has more elements.
+   * 
    * @return true if there are still elements, false otherwise.
    */
   public boolean hasMoreElements() {
@@ -47,6 +45,7 @@ public class CompoundEnumeration<E> implements Enumeration<E> {
 
   /**
    * Returns the next element in the {@link CompoundEnumeration}
+   * 
    * @return
    */
   public E nextElement() {
