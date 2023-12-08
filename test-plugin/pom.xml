@@ -13,16 +13,10 @@
     
     <properties>
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
-        <mule.extensions.maven.plugin.version>1.5.0</mule.extensions.maven.plugin.version>
     </properties>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.mule.runtime.plugins</groupId>
-                <artifactId>mule-extensions-maven-plugin</artifactId>
-                <version>${mule.extensions.maven.plugin.version}</version>
-            </plugin>
             <plugin>
                 <groupId>org.mule.runtime.plugins</groupId>
                 <artifactId>mule-plugin-maven-plugin</artifactId>
