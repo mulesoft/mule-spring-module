@@ -256,5 +256,4 @@
       <version>${sdk.api.version}</version>
     </dependency>
   </dependencies>
-
 </project>

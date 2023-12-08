@@ -6,6 +6,7 @@
  */
 package org.mule.extension.spring.test.jndi;
 
+import org.mule.functional.jndi.InMemoryContextFactory;
 import org.mule.tck.testmodels.fruit.Apple;
 import org.mule.tck.testmodels.fruit.Banana;
 import org.mule.tck.testmodels.fruit.Orange;

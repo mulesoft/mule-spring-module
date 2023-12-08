@@ -6,14 +6,15 @@
  */
 package org.mule.extension.spring.test.jndi;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * Simple in-memory JNDI context for unit testing.
