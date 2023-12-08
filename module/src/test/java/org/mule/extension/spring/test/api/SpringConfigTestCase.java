@@ -1,5 +1,8 @@
 /*
- * Copyright 2023 Salesforce, Inc. All rights reserved.
+ * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file.
  */
 package org.mule.extension.spring.test.api;
 
@@ -62,11 +65,11 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
     // Mock class loader
     URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
     when(fakeClassLoader.getResources(anyString()))
-        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgument(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgumentAt(0, String.class)));
     when(fakeClassLoader.getResourceAsStream("other-cl-" + FILE_NAME))
         .thenAnswer(inv -> originalClassLoader.getResourceAsStream(FILE_NAME));
     when(fakeClassLoader.loadClass(anyString()))
-        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgument(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgumentAt(0, String.class)));
     currentThread().setContextClassLoader(fakeClassLoader);
 
     // Set parameters
