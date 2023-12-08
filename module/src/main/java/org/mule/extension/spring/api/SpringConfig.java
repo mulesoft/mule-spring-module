@@ -188,6 +188,7 @@ public class SpringConfig extends AbstractComponent
     this.applicationContext = applicationContext;
   }
 
+  @ExcludeFromGeneratedCoverage
   public void setName(String name) {
     this.name = name;
   }
