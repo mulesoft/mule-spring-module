@@ -49,6 +49,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -100,19 +101,18 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   }
 
   private void declareConfig(ExtensionDeclarer extensionDeclarer, ClassTypeLoader typeLoader) {
-    ConfigurationDeclarer springConfig;
-
-    if (hasJavaSupportingMethod(extensionDeclarer)) {
-      Method supportingJavaVersionsMethod;
+    Optional<Method> m = Arrays.stream(extensionDeclarer.getClass().getMethods())
+        .filter(method -> method.getName().equals("supportingJavaVersions")).findFirst();
+    if (m.isPresent()) {
       try {
-        supportingJavaVersionsMethod = ExtensionDeclarer.class.getMethod("supportingJavaVersions", Set.class);
-        supportingJavaVersionsMethod.invoke(extensionDeclarer, new LinkedHashSet(Arrays.asList("1.8", "11", "17")));
-      } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-        // mule version lower than 4.5, continue without setting the supportingVersions
+        extensionDeclarer = (ExtensionDeclarer) m.get()
+            .invoke(extensionDeclarer, Collections.unmodifiableSet(new LinkedHashSet(Arrays.asList("1.8", "11", "17"))));
+      } catch (IllegalAccessException | InvocationTargetException e) {
+        throw new RuntimeException("Failed to initialize the extension when trying to declare `supportingJavaVersions` for the extension.",
+                                   e);
       }
     }
-
-    springConfig = extensionDeclarer
+    final ConfigurationDeclarer springConfig = extensionDeclarer
         .withConfig("config")
         .withStereotype(StereotypeModelBuilder.newStereotype("CONFIG", "SPRING").withParent(APP_CONFIG).build())
         .describedAs("Spring configuration that allows to define a set of spring XML files and create an application context with objects to be used in the mule artifact.");

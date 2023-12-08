@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
         http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
         http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
-    <munit:config name="AuthorizationFilterTestCase.xml" />
+    <munit:config name="AuthorizationFilterTestCase.xml" minMuleVersion="4.3.0"/>
 
     <spring:config name="springConfig" files="beans.xml" />
 
