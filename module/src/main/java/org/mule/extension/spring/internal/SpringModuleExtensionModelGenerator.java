@@ -102,7 +102,9 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
 
   private void declareConfig(ExtensionDeclarer extensionDeclarer, ClassTypeLoader typeLoader) {
     Optional<Method> m = Arrays.stream(extensionDeclarer.getClass().getMethods())
-        .filter(method -> method.getName().equals("supportingJavaVersions")).findFirst();
+        .filter(method -> method.getName().equals("supportingJavaVersions"))
+        .filter(method -> Arrays.equals(method.getParameterTypes(), new Class[] {Set.class}))
+        .findFirst();
     if (m.isPresent()) {
       try {
         extensionDeclarer = (ExtensionDeclarer) m.get()
