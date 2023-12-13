@@ -15,14 +15,6 @@ public class SpringSecurityMessages extends I18nMessageFactory {
 
   private static final String BUNDLE_PATH = getBundlePath("spring-security");
 
-  public static I18nMessage basicFilterCannotHandleHeader(String header) {
-    return factory.createMessage(BUNDLE_PATH, 1, header);
-  }
-
-  public static I18nMessage authRealmMustBeSetOnFilter() {
-    return factory.createMessage(BUNDLE_PATH, 2);
-  }
-
   public static I18nMessage noGrantedAuthority(String authority) {
     return factory.createMessage(BUNDLE_PATH, 3, authority);
   }
