@@ -137,10 +137,14 @@
             <argLine>
               -javaagent:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${session.executionRootDirectory}/target/jacoco-munit.exec
             </argLine>
-            <argLine>
-              -Dmule.jvm.version.extension.enforcement=LOOSE
-            </argLine>
           </argLines>
+          <runtimeConfiguration>
+            <discoverRuntimes>
+              <minMuleVersion>${minVersion}</minMuleVersion>
+              <includeSnapshots>false</includeSnapshots>
+              <product>EE</product>
+            </discoverRuntimes>
+          </runtimeConfiguration>
         </configuration>
 
         <dependencies>
