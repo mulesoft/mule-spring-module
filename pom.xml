@@ -31,7 +31,6 @@
 	        <dependency>
 	            <artifactId>mule-api</artifactId>
 	            <groupId>org.mule.runtime</groupId>
-	            <version>${mule.api.version}</version>
 	            <exclusions>
 	                <exclusion>
 	                    <groupId>com.google.code.gson</groupId>
