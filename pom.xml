@@ -11,6 +11,7 @@
     <artifactId>mule-spring-module-parent</artifactId>
     <name>Spring Module</name>
     <packaging>pom</packaging>
+	<!-- REMEMBER also to change module pom and SpringModuleExtensionModelGenerator.VERSION -->
     <version>1.3.12-SNAPSHOT</version>
 
     <properties>
