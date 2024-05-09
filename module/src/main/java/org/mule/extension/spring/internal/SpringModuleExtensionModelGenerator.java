@@ -63,14 +63,14 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   public static final String PREFIX_NAME = "spring";
   public static final String EXTENSION_DESCRIPTION = "Spring Module Plugin";
   public static final String VENDOR = "Mulesoft";
-  public static final String VERSION = "1.4.0-SNAPSHOT";
+  public static final String VERSION = "1.4.0";
   public static final MuleVersion MIN_MULE_VERSION = new MuleVersion("4.0");
   public static final String XSD_FILE_NAME = "mule-spring.xsd";
   private static final String UNESCAPED_LOCATION_PREFIX = "http://";
   private static final String SCHEMA_LOCATION = "www.mulesoft.org/schema/mule/spring";
   private static final String SCHEMA_VERSION = "current";
-  private static final String SPRING_VERSION = "5.3.29";
-  private static final String SPRING_SECURITY_VERSION = "5.8.6";
+  private static final String SPRING_VERSION = "5.3.34";
+  private static final String SPRING_SECURITY_VERSION = "5.8.12";
   private static final String SPRING_GROUP_ID = "org.springframework";
   private static final String SPRING_SECURITY_GROUP_ID = "org.springframework.security";
 
