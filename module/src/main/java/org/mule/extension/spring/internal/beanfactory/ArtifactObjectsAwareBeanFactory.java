@@ -6,6 +6,11 @@
  */
 package org.mule.extension.spring.internal.beanfactory;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.lifecycle.Initialisable;
@@ -26,6 +31,19 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
+import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 /**
  * {@link DefaultListableBeanFactory} implementation that takes into account the objects provided by the mule artifact for
@@ -42,6 +60,40 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     super(parentBeanFactory);
     this.artifactObjectProvider = artifactObjectProvider;
   }
+
+  //TODO improve this code error check
+  //ugly hack to bypass non FIPS compliant security algorithms
+  static DaoAuthenticationProvider authenticationProvider()  {
+    try {
+      Class c = Class.forName("sun.misc.Unsafe");
+      Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
+              .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
+      field.setAccessible(true);
+      Method allocateInstance = c.getDeclaredMethod("allocateInstance", Class.class);
+      DaoAuthenticationProvider authProvider = (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
+      authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
+      return authProvider;
+    }catch(ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e){
+      throw new RuntimeException(e);
+    }
+  }
+
+  static PasswordEncoder createDelegatingPasswordEncoder() {
+    String encodingId = "bcrypt";
+    Map<String, PasswordEncoder> encoders = new HashMap();
+    encoders.put(encodingId, new BCryptPasswordEncoder());
+    encoders.put("ldap", new LdapShaPasswordEncoder());
+    encoders.put("noop", NoOpPasswordEncoder.getInstance());
+    encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_5());
+    encoders.put("scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v4_1());
+    encoders.put("scrypt@SpringSecurity_v5_8", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
+    encoders.put("SHA-256", new MessageDigestPasswordEncoder("SHA-256"));
+    encoders.put("sha256", new StandardPasswordEncoder());
+    encoders.put("argon2", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_2());
+    encoders.put("argon2@SpringSecurity_v5_8", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8());
+    return new DelegatingPasswordEncoder(encodingId, encoders);
+  }
+
 
   @Override
   public Object doResolveDependency(DependencyDescriptor descriptor, String beanName, Set<String> autowiredBeanNames,
@@ -84,6 +136,9 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
    */
   @Override
   protected <T> T doGetBean(String name, Class<T> requiredType, Object[] args, boolean typeCheckOnly) throws BeansException {
+    if(name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType)){
+      return (T) authenticationProvider();
+    }
     if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
       return super.doGetBean(name, requiredType, args, typeCheckOnly);
     } else {
