@@ -100,7 +100,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
    */
   @Override
   protected <T> T doGetBean(String name, Class<T> requiredType, Object[] args, boolean typeCheckOnly) throws BeansException {
-    if(name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType)){
+    if (name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType)) {
       return (T) authenticationProvider();
     }
     if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
@@ -156,17 +156,18 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
 
   //TODO improve this code error check
   //ugly hack to bypass non FIPS compliant security algorithms
-  static DaoAuthenticationProvider authenticationProvider()  {
+  static DaoAuthenticationProvider authenticationProvider() {
     try {
       Class c = Class.forName("sun.misc.Unsafe");
       Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
-              .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
+          .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
       field.setAccessible(true);
       Method allocateInstance = c.getDeclaredMethod("allocateInstance", Class.class);
-      DaoAuthenticationProvider authProvider = (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
+      DaoAuthenticationProvider authProvider =
+          (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
       authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
       return authProvider;
-    }catch(ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e){
+    } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       throw new RuntimeException(e);
     }
   }
