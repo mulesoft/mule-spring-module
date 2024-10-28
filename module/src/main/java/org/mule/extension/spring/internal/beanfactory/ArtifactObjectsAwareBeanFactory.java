@@ -6,11 +6,10 @@
  */
 package org.mule.extension.spring.internal.beanfactory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
+
+import org.mule.extension.spring.internal.util.CustomPostAuthenticationChecks;
+import org.mule.extension.spring.internal.util.CustomPreAuthenticationChecks;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.lifecycle.Initialisable;
@@ -32,6 +31,9 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
@@ -100,8 +102,11 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
    */
   @Override
   protected <T> T doGetBean(String name, Class<T> requiredType, Object[] args, boolean typeCheckOnly) throws BeansException {
-    if (name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType)) {
-      return (T) authenticationProvider();
+    if("fips140-2".equals(System.getProperty("mule.security.model"))) {
+      if (name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType)) {
+        UserDetailsService userDetailsService = (UserDetailsService) super.getBean("userService");
+        return (T) authenticationProvider(userDetailsService);
+      }
     }
     if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
       return super.doGetBean(name, requiredType, args, typeCheckOnly);
@@ -156,20 +161,18 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
 
   //TODO improve this code error check
   //ugly hack to bypass non FIPS compliant security algorithms
-  static DaoAuthenticationProvider authenticationProvider() {
-    try {
-      Class c = Class.forName("sun.misc.Unsafe");
-      Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
-          .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
-      field.setAccessible(true);
-      Method allocateInstance = c.getDeclaredMethod("allocateInstance", Class.class);
-      DaoAuthenticationProvider authProvider =
-          (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
-      authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
-      return authProvider;
-    } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-      throw new RuntimeException(e);
-    }
+  static DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
+    authProvider.setUserDetailsService(userDetailsService);
+    authProvider.setUserCache(new NullUserCache());
+    authProvider.setAuthoritiesMapper(new NullAuthoritiesMapper());
+
+    // Setting custom pre and post authentication checks
+    authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
+    authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
+
+    return authProvider;
   }
 
   static PasswordEncoder createDelegatingPasswordEncoder() {
