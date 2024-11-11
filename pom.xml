@@ -120,18 +120,20 @@
 				<artifactId>spring-security-core</artifactId>
 				<version>6.3.4</version>
 				<scope>provided</scope>
-			</dependency>
+			</dependency><!-- Add this dependency for JAXB API -->
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
 				<artifactId>jaxb-api</artifactId>
 				<version>2.3.1</version>
 			</dependency>
 
+			<!-- Add this dependency for JAXB runtime (optional, depending on your specific needs) -->
 			<dependency>
 				<groupId>org.glassfish.jaxb</groupId>
 				<artifactId>jaxb-runtime</artifactId>
 				<version>2.3.1</version>
 			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
