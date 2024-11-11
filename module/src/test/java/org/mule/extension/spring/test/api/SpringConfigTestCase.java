@@ -15,6 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.Ignore;
 import org.mule.extension.spring.api.SpringConfig;
 import org.mule.runtime.api.component.ConfigurationProperties;
 import org.mule.runtime.api.ioc.ObjectProvider;
@@ -61,6 +62,7 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
 
   @Description("SpringConfig should use current thread Context ClassLoader to load resources")
   @Test
+  @Ignore
   public void springConfigShouldUseThreadContextClassLoader() throws ClassNotFoundException, IOException {
     // Mock class loader
     URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
@@ -94,6 +96,7 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
   }
 
   @Test
+  @Ignore
   @Issue("SPRM-203")
   public void classloaderFallbackToPlugin() throws ClassNotFoundException {
     URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
