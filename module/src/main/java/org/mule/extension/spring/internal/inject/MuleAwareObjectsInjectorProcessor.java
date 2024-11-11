@@ -24,7 +24,6 @@ public class MuleAwareObjectsInjectorProcessor extends AutowiredAnnotationBeanPo
   @Override
   public final void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {}
 
-  @Override
   protected boolean determineRequiredStatus(AnnotationAttributes ann) {
     return false;
   }

@@ -97,9 +97,8 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
                                                       artifactPlaceholderBeanDefinitionBuilder.getBeanDefinition());
   }
 
-  @Override
   public void destroy() {
     beanFactory.markForDestroy();
-    super.destroy();
+    super.close();
   }
 }
