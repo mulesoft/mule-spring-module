@@ -27,6 +27,8 @@
     <http.connector.version>1.8.1</http.connector.version>
     <mule.java.module.version>1.2.12</mule.java.module.version>
     <mule.sockets.connector.version>1.2.3</mule.sockets.connector.version>
+    <springVersion>6.1.14</springVersion>
+    <springSecurityVersion>6.3.4</springSecurityVersion>
   </properties>
 
   <build>
