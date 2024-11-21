@@ -24,9 +24,10 @@
 
     <jacoco.version>0.8.10</jacoco.version>
     <sdk.api.version>0.7.0</sdk.api.version>
-    <http.connector.version>1.8.1</http.connector.version>
+    <http.connector.version>1.9.0</http.connector.version>
     <mule.java.module.version>1.2.12</mule.java.module.version>
     <mule.sockets.connector.version>1.2.3</mule.sockets.connector.version>
+    <mtf.javaopts></mtf.javaopts>
   </properties>
 
   <build>
@@ -145,8 +146,11 @@
               <product>EE</product>
             </discoverRuntimes>
           </runtimeConfiguration>
+          <environmentVariables>
+            <!-- Toggles the JDK17 style flag -->
+            <_JAVA_OPTIONS>-XX:+PrintCommandLineFlags ${mtf.javaopts}</_JAVA_OPTIONS>
+          </environmentVariables>
         </configuration>
-
         <dependencies>
           <dependency>
             <groupId>com.mulesoft.munit</groupId>

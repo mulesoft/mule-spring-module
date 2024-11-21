@@ -19,6 +19,7 @@
         <springSecurityVersion>5.8.6</springSecurityVersion>
         <mule.version>4.1.5</mule.version>
         <gsonVersion>2.9.1</gsonVersion>
+		<mule.extensions.maven.plugin.version>1.6.3</mule.extensions.maven.plugin.version>
     </properties>
 
     <modules>
