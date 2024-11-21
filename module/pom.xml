@@ -16,7 +16,7 @@
     <munit.input.directory>src/test/munit</munit.input.directory>
     <munit.output.directory>${basedir}/target/test-mule/munit</munit.output.directory>
 
-    <munit.extensions.maven.plugin.version>1.2.0-rc2</munit.extensions.maven.plugin.version>
+    <munit.extensions.maven.plugin.version>1.4.0</munit.extensions.maven.plugin.version>
     <munit.version>3.1.0-rc3</munit.version>
     <mtf.tools.version>1.2.0-rc1</mtf.tools.version>
 
@@ -28,6 +28,14 @@
     <mule.java.module.version>1.2.12</mule.java.module.version>
     <mule.sockets.connector.version>1.2.3</mule.sockets.connector.version>
     <mtf.javaopts></mtf.javaopts>
+
+    <!-- fips testing -->
+    <bctls-fips.version>1.0.19</bctls-fips.version>
+    <bcpqc-addon-fips.version>1.0.1</bcpqc-addon-fips.version>
+    <bcpkix-fips.version>1.0.7</bcpkix-fips.version>
+    <bcpg-fips.version>1.0.7.1</bcpg-fips.version>
+    <bcmail-fips.version>1.0.4</bcmail-fips.version>
+    <bc-fips.version>1.0.2.5</bc-fips.version>
   </properties>
 
   <build>
@@ -87,7 +95,52 @@
           </execution>
         </executions>
         <configuration>
+          <additionalFipsDependencies>
+            <!-- fips testing -->
+            <dependency>
+              <groupId>org.bouncycastle</groupId>
+              <artifactId>bc-fips</artifactId>
+              <version>${bc-fips.version}</version>
+              <scope>test</scope>
+            </dependency>
+
+            <dependency>
+              <groupId>org.bouncycastle</groupId>
+              <artifactId>bcmail-fips</artifactId>
+              <version>${bcmail-fips.version}</version>
+              <scope>test</scope>
+            </dependency>
+
+            <dependency>
+              <groupId>org.bouncycastle</groupId>
+              <artifactId>bcpg-fips</artifactId>
+              <version>${bcpg-fips.version}</version>
+              <scope>test</scope>
+            </dependency>
+
+            <dependency>
+              <groupId>org.bouncycastle</groupId>
+              <artifactId>bcpkix-fips</artifactId>
+              <version>${bcpkix-fips.version}</version>
+              <scope>test</scope>
+            </dependency>
+
+            <dependency>
+              <groupId>org.bouncycastle</groupId>
+              <artifactId>bcpqc-addon-fips</artifactId>
+              <version>${bcpqc-addon-fips.version}</version>
+              <scope>test</scope>
+            </dependency>
+
+            <dependency>
+              <groupId>org.bouncycastle</groupId>
+              <artifactId>bctls-fips</artifactId>
+              <version>${bctls-fips.version}</version>
+              <scope>test</scope>
+            </dependency>
+          </additionalFipsDependencies>
           <!-- Configure the Spring dependencies as Shared Libraries -->
+
           <sharedLibraries>
             <sharedLibrary>
               <groupId>org.springframework.security</groupId>
