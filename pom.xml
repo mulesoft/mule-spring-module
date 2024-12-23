@@ -91,7 +91,7 @@
 		<dependency>
 			<groupId>org.mule.tests</groupId>
 			<artifactId>mule-tests-runner</artifactId>
-			<version>4.3.0</version>
+			<version>4.9.0-20241025</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
