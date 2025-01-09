@@ -163,7 +163,7 @@ public class SpringConfig extends AbstractComponent
   @Override
   public void dispose() {
     if (applicationContext != null) {
-      applicationContext.destroy();
+      applicationContext.close();
       applicationContext = null;
     }
   }
