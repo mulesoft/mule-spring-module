@@ -58,6 +58,7 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
 
       @Override
       public int loadBeanDefinitions(Resource resource) throws BeanDefinitionStoreException {
+        System.out.println("//////////////////////" + resource);
         return super.loadBeanDefinitions(new ResourceDelegate(resource));
       }
     };

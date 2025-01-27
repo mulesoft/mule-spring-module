@@ -1,140 +1,119 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.mule.extensions</groupId>
-		<artifactId>mule-core-modules-parent</artifactId>
-		<version>1.2.0</version>
-	</parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.mule.extensions</groupId>
+        <artifactId>mule-core-modules-parent</artifactId>
+        <version>1.1.9</version>
+    </parent>
 
-	<groupId>org.mule.modules</groupId>
-	<artifactId>mule-spring-module-parent</artifactId>
-	<name>Spring Module</name>
-	<packaging>pom</packaging>
-	<version>1.4.0</version>
+    <groupId>org.mule.modules</groupId>
+    <artifactId>mule-spring-module-parent</artifactId>
+    <name>Spring Module</name>
+    <packaging>pom</packaging>
+    <version>1.5.0-SNAPSHOT</version>
 
 
-	<properties>
-		<formatterConfigPath>formatter.xml</formatterConfigPath>
-		<springVersion>6.1.14</springVersion>
-		<springSecurityVersion>6.3.4</springSecurityVersion>
-		<gsonVersion>2.9.1</gsonVersion>
+    <properties>
+        <formatterConfigPath>formatter.xml</formatterConfigPath>
+        <springVersion>6.2.1</springVersion>
+        <springSecurityVersion>6.3.0</springSecurityVersion>
+        <mule.version>4.1.5</mule.version>
+        <gsonVersion>2.9.1</gsonVersion>
+
+		<mule.extensions.maven.plugin.version>1.6.9</mule.extensions.maven.plugin.version>
+		<munit.extensions.maven.plugin.version>1.5.0-rc1</munit.extensions.maven.plugin.version>
+
 	</properties>
 
-	<modules>
-		<module>module</module>
-		<module>test-plugin</module>
-	</modules>
+    <modules>
+        <module>module</module>
+        <module>test-plugin</module>
+    </modules>
 
 	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<artifactId>mule-api</artifactId>
-				<groupId>org.mule.runtime</groupId>
-				<exclusions>
+	    <dependencies>
+	        <dependency>
+	            <artifactId>mule-api</artifactId>
+	            <groupId>org.mule.runtime</groupId>
+	            <exclusions>
+	                <exclusion>
+	                    <groupId>com.google.code.gson</groupId>
+	                    <artifactId>gson</artifactId>
+	                </exclusion>
 					<exclusion>
 						<groupId>com.google.code.gson</groupId>
 						<artifactId>gson</artifactId>
 					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<artifactId>mule-metadata-model-json</artifactId>
-				<groupId>org.mule.runtime</groupId>
-				<exclusions>
+	            </exclusions>
+	        </dependency>
+	        <dependency>
+	            <artifactId>mule-metadata-model-json</artifactId>
+	            <groupId>org.mule.runtime</groupId>
+	            <exclusions>
+	                <exclusion>
+	                    <groupId>com.google.code.gson</groupId>
+	                    <artifactId>gson</artifactId>
+	                </exclusion>
+	            </exclusions>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.mule.runtime</groupId>
+            	<artifactId>mule-module-service</artifactId>
+	            <exclusions>
+	                <exclusion>
+	                    <groupId>com.google.code.gson</groupId>
+	                    <artifactId>gson</artifactId>
+	                </exclusion>
+	            </exclusions>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.mule.runtime</groupId>
+            	<artifactId>mule-module-extensions-spring-support</artifactId>
+	            <exclusions>
+	                <exclusion>
+	                    <groupId>com.google.code.gson</groupId>
+	                    <artifactId>gson</artifactId>
+	                </exclusion>
 					<exclusion>
-						<groupId>com.google.code.gson</groupId>
-						<artifactId>gson</artifactId>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-beans</artifactId>
 					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.mule.runtime</groupId>
-				<artifactId>mule-module-service</artifactId>
-				<exclusions>
 					<exclusion>
-						<groupId>com.google.code.gson</groupId>
-						<artifactId>gson</artifactId>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
 					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.mule.runtime</groupId>
-				<artifactId>mule-module-extensions-spring-support</artifactId>
-				<exclusions>
 					<exclusion>
-						<groupId>com.google.code.gson</groupId>
-						<artifactId>gson</artifactId>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-expression</artifactId>
 					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.mule.runtime</groupId>
-				<artifactId>mule-extensions-api-persistence</artifactId>
-				<exclusions>
 					<exclusion>
-						<groupId>com.google.code.gson</groupId>
-						<artifactId>gson</artifactId>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-context</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-aop</artifactId>
+					</exclusion>
+
 				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.mule.connectors</groupId>
-				<artifactId>mule-http-connector</artifactId>
-				<version>1.10.2</version>
-				<classifier>mule-plugin</classifier>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>6.1.14</version>
-				<scope>provided</scope>
-			</dependency>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.mule.runtime</groupId>
+            	<artifactId>mule-extensions-api-persistence</artifactId>
+	            <exclusions>
+	                <exclusion>
+	                    <groupId>com.google.code.gson</groupId>
+	                    <artifactId>gson</artifactId>
+	                </exclusion>
+	            </exclusions>
+	        </dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-crypto</artifactId>
-				<version>6.3.4</version>
-				<scope>provided</scope>
+				<version>${springSecurityVersion}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-config</artifactId>
-				<version>6.3.4</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>6.1.14</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>6.1.14</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-core</artifactId>
-				<version>6.3.4</version>
-				<scope>provided</scope>
-			</dependency><!-- Add this dependency for JAXB API -->
-			<dependency>
-				<groupId>javax.xml.bind</groupId>
-				<artifactId>jaxb-api</artifactId>
-				<version>2.3.1</version>
-			</dependency>
-
-			<!-- Add this dependency for JAXB runtime (optional, depending on your specific needs) -->
-			<dependency>
-				<groupId>org.glassfish.jaxb</groupId>
-				<artifactId>jaxb-runtime</artifactId>
-				<version>2.3.1</version>
-			</dependency>
-
-		</dependencies>
+	    </dependencies>
 	</dependencyManagement>
 
 	<dependencies>
@@ -145,34 +124,44 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<distributionManagement>
-		<downloadUrl>http://www.mulesoft.org/display/MULE/Download</downloadUrl>
-		<repository>
-			<id>mule-releases</id>
-			<name>Mule Release Repository</name>
-			<url>https://repository-master.mulesoft.org/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>mule-snapshots</id>
-			<name>Mule Snapshot Repository</name>
-			<url>https://repository-master.mulesoft.org/nexus/content/repositories/snapshots</url>
-			<uniqueVersion>false</uniqueVersion>
-		</snapshotRepository>
-	</distributionManagement>
+    <distributionManagement>
+        <downloadUrl>http://www.mulesoft.org/display/MULE/Download</downloadUrl>
+        <repository>
+            <id>mule-releases</id>
+            <name>Mule Release Repository</name>
+            <url>https://repository-master.mulesoft.org/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>mule-snapshots</id>
+            <name>Mule Snapshot Repository</name>
+            <url>https://repository-master.mulesoft.org/nexus/content/repositories/snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
 
-	<repositories>
+    <repositories>
 		<repository>
-			<id>mule</id>
-			<name>Mule Repository</name>
-			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+			<id>mule-ci</id>
+			<name>Mule CI Repository</name>
+			<url>https://repository-master.mulesoft.org/nexus/content/repositories/ci-releases/</url>
 		</repository>
-	</repositories>
+        <repository>
+            <id>mule</id>
+            <name>Mule Repository</name>
+            <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+        </repository>
+    </repositories>
 
-	<pluginRepositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>mule-plugin</id>
+            <name>Mule Repository</name>
+            <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+        </pluginRepository>
 		<pluginRepository>
-			<id>mule-plugin</id>
-			<name>Mule Repository</name>
-			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+			<id>mule-ci</id>
+			<name>Mule CI Repository</name>
+			<url>https://repository-master.mulesoft.org/nexus/content/repositories/ci-releases/</url>
 		</pluginRepository>
-	</pluginRepositories>
+    </pluginRepositories>
 </project>

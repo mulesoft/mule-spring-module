@@ -23,8 +23,6 @@ import org.mule.runtime.api.security.NotPermittedException;
 import org.mule.runtime.api.security.SecurityContext;
 import org.mule.runtime.api.security.UnauthorisedException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.text.MessageFormat;
@@ -37,7 +35,6 @@ import java.util.HashSet;
  */
 public class AuthorizationFilter extends AbstractSecurityFilter {
 
-  protected final Logger logger = LoggerFactory.getLogger(getClass());
   private Collection<String> requiredAuthorities = new HashSet<>();
 
   public AuthorizationFilter(Collection<String> requiredAuthorities) {
@@ -66,9 +63,6 @@ public class AuthorizationFilter extends AbstractSecurityFilter {
     // then return.
     boolean authorized = false;
     if (authorities != null) {
-      if (logger.isDebugEnabled()) {
-        logger.debug("Found authorities '" + Arrays.toString(authorities) + "' for principal '" + principalName + "'.");
-      }
 
       for (GrantedAuthority authority : authorities) {
         if (requiredAuthorities.contains(authority.getAuthority())) {
@@ -78,9 +72,6 @@ public class AuthorizationFilter extends AbstractSecurityFilter {
     }
 
     if (!authorized) {
-      logger.info(MessageFormat
-          .format("Could not find required authorities for {0}. Required authorities: {1}. Authorities found: {2}.",
-                  principalName, Arrays.toString(requiredAuthorities.toArray()), Arrays.toString(authorities)));
       throw new NotPermittedException(noGrantedAuthority(principalName));
     }
 

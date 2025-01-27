@@ -16,20 +16,21 @@
     <munit.input.directory>src/test/munit</munit.input.directory>
     <munit.output.directory>${basedir}/target/test-mule/munit</munit.output.directory>
 
-    <munit.extensions.maven.plugin.version>1.2.0</munit.extensions.maven.plugin.version>
-    <munit.version>3.1.0</munit.version>
-    <mtf.tools.version>1.2.0</mtf.tools.version>
+    <mule.extensions.maven.plugin.version>1.6.9</mule.extensions.maven.plugin.version>
+
+    <munit.extensions.maven.plugin.version>1.5.0-rc1</munit.extensions.maven.plugin.version>
+    <mtf.tools.version>1.2.0-rc1</mtf.tools.version>
 
     <mavenResourcesVersion>3.0.2</mavenResourcesVersion>
 
     <jacoco.version>0.8.10</jacoco.version>
     <sdk.api.version>0.7.0</sdk.api.version>
-    <http.connector.version>1.8.1</http.connector.version>
+    <http.connector.version>1.11.0-beta1</http.connector.version>
     <mule.java.module.version>1.2.12</mule.java.module.version>
     <mule.sockets.connector.version>1.2.3</mule.sockets.connector.version>
-    <springVersion>6.1.14</springVersion>
-    <springSecurityVersion>6.3.4</springSecurityVersion>
-    <allure.maven.plugin.version>2.27.0</allure.maven.plugin.version>
+    <springVersion>6.2.1</springVersion>
+    <springSecurityVersion>6.3.0</springSecurityVersion>
+    <allure.maven.plugin.version>2.15.2</allure.maven.plugin.version>
   </properties>
 
   <build>
@@ -220,6 +221,67 @@
             <version>${mtf.tools.version}</version>
             <classifier>mule-plugin</classifier>
           </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>6.2.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>6.2.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>6.2.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${springVersion}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${springVersion}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>6.2.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>6.3.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+            <version>6.3.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>6.3.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>6.2.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jcl</artifactId>
+            <version>6.2.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>6.2.1</version>
+          </dependency>
+
         </dependencies>
       </plugin>
     </plugins>
@@ -230,67 +292,85 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>${springVersion}</version>
+      <version>6.2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
+      <version>6.2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+      <version>6.2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${springVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
       <version>${springVersion}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>${springVersion}</version>
+      <version>6.2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
-      <version>${springSecurityVersion}</version>
+      <version>6.3.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-crypto</artifactId>
-      <version>${springSecurityVersion}</version>
+      <version>6.3.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
-      <version>${springSecurityVersion}</version>
+      <version>6.3.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
-      <version>${springSecurityVersion}</version>
+      <version>6.3.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-ldap</artifactId>
-      <version>${springSecurityVersion}</version>
+      <version>6.3.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-expression</artifactId>
-      <version>${springVersion}</version>
+      <version>6.2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jcl</artifactId>
-      <version>${springVersion}</version>
+      <version>6.2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>${springVersion}</version>
+      <version>6.2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -325,5 +405,44 @@
       <artifactId>mule-sdk-api</artifactId>
       <version>${sdk.api.version}</version>
     </dependency>
+    <!-- Add this dependency for JAXB API -->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+
+    <!-- Add this dependency for JAXB runtime (optional, depending on your specific needs) -->
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>2.3.1</version>
+    </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>mule-ci</id>
+      <name>Mule CI Repository</name>
+      <url>https://repository-master.mulesoft.org/nexus/content/repositories/ci-releases/</url>
+    </repository>
+    <repository>
+      <id>mule</id>
+      <name>Mule Repository</name>
+      <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>mule-plugin</id>
+      <name>Mule Repository</name>
+      <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>mule-ci</id>
+      <name>Mule CI Repository</name>
+      <url>https://repository-master.mulesoft.org/nexus/content/repositories/ci-releases/</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
