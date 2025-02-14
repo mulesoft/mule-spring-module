@@ -1,8 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
+ * Copyright 2023 Salesforce, Inc. All rights reserved.
  */
 package org.mule.extension.spring.internal.context;
 
@@ -97,9 +94,11 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
                                                       artifactPlaceholderBeanDefinitionBuilder.getBeanDefinition());
   }
 
+  // README:
+  // https://docs.spring.io/spring-framework/docs/5.0.x/javadoc-api/org/springframework/context/support/AbstractApplicationContext.html#destroy--
   @Override
-  public void destroy() {
+  public void close() {
     beanFactory.markForDestroy();
-    super.destroy();
+    super.close();
   }
 }

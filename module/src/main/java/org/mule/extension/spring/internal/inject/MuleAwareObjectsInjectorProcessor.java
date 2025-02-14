@@ -1,14 +1,12 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
+ * Copyright 2023 Salesforce, Inc. All rights reserved.
  */
 package org.mule.extension.spring.internal.inject;
 
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.core.annotation.AnnotationAttributes;
+import org.springframework.core.annotation.MergedAnnotation;
 
 /**
  * Specialization of {@link AutowiredAnnotationBeanPostProcessor} which acts as the default injection post processors to be used
@@ -24,8 +22,10 @@ public class MuleAwareObjectsInjectorProcessor extends AutowiredAnnotationBeanPo
   @Override
   public final void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {}
 
+  // README:
+  // https://docs.spring.io/spring-framework/docs/5.2.1.RELEASE/javadoc-api/org/springframework/beans/factory/annotation/AutowiredAnnotationBeanPostProcessor.html#determineRequiredStatus-org.springframework.core.annotation.AnnotationAttributes-
   @Override
-  protected boolean determineRequiredStatus(AnnotationAttributes ann) {
+  protected boolean determineRequiredStatus(MergedAnnotation ann) {
     return false;
   }
 }

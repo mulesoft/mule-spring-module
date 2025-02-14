@@ -1,8 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
+ * Copyright 2023 Salesforce, Inc. All rights reserved.
  */
 package org.mule.extension.spring.internal.util;
 
@@ -50,7 +47,7 @@ public class CompositeClassLoader extends ClassLoader {
    * Overrides the loadClass in order to support scenarios where a custom class loader is created in a plugin and these calls to
    * this method explicitly.
    *
-   * @param name The <a href="#name">binary name</a> of the class
+   * @param name    The <a href="#name">binary name</a> of the class
    * @param resolve If <tt>true</tt> then resolve the class
    * @return The resulting <tt>Class</tt> object
    * @throws ClassNotFoundException If the class could not be found

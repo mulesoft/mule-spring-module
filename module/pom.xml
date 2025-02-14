@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mule.modules</groupId>
         <artifactId>mule-spring-module-parent</artifactId>
-        <version>1.5.0-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>mule-spring-module</artifactId>
     <packaging>mule-extension</packaging>
@@ -25,13 +25,13 @@
     <jacoco.version>0.8.10</jacoco.version>
     <sdk.api.version>0.7.0</sdk.api.version>
     <http.connector.version>1.8.1</http.connector.version>
-    <mule.java.module.version>1.2.12</mule.java.module.version>
+    <mule.java.module.version>2.0.0-SNAPSHOT</mule.java.module.version>
     <mule.sockets.connector.version>1.2.3</mule.sockets.connector.version>
   </properties>
 
   <build>
     <plugins>
-      <plugin>
+      <!--<plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
@@ -43,7 +43,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
         <groupId>org.mule.runtime.plugins</groupId>
         <artifactId>mule-plugin-maven-plugin</artifactId>
