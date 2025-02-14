@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mule.extensions</groupId>
         <artifactId>mule-core-modules-parent</artifactId>
-        <version>1.9.0</version>
+        <version>1.6.0</version>
     </parent>
 
     <groupId>org.mule.modules</groupId>
@@ -19,7 +19,7 @@
         <springVersion>6.2.2</springVersion>
         <springSecurityVersion>6.4.2</springSecurityVersion>
         <!--<mule.version>4.1.5</mule.version>-->
-		<mule.version>4.9.0</mule.version>
+		<mule.version>4.6.0</mule.version>
         <gsonVersion>2.9.1</gsonVersion>
     </properties>
 

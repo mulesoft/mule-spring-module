@@ -105,7 +105,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
     if (m.isPresent()) {
       try {
         extensionDeclarer = (ExtensionDeclarer) m.get()
-            .invoke(extensionDeclarer, Collections.unmodifiableSet(new LinkedHashSet(Arrays.asList("1.8", "11", "17"))));
+            .invoke(extensionDeclarer, Collections.unmodifiableSet(new LinkedHashSet(Arrays.asList("17"))));
       } catch (IllegalAccessException | InvocationTargetException e) {
         throw new RuntimeException("Failed to initialize the extension when trying to declare `supportingJavaVersions` for the extension.",
                                    e);
