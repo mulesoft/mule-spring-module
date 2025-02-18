@@ -23,27 +23,14 @@
     <mavenResourcesVersion>3.0.2</mavenResourcesVersion>
 
     <jacoco.version>0.8.10</jacoco.version>
-    <sdk.api.version>0.7.0</sdk.api.version>
+    <sdk.api.version>0.11.1</sdk.api.version>
     <http.connector.version>1.10.3</http.connector.version>
     <mule.java.module.version>2.0.0-SNAPSHOT</mule.java.module.version>
-    <mule.sockets.connector.version>1.2.3</mule.sockets.connector.version>
+    <mule.sockets.connector.version>1.2.5</mule.sockets.connector.version>
   </properties>
 
   <build>
     <plugins>
-      <!--<plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>baseJar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
       <plugin>
         <groupId>org.mule.runtime.plugins</groupId>
         <artifactId>mule-plugin-maven-plugin</artifactId>

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mule.extensions</groupId>
         <artifactId>mule-core-modules-parent</artifactId>
-        <version>1.6.0</version>
+        <version>1.9.0</version>
     </parent>
 
     <groupId>org.mule.modules</groupId>
@@ -18,8 +18,7 @@
         <formatterConfigPath>formatter.xml</formatterConfigPath>
         <springVersion>6.2.2</springVersion>
         <springSecurityVersion>6.4.2</springSecurityVersion>
-        <!--<mule.version>4.1.5</mule.version>-->
-		<mule.version>4.6.0</mule.version>
+		<mule.version>4.9.0</mule.version>
         <gsonVersion>2.9.1</gsonVersion>
     </properties>
 
@@ -30,56 +29,6 @@
 
 	<dependencyManagement>
 	    <dependencies>
-	       <!-- <dependency>
-	            <artifactId>mule-api</artifactId>
-	            <groupId>org.mule.runtime</groupId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>
-	        <dependency>
-	            <artifactId>mule-metadata-model-json</artifactId>
-	            <groupId>org.mule.runtime</groupId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.mule.runtime</groupId>
-            	<artifactId>mule-module-service</artifactId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.mule.runtime</groupId>
-            	<artifactId>mule-module-extensions-spring-support</artifactId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.mule.runtime</groupId>
-            	<artifactId>mule-extensions-api-persistence</artifactId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>-->
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-crypto</artifactId>
@@ -88,14 +37,14 @@
 	    </dependencies>
 	</dependencyManagement>
 
-	<dependencies>
+	<!--<dependencies>
 		<dependency>
 			<groupId>org.mule.tests</groupId>
 			<artifactId>mule-tests-runner</artifactId>
 			<version>4.9.0</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+	</dependencies>-->
     <distributionManagement>
         <downloadUrl>http://www.mulesoft.org/display/MULE/Download</downloadUrl>
         <repository>
