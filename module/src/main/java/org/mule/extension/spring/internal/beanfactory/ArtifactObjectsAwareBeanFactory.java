@@ -6,6 +6,16 @@
  */
 package org.mule.extension.spring.internal.beanfactory;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import org.apache.commons.logging.LogFactory;
+import org.mule.extension.spring.internal.util.CustomPostAuthenticationChecks;
+import org.mule.extension.spring.internal.util.CustomPreAuthenticationChecks;
+import org.mule.extension.spring.internal.util.MyCustomLogger;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.lifecycle.Initialisable;
@@ -26,6 +36,21 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.cache.NullUserCache;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
+import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 /**
  * {@link DefaultListableBeanFactory} implementation that takes into account the objects provided by the mule artifact for
@@ -84,6 +109,12 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
    */
   @Override
   protected <T> T doGetBean(String name, Class<T> requiredType, Object[] args, boolean typeCheckOnly) throws BeansException {
+    if ("fips140-2".equals(System.getProperty("mule.security.model"))) {
+      if (name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType)) {
+        UserDetailsService userDetailsService = (UserDetailsService) super.getBean("userService");
+        return (T) authenticationProvider(userDetailsService);
+      }
+    }
     if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
       return super.doGetBean(name, requiredType, args, typeCheckOnly);
     } else {
@@ -133,5 +164,52 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
    */
   public void markForDestroy() {
     this.destroying = true;
+  }
+
+  //TODO improve this code error check
+  //ugly hack to bypass non FIPS compliant security algorithms
+  static DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    try {
+      Class c = Class.forName("sun.misc.Unsafe");
+      Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
+              .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
+      field.setAccessible(true);
+      Method allocateInstance = c.getDeclaredMethod("allocateInstance", Class.class);
+      DaoAuthenticationProvider authProvider =
+              (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
+      authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
+      authProvider.setUserDetailsService(userDetailsService);
+      authProvider.setUserCache(new NullUserCache());
+      authProvider.setAuthoritiesMapper(new NullAuthoritiesMapper());
+
+      // Setting custom pre and post authentication checks
+      authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
+      authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
+
+      Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
+      loggerField.setAccessible(true);
+      loggerField.set(authProvider, LogFactory.getLog(MyCustomLogger.class));
+
+      return authProvider;
+    } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException
+             | NoSuchFieldException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  static PasswordEncoder createDelegatingPasswordEncoder() {
+    String encodingId = "bcrypt";
+    Map<String, PasswordEncoder> encoders = new HashMap();
+    encoders.put(encodingId, new BCryptPasswordEncoder());
+    encoders.put("ldap", new LdapShaPasswordEncoder());
+    encoders.put("noop", NoOpPasswordEncoder.getInstance());
+    encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_5());
+    encoders.put("scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v4_1());
+    encoders.put("scrypt@SpringSecurity_v5_8", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
+    encoders.put("SHA-256", new MessageDigestPasswordEncoder("SHA-256"));
+    encoders.put("sha256", new StandardPasswordEncoder());
+    encoders.put("argon2", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_2());
+    encoders.put("argon2@SpringSecurity_v5_8", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8());
+    return new DelegatingPasswordEncoder(encodingId, encoders);
   }
 }
