@@ -115,11 +115,10 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
         return (T) authenticationProvider(userDetailsService);
       }
     }
-    if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
-      return super.doGetBean(name, requiredType, args, typeCheckOnly);
-    } else {
+    if (!containsBean(name) && artifactObjectProvider.containsObject(name) && !destroying) {
       return (T) artifactObjectProvider.getObject(name).get();
     }
+    return super.doGetBean(name, requiredType, args, typeCheckOnly);
   }
 
   /**
@@ -201,13 +200,10 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     String encodingId = "bcrypt";
     Map<String, PasswordEncoder> encoders = new HashMap();
     encoders.put(encodingId, new BCryptPasswordEncoder());
-    encoders.put("ldap", new LdapShaPasswordEncoder());
     encoders.put("noop", NoOpPasswordEncoder.getInstance());
     encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_5());
     encoders.put("scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v4_1());
     encoders.put("scrypt@SpringSecurity_v5_8", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
-    encoders.put("SHA-256", new MessageDigestPasswordEncoder("SHA-256"));
-    encoders.put("sha256", new StandardPasswordEncoder());
     encoders.put("argon2", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_2());
     encoders.put("argon2@SpringSecurity_v5_8", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8());
     return new DelegatingPasswordEncoder(encodingId, encoders);
