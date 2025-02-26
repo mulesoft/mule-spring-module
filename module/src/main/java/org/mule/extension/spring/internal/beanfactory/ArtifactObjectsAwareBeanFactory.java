@@ -43,9 +43,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.password.*;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 /**
@@ -196,6 +194,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     String encodingId = "bcrypt";
     Map<String, PasswordEncoder> encoders = new HashMap();
     encoders.put(encodingId, new BCryptPasswordEncoder());
+    encoders.put("noop", NoOpPasswordEncoder.getInstance());
     encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_5());
     encoders.put("scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v4_1());
     encoders.put("scrypt@SpringSecurity_v5_8", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
