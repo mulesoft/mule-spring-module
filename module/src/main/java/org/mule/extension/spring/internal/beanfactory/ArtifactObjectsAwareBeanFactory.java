@@ -7,9 +7,6 @@
 package org.mule.extension.spring.internal.beanfactory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import org.apache.commons.logging.LogFactory;
@@ -159,35 +156,26 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     this.destroying = true;
   }
 
-  //TODO improve this code error check
-  //ugly hack to bypass non FIPS compliant security algorithms
   static DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
+    authProvider.setUserDetailsService(userDetailsService);
+    authProvider.setUserCache(new NullUserCache());
+    authProvider.setAuthoritiesMapper(new NullAuthoritiesMapper());
+
+    // Setting custom pre and post authentication checks
+    authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
+    authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
+
     try {
-      Class c = Class.forName("sun.misc.Unsafe");
-      Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
-          .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
-      field.setAccessible(true);
-      Method allocateInstance = c.getDeclaredMethod("allocateInstance", Class.class);
-      DaoAuthenticationProvider authProvider =
-          (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
-      authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
-      authProvider.setUserDetailsService(userDetailsService);
-      authProvider.setUserCache(new NullUserCache());
-      authProvider.setAuthoritiesMapper(new NullAuthoritiesMapper());
-
-      // Setting custom pre and post authentication checks
-      authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
-      authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
-
       Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
       loggerField.setAccessible(true);
       loggerField.set(authProvider, LogFactory.getLog(MyCustomLogger.class));
-
-      return authProvider;
-    } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException
-        | NoSuchFieldException e) {
-      throw new RuntimeException(e);
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      throw new RuntimeException("Error setting logger field", e);
     }
+
+    return authProvider;
   }
 
   static PasswordEncoder createDelegatingPasswordEncoder() {
