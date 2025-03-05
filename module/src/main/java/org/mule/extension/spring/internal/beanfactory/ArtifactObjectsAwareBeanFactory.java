@@ -7,6 +7,9 @@
 package org.mule.extension.spring.internal.beanfactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +43,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.*;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
+import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 /**
@@ -106,10 +115,11 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
         return (T) authenticationProvider(userDetailsService);
       }
     }
-    if (!containsBean(name) && artifactObjectProvider.containsObject(name) && !destroying) {
+    if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
+      return super.doGetBean(name, requiredType, args, typeCheckOnly);
+    } else {
       return (T) artifactObjectProvider.getObject(name).get();
     }
-    return super.doGetBean(name, requiredType, args, typeCheckOnly);
   }
 
   /**
@@ -156,26 +166,35 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     this.destroying = true;
   }
 
+  //TODO improve this code error check
+  //ugly hack to bypass non FIPS compliant security algorithms
   static DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
-    authProvider.setUserDetailsService(userDetailsService);
-    authProvider.setUserCache(new NullUserCache());
-    authProvider.setAuthoritiesMapper(new NullAuthoritiesMapper());
-
-    // Setting custom pre and post authentication checks
-    authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
-    authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
-
     try {
+      Class c = Class.forName("sun.misc.Unsafe");
+      Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
+          .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
+      field.setAccessible(true);
+      Method allocateInstance = c.getDeclaredMethod("allocateInstance", Class.class);
+      DaoAuthenticationProvider authProvider =
+          (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
+      authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
+      authProvider.setUserDetailsService(userDetailsService);
+      authProvider.setUserCache(new NullUserCache());
+      authProvider.setAuthoritiesMapper(new NullAuthoritiesMapper());
+
+      // Setting custom pre and post authentication checks
+      authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
+      authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
+
       Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
       loggerField.setAccessible(true);
       loggerField.set(authProvider, LogFactory.getLog(MyCustomLogger.class));
-    } catch (NoSuchFieldException | IllegalAccessException e) {
-      throw new RuntimeException("Error setting logger field", e);
-    }
 
-    return authProvider;
+      return authProvider;
+    } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException
+        | NoSuchFieldException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   static PasswordEncoder createDelegatingPasswordEncoder() {
