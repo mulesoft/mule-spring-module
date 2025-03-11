@@ -14,8 +14,8 @@
     <ss:authentication-manager alias="authenticationManager">
         <ss:authentication-provider>
             <ss:user-service id="userService">
-                <ss:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN" />
-                <ss:user name="anon" password="{noop}anon" authorities="ROLE_ANON" />
+                <ss:user name="admin" password="{bcrypt}$2y$10$L7nVRlI9TswnzbbRJ0XtH.nEgR9ZMbcVK6rGZKt6rBqRUUGc/cIaq" authorities="ROLE_ADMIN" />
+                <ss:user name="anon" password="{bcrypt}$2y$10$yMGo.D9jbFXQ5qSwy2HtpeOLA5CvWybydInz2z8iYpbpU9JMLLjf6" authorities="ROLE_ANON" />
             </ss:user-service>
         </ss:authentication-provider>
     </ss:authentication-manager>

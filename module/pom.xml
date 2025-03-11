@@ -17,16 +17,16 @@
     <munit.output.directory>${basedir}/target/test-mule/munit</munit.output.directory>
 
     <munit.extensions.maven.plugin.version>1.4.0</munit.extensions.maven.plugin.version>
-    <munit.version>3.3.2</munit.version>
+    <munit.version>3.4.0</munit.version>
     <mtf.tools.version>1.2.0</mtf.tools.version>
 
     <mavenResourcesVersion>3.0.2</mavenResourcesVersion>
 
-    <jacoco.version>0.8.10</jacoco.version>
+    <jacoco.version>0.8.12</jacoco.version>
     <sdk.api.version>0.7.0</sdk.api.version>
     <http.connector.version>1.9.3</http.connector.version>
-    <mule.java.module.version>1.2.12</mule.java.module.version>
-    <mule.sockets.connector.version>1.2.3</mule.sockets.connector.version>
+    <mule.java.module.version>1.2.13</mule.java.module.version>
+    <mule.sockets.connector.version>1.2.5</mule.sockets.connector.version>
   </properties>
 
   <build>
