@@ -15,7 +15,6 @@ import java.util.HashMap;
 import org.apache.commons.logging.LogFactory;
 import org.mule.extension.spring.internal.util.CustomPostAuthenticationChecks;
 import org.mule.extension.spring.internal.util.CustomPreAuthenticationChecks;
-import org.mule.extension.spring.internal.util.MyCustomLogger;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.lifecycle.Initialisable;
@@ -44,12 +43,8 @@ import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
-import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 /**
@@ -166,11 +161,17 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     this.destroying = true;
   }
 
-  //TODO improve this code error check
-  //ugly hack to bypass non FIPS compliant security algorithms
+  /**
+   * TODO improve this code error check, ugly hack to bypass non FIPS compliant security algorithms
+   *
+   * The use of sun.misc.Unsafe API is discouraged. For the time being, using sun.misc.Unsafe to instantiate
+   * DaoAuthenticationProvider is a necessary workaround to avoid FIPS compliance issues caused by MD5 and SHA1.
+   * However, once we upgrade to Spring 6.x, we can switch to using the new constructor, passing a compliant PasswordEncoder.
+   * This will allow us to address the compliance issue more cleanly and avoid reliance on unsafe practices.
+   */
   static DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
     try {
-      Class c = Class.forName("sun.misc.Unsafe");
+      Class<?> c = Class.forName("sun.misc.Unsafe");
       Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
           .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
       field.setAccessible(true);
@@ -188,7 +189,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
 
       Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
       loggerField.setAccessible(true);
-      loggerField.set(authProvider, LogFactory.getLog(MyCustomLogger.class));
+      loggerField.set(authProvider, LogFactory.getLog(AbstractUserDetailsAuthenticationProvider.class));
 
       return authProvider;
     } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException
@@ -199,9 +200,8 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
 
   static PasswordEncoder createDelegatingPasswordEncoder() {
     String encodingId = "bcrypt";
-    Map<String, PasswordEncoder> encoders = new HashMap();
+    Map<String, PasswordEncoder> encoders = new HashMap<>();
     encoders.put(encodingId, new BCryptPasswordEncoder());
-    encoders.put("noop", NoOpPasswordEncoder.getInstance());
     encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_5());
     encoders.put("scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v4_1());
     encoders.put("scrypt@SpringSecurity_v5_8", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
