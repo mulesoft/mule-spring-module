@@ -15,6 +15,7 @@ import java.util.HashMap;
 import org.apache.commons.logging.LogFactory;
 import org.mule.extension.spring.internal.util.CustomPostAuthenticationChecks;
 import org.mule.extension.spring.internal.util.CustomPreAuthenticationChecks;
+import org.mule.runtime.api.exception.MuleRuntimeException;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.lifecycle.Initialisable;
@@ -40,12 +41,10 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 /**
  * {@link DefaultListableBeanFactory} implementation that takes into account the objects provided by the mule artifact for
@@ -194,7 +193,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
       return authProvider;
     } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException
         | NoSuchFieldException e) {
-      throw new RuntimeException(e);
+      throw new MuleRuntimeException(e);
     }
   }
 
@@ -202,11 +201,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     String encodingId = "bcrypt";
     Map<String, PasswordEncoder> encoders = new HashMap<>();
     encoders.put(encodingId, new BCryptPasswordEncoder());
-    encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_5());
-    encoders.put("scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v4_1());
-    encoders.put("scrypt@SpringSecurity_v5_8", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
-    encoders.put("argon2", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_2());
-    encoders.put("argon2@SpringSecurity_v5_8", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8());
+    encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8());
     return new DelegatingPasswordEncoder(encodingId, encoders);
   }
 }
