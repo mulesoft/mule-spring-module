@@ -29,12 +29,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.PropertyValue;
 import org.springframework.beans.TypeConverter;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.DependencyDescriptor;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -105,8 +107,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   protected <T> T doGetBean(String name, Class<T> requiredType, Object[] args, boolean typeCheckOnly) throws BeansException {
     if ("fips140-2".equals(System.getProperty("mule.security.model"))) {
       if (name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType)) {
-        UserDetailsService userDetailsService = (UserDetailsService) super.getBean("userService");
-        return (T) authenticationProvider(userDetailsService);
+        return (T) authenticationProvider(getUserDetailService(name));
       }
     }
     if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
@@ -203,5 +204,15 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     encoders.put(encodingId, new BCryptPasswordEncoder());
     encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8());
     return new DelegatingPasswordEncoder(encodingId, encoders);
+  }
+
+  private UserDetailsService getUserDetailService(String name) {
+    List<PropertyValue> propertyValues = super.getBeanDefinition(name).getPropertyValues().getPropertyValueList();
+    String userServiceName = propertyValues.stream()
+            .filter(propertyValue -> "userDetailsService".equals(propertyValue.getName()))
+            .map(propertyValue -> ((RuntimeBeanReference) propertyValue.getValue()).getBeanName())
+            .findFirst()
+            .orElse(null);
+    return (UserDetailsService) super.getBean(userServiceName != null ? userServiceName : "userService");
   }
 }
