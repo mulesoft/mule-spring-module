@@ -209,10 +209,10 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   private UserDetailsService getUserDetailService(String name) {
     List<PropertyValue> propertyValues = super.getBeanDefinition(name).getPropertyValues().getPropertyValueList();
     String userServiceName = propertyValues.stream()
-            .filter(propertyValue -> "userDetailsService".equals(propertyValue.getName()))
-            .map(propertyValue -> ((RuntimeBeanReference) propertyValue.getValue()).getBeanName())
-            .findFirst()
-            .orElse(null);
+        .filter(propertyValue -> "userDetailsService".equals(propertyValue.getName()))
+        .map(propertyValue -> ((RuntimeBeanReference) propertyValue.getValue()).getBeanName())
+        .findFirst()
+        .orElse(null);
     return (UserDetailsService) super.getBean(userServiceName != null ? userServiceName : "userService");
   }
 }
