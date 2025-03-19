@@ -23,7 +23,7 @@
     <mavenResourcesVersion>3.0.2</mavenResourcesVersion>
 
     <jacoco.version>0.8.12</jacoco.version>
-    <sdk.api.version>0.7.0</sdk.api.version>
+    <sdk.api.version>0.11.2</sdk.api.version>
     <http.connector.version>1.9.3</http.connector.version>
     <mule.java.module.version>1.2.13</mule.java.module.version>
     <mule.sockets.connector.version>1.2.5</mule.sockets.connector.version>
