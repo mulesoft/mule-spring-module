@@ -63,7 +63,7 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   public static final String PREFIX_NAME = "spring";
   public static final String EXTENSION_DESCRIPTION = "Spring Module Plugin";
   public static final String VENDOR = "Mulesoft";
-  public static final String VERSION = "1.5.0";
+  public static final String VERSION = "1.5.1-SNAPSHOT";
   public static final MuleVersion MIN_MULE_VERSION = new MuleVersion("4.0");
   public static final String XSD_FILE_NAME = "mule-spring.xsd";
   private static final String UNESCAPED_LOCATION_PREFIX = "http://";
