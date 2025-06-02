@@ -1,15 +1,13 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
+ * Copyright 2023 Salesforce, Inc. All rights reserved.
  */
 package org.mule.extension.spring.test.api;
 
 import static java.lang.Thread.currentThread;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -27,14 +25,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
 import io.qameta.allure.Story;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 @Feature(AllureConstants.SpringFeature.SPRING_EXTENSION)
 @Story(AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY)
@@ -65,11 +62,11 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
     // Mock class loader
     URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
     when(fakeClassLoader.getResources(anyString()))
-        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgumentAt(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgument(0, String.class)));
     when(fakeClassLoader.getResourceAsStream("other-cl-" + FILE_NAME))
         .thenAnswer(inv -> originalClassLoader.getResourceAsStream(FILE_NAME));
     when(fakeClassLoader.loadClass(anyString()))
-        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgumentAt(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgument(0, String.class)));
     currentThread().setContextClassLoader(fakeClassLoader);
 
     // Set parameters

@@ -9,7 +9,6 @@
     
     <artifactId>mule-spring-test-plugin</artifactId>
     <description>Mule plugin that has compile dependencies to spring. To use only in tests of extensions.</description>
-    <packaging>mule-extension</packaging>
     
     <properties>
         <formatterConfigPath>../formatter.xml</formatterConfigPath>
@@ -17,11 +16,43 @@
 
     <build>
         <plugins>
+            <!--<plugin>
+                <groupId>org.mule.runtime.plugins</groupId>
+                <artifactId>mule-extensions-maven-plugin</artifactId>
+                <version>1.9.4</version>
+                <configuration>
+                    <useLocalDependencies>true</useLocalDependencies>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.mule.runtime.plugins</groupId>
                 <artifactId>mule-plugin-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <version>${mule.app.plugins.maven.plugin.version}</version>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>connector-analyze</id>
+                        <goals>
+                            <goal>analyze-only</goal>
+                        </goals>
+                        <configuration>
+                            <failOnWarning>false</failOnWarning>
+                            <ignoredUnusedDeclaredDependencies>
+                                <ignoredUnusedDeclaredDependency>org.springframework:spring-core</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.springframework:spring-context</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-core</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.springframework:spring-security-crypto</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.springframework:spring-security-config</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.springframework:spring-security-web</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>org.springframework:spring-security-config</ignoredUnusedDeclaredDependency>
+                            </ignoredUnusedDeclaredDependencies>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

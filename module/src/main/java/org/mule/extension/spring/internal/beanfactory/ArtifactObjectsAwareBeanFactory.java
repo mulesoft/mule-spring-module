@@ -1,18 +1,8 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
+ * Copyright 2023 Salesforce, Inc. All rights reserved.
  */
 package org.mule.extension.spring.internal.beanfactory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-
-import org.apache.commons.logging.LogFactory;
 import org.mule.extension.spring.internal.util.CustomPostAuthenticationChecks;
 import org.mule.extension.spring.internal.util.CustomPreAuthenticationChecks;
 import org.mule.runtime.api.exception.MuleRuntimeException;
@@ -22,12 +12,18 @@ import org.mule.runtime.api.lifecycle.Initialisable;
 import org.mule.runtime.api.lifecycle.Startable;
 import org.mule.runtime.api.lifecycle.Stoppable;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.TypeConverter;
@@ -51,7 +47,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 /**
  * {@link DefaultListableBeanFactory} implementation that takes into account the objects provided by the mule artifact for
  * dependency resolution.
- * 
+ *
  * @since 1.0
  */
 public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory {
@@ -120,7 +116,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   /**
    * Overrides spring method to first check if the bean to be registered is a valid one. As for now, we are not supporting beans
    * with a class that implements mule Lifecycle.
-   * 
+   *
    * @param beanName
    * @param beanDefinition
    * @throws BeanDefinitionStoreException
@@ -162,12 +158,12 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   }
 
   /**
-   * TODO improve this code error check, ugly hack to bypass non FIPS compliant security algorithms
+   * TODOs improve this code error check, ugly hack to bypass non FIPS compliant security algorithms
    *
    * The use of sun.misc.Unsafe API is discouraged. For the time being, using sun.misc.Unsafe to instantiate
-   * DaoAuthenticationProvider is a necessary workaround to avoid FIPS compliance issues caused by MD5 and SHA1.
-   * However, once we upgrade to Spring 6.x, we can switch to using the new constructor, passing a compliant PasswordEncoder.
-   * This will allow us to address the compliance issue more cleanly and avoid reliance on unsafe practices.
+   * DaoAuthenticationProvider is a necessary workaround to avoid FIPS compliance issues caused by MD5 and SHA1. However, once we
+   * upgrade to Spring 6.x, we can switch to using the new constructor, passing a compliant PasswordEncoder. This will allow us to
+   * address the compliance issue more cleanly and avoid reliance on unsafe practices.
    */
   static DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
     try {

@@ -16,7 +16,7 @@
     <munit.input.directory>src/test/munit</munit.input.directory>
     <munit.output.directory>${basedir}/target/test-mule/munit</munit.output.directory>
 
-    <munit.extensions.maven.plugin.version>1.4.0</munit.extensions.maven.plugin.version>
+    <munit.extensions.maven.plugin.version>1.5.0</munit.extensions.maven.plugin.version>
     <munit.version>3.4.0</munit.version>
     <mtf.tools.version>1.2.0</mtf.tools.version>
 
@@ -41,6 +41,9 @@
             <goals>
               <goal>jar</goal>
             </goals>
+            <configuration>
+              <classifier>classes</classifier>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -167,6 +170,28 @@
             <classifier>mule-plugin</classifier>
           </dependency>
         </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>connector-analyze</id>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <failOnWarning>false</failOnWarning>
+              <ignoredUnusedDeclaredDependencies>
+                <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-config</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-web</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-ldap</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework:spring-expression</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework:spring-aop</ignoredUnusedDeclaredDependency>
+              </ignoredUnusedDeclaredDependencies>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

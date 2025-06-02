@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mule.extensions</groupId>
-        <artifactId>mule-core-modules-parent</artifactId>
-        <version>1.1.9</version>
+		<groupId>com.mulesoft.connectors</groupId>
+		<artifactId>mule4-connectors-parent</artifactId>
+		<version>9.0.0</version>
     </parent>
 
     <groupId>org.mule.modules</groupId>
@@ -16,10 +16,12 @@
 
     <properties>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
-        <springVersion>5.3.34</springVersion>
-        <springSecurityVersion>5.8.12</springSecurityVersion>
-        <mule.version>4.1.5</mule.version>
-        <gsonVersion>2.9.1</gsonVersion>
+		<springVersion>6.2.0</springVersion>
+		<springSecurityVersion>6.1.7</springSecurityVersion>
+		<mule.version>4.9.0</mule.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+<!--        <gsonVersion>2.9.1</gsonVersion>-->
     </properties>
 
     <modules>
@@ -29,7 +31,7 @@
 
 	<dependencyManagement>
 	    <dependencies>
-	        <dependency>
+	        <!--<dependency>
 	            <artifactId>mule-api</artifactId>
 	            <groupId>org.mule.runtime</groupId>
 	            <exclusions>
@@ -68,7 +70,7 @@
 	                    <artifactId>gson</artifactId>
 	                </exclusion>
 	            </exclusions>
-	        </dependency>
+	        </dependency>-->
 	        <dependency>
 	            <groupId>org.mule.runtime</groupId>
             	<artifactId>mule-extensions-api-persistence</artifactId>
@@ -88,14 +90,14 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<dependency>
+<!--		<dependency>
 			<groupId>org.mule.tests</groupId>
 			<artifactId>mule-tests-runner</artifactId>
 			<version>4.3.0</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency>-->
 	</dependencies>
-    <distributionManagement>
+<!--    <distributionManagement>
         <downloadUrl>http://www.mulesoft.org/display/MULE/Download</downloadUrl>
         <repository>
             <id>mule-releases</id>
@@ -108,7 +110,7 @@
             <url>https://repository-master.mulesoft.org/nexus/content/repositories/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <repositories>
         <repository>
@@ -118,11 +120,11 @@
         </repository>
     </repositories>
 
-    <pluginRepositories>
+    <!--<pluginRepositories>
         <pluginRepository>
             <id>mule-plugin</id>
             <name>Mule Repository</name>
             <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
         </pluginRepository>
-    </pluginRepositories>
+    </pluginRepositories>-->
 </project>
