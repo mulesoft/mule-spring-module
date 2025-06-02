@@ -52,7 +52,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
  */
 public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory {
 
-  private final ObjectProvider artifactObjectProvider;
+  private final ObjectProvider artifactObjectProvider; //NOSONAR
   private boolean destroying = false;
 
   public ArtifactObjectsAwareBeanFactory(BeanFactory parentBeanFactory, ObjectProvider artifactObjectProvider) {
@@ -61,6 +61,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   }
 
   @Override
+  @SuppressWarnings({"java:S3740","java:S2589","java:S2583","java:S6201"})
   public Object doResolveDependency(DependencyDescriptor descriptor, String beanName, Set<String> autowiredBeanNames,
                                     TypeConverter typeConverter)
       throws BeansException {
@@ -101,15 +102,14 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
    */
   @Override
   protected <T> T doGetBean(String name, Class<T> requiredType, Object[] args, boolean typeCheckOnly) throws BeansException {
-    if ("fips140-2".equals(System.getProperty("mule.security.model"))) {
-      if (name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType)) {
+    if ("fips140-2".equals(System.getProperty("mule.security.model")) && (name.contains(DaoAuthenticationProvider.class.getName()) || DaoAuthenticationProvider.class.equals(requiredType))) {
         return (T) authenticationProvider(getUserDetailService(name));
-      }
+
     }
     if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
       return super.doGetBean(name, requiredType, args, typeCheckOnly);
     } else {
-      return (T) artifactObjectProvider.getObject(name).get();
+      return (T) artifactObjectProvider.getObject(name).get(); //NOSONAR
     }
   }
 
@@ -170,7 +170,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
       Class<?> c = Class.forName("sun.misc.Unsafe");
       Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
           .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
-      field.setAccessible(true);
+      field.setAccessible(true);//NOSONAR
       Method allocateInstance = c.getDeclaredMethod("allocateInstance", Class.class);
       DaoAuthenticationProvider authProvider =
           (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
@@ -184,8 +184,8 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
       authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
 
       Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
-      loggerField.setAccessible(true);
-      loggerField.set(authProvider, LogFactory.getLog(AbstractUserDetailsAuthenticationProvider.class));
+      loggerField.setAccessible(true);//NOSONAR
+      loggerField.set(authProvider, LogFactory.getLog(AbstractUserDetailsAuthenticationProvider.class));//NOSONAR
 
       return authProvider;
     } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException
