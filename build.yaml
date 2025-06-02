@@ -1,7 +1,3 @@
 projectType: extension
 jdkTool: OPEN-JDK17
 mavenAdditionalArgs: -DincludeSnapshots=false -DmunitMinMuleVersion=4.9.0 -DruntimeVersion=4.9.1
-additionalTestConfigs:
-  jdk17:
-    testJdkTool: OPEN-JDK17
-    mavenAdditionalArgs: -Dtest=none -DfailIfNoTests=false -DminVersion=4.9.0 -Dmule.jvm.version.extension.enforcement=LOOSE
