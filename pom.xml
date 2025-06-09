@@ -21,7 +21,6 @@
 		<mule.version>4.9.0</mule.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-<!--        <gsonVersion>2.9.1</gsonVersion>-->
     </properties>
 
     <modules>
@@ -31,46 +30,6 @@
 
 	<dependencyManagement>
 	    <dependencies>
-	        <!--<dependency>
-	            <artifactId>mule-api</artifactId>
-	            <groupId>org.mule.runtime</groupId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>
-	        <dependency>
-	            <artifactId>mule-metadata-model-json</artifactId>
-	            <groupId>org.mule.runtime</groupId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.mule.runtime</groupId>
-            	<artifactId>mule-module-service</artifactId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.mule.runtime</groupId>
-            	<artifactId>mule-module-extensions-spring-support</artifactId>
-	            <exclusions>
-	                <exclusion>
-	                    <groupId>com.google.code.gson</groupId>
-	                    <artifactId>gson</artifactId>
-	                </exclusion>
-	            </exclusions>
-	        </dependency>-->
 	        <dependency>
 	            <groupId>org.mule.runtime</groupId>
             	<artifactId>mule-extensions-api-persistence</artifactId>
@@ -89,29 +48,6 @@
 	    </dependencies>
 	</dependencyManagement>
 
-	<dependencies>
-<!--		<dependency>
-			<groupId>org.mule.tests</groupId>
-			<artifactId>mule-tests-runner</artifactId>
-			<version>4.3.0</version>
-			<scope>test</scope>
-		</dependency>-->
-	</dependencies>
-<!--    <distributionManagement>
-        <downloadUrl>http://www.mulesoft.org/display/MULE/Download</downloadUrl>
-        <repository>
-            <id>mule-releases</id>
-            <name>Mule Release Repository</name>
-            <url>https://repository-master.mulesoft.org/nexus/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>mule-snapshots</id>
-            <name>Mule Snapshot Repository</name>
-            <url>https://repository-master.mulesoft.org/nexus/content/repositories/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>-->
-
     <repositories>
         <repository>
             <id>mule</id>
@@ -119,14 +55,6 @@
             <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
         </repository>
     </repositories>
-
-    <!--<pluginRepositories>
-        <pluginRepository>
-            <id>mule-plugin</id>
-            <name>Mule Repository</name>
-            <url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
-        </pluginRepository>
-    </pluginRepositories>-->
 
 	<build>
 		<plugins>
