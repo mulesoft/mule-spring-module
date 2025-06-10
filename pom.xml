@@ -84,7 +84,7 @@
 								<fileSet>
 									<directory>${session.executionRootDirectory}/target</directory>
 									<includes>
-										<include>jacoco-java.exec</include>
+										<include>jacoco.exec</include>
 										<include>jacoco-munit.exec</include>
 									</includes>
 								</fileSet>
