@@ -171,7 +171,6 @@ public class ArtifactObjectsAwareBeanFactoryTest {
     // Act & Assert - should not throw exception
     beanFactory.registerBeanDefinition(beanName, mockBeanDefinition);
     assertThat(beanName.equals("validBean"), is(true));
-
   }
 
   @Test(expected = BeanDefinitionStoreException.class)
@@ -183,6 +182,7 @@ public class ArtifactObjectsAwareBeanFactoryTest {
 
     // Act - should throw exception
     beanFactory.registerBeanDefinition(beanName, mockBeanDefinition);
+    assertThat(beanName, notNullValue());
   }
 
   @Test(expected = BeanDefinitionStoreException.class)
