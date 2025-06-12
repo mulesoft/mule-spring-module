@@ -98,7 +98,7 @@ public class SpringProviderAdapterTest {
   public void testSpringAuthenticateWithException() throws AuthenticationException {
     when(mockDelegate.authenticate(mockSpringAuth)).thenThrow(new AuthenticationException("Test exception") {});
 
-    assertThat(adapter.authenticate(mockSpringAuth),isNotNull());
+    assertThat(adapter.authenticate(mockSpringAuth), isNotNull());
   }
 
   @Test

@@ -66,6 +66,6 @@ public class MethodSecurityMetadataSourceEditorTest {
     String input = "key1=value1\ninvalid line without equals\nkey2=value2";
 
     editor.setAsText(input);
-    assertThat(editor,notNullValue());
+    assertThat(editor, notNullValue());
   }
 }
