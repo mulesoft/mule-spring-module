@@ -16,8 +16,8 @@
 
     <properties>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
-		<springVersion>6.2.0</springVersion>
-		<springSecurityVersion>6.1.7</springSecurityVersion>
+		<springVersion>6.2.5</springVersion>
+		<springSecurityVersion>6.4.6</springSecurityVersion>
 		<mule.version>4.9.0</mule.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
