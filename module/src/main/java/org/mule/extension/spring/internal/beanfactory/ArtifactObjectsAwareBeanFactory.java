@@ -61,6 +61,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   }
 
   @Override
+  @SuppressWarnings({"java:S3740", "java:S2589", "java:S2583", "java:S6201"})
   public Object doResolveDependency(DependencyDescriptor descriptor, String beanName, Set<String> autowiredBeanNames,
                                     TypeConverter typeConverter)
       throws BeansException {
