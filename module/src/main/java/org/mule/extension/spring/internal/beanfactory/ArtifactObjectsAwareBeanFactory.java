@@ -1,29 +1,26 @@
 /*
- * Copyright 2023 Salesforce, Inc. All rights reserved.
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file.
  */
 package org.mule.extension.spring.internal.beanfactory;
 
 import org.mule.extension.spring.internal.util.CustomPostAuthenticationChecks;
 import org.mule.extension.spring.internal.util.CustomPreAuthenticationChecks;
-import org.mule.runtime.api.exception.MuleRuntimeException;
 import org.mule.runtime.api.ioc.ObjectProvider;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.lifecycle.Initialisable;
 import org.mule.runtime.api.lifecycle.Startable;
 import org.mule.runtime.api.lifecycle.Stoppable;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.TypeConverter;
@@ -34,7 +31,6 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -52,7 +48,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
  */
 public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory {
 
-  private final ObjectProvider artifactObjectProvider; // NOSONAR
+  private final ObjectProvider artifactObjectProvider;
   private boolean destroying = false;
 
   public ArtifactObjectsAwareBeanFactory(BeanFactory parentBeanFactory, ObjectProvider artifactObjectProvider) {
@@ -158,41 +154,22 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     this.destroying = true;
   }
 
-  /**
-   * TODOs improve this code error check, ugly hack to bypass non FIPS compliant security algorithms
-   *
-   * The use of sun.misc.Unsafe API is discouraged. For the time being, using sun.misc.Unsafe to instantiate
-   * DaoAuthenticationProvider is a necessary workaround to avoid FIPS compliance issues caused by MD5 and SHA1. However, once we
-   * upgrade to Spring 6.x, we can switch to using the new constructor, passing a compliant PasswordEncoder. This will allow us to
-   * address the compliance issue more cleanly and avoid reliance on unsafe practices.
-   */
   static DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-    try {
-      Class<?> c = Class.forName("sun.misc.Unsafe");
-      Field field = Arrays.stream(c.getDeclaredFields()).filter(f -> f.getName().equals("theUnsafe"))
-          .findFirst().orElseThrow(() -> new RuntimeException("Field not found"));
-      field.setAccessible(true);// NOSONAR
-      Method allocateInstance = c.getDeclaredMethod("allocateInstance", Class.class);
-      DaoAuthenticationProvider authProvider =
-          (DaoAuthenticationProvider) allocateInstance.invoke(field.get(null), DaoAuthenticationProvider.class);
-      authProvider.setPasswordEncoder(createDelegatingPasswordEncoder());
-      authProvider.setUserDetailsService(userDetailsService);
-      authProvider.setUserCache(new NullUserCache());
-      authProvider.setAuthoritiesMapper(new NullAuthoritiesMapper());
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(createDelegatingPasswordEncoder());
 
-      // Setting custom pre and post authentication checks
-      authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
-      authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
+    authProvider.setUserDetailsService(userDetailsService);
+    authProvider.setUserCache(new NullUserCache());
+    authProvider.setAuthoritiesMapper(new NullAuthoritiesMapper());
 
-      Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
-      loggerField.setAccessible(true);// NOSONAR
-      loggerField.set(authProvider, LogFactory.getLog(AbstractUserDetailsAuthenticationProvider.class));// NOSONAR
+    // Setting custom pre and post authentication checks
+    authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
+    authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
 
-      return authProvider;
-    } catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | InvocationTargetException
-        | NoSuchFieldException e) {
-      throw new MuleRuntimeException(e);
-    }
+    // Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
+    // loggerField.setAccessible(true);// NOSONAR
+    // loggerField.set(authProvider, LogFactory.getLog(AbstractUserDetailsAuthenticationProvider.class));
+
+    return authProvider;
   }
 
   static PasswordEncoder createDelegatingPasswordEncoder() {

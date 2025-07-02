@@ -1,5 +1,8 @@
 /*
- * Copyright 2023 Salesforce, Inc. All rights reserved.
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file.
  */
 package org.mule.extension.spring.internal;
 
@@ -16,6 +19,7 @@ import static org.mule.runtime.extension.api.stereotype.MuleStereotypes.APP_CONF
 
 import static java.lang.String.format;
 
+import org.mule.extension.spring.internal.SpringModuleConstants;
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.annotation.TypeAliasAnnotation;
 import org.mule.metadata.api.builder.BaseTypeBuilder;
@@ -61,14 +65,14 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   public static final String PREFIX_NAME = "spring";
   public static final String EXTENSION_DESCRIPTION = "Spring Module Plugin";
   public static final String VENDOR = "Mulesoft";
-  public static final String VERSION = "2.0.0";
+  public static final String VERSION = SpringModuleConstants.VERSION;
   public static final MuleVersion MIN_MULE_VERSION = new MuleVersion("4.9");
   public static final String XSD_FILE_NAME = "mule-spring.xsd";
   private static final String UNESCAPED_LOCATION_PREFIX = "http://";
   private static final String SCHEMA_LOCATION = "www.mulesoft.org/schema/mule/spring";
   private static final String SCHEMA_VERSION = "current";
-  private static final String SPRING_VERSION = "6.2.5";
-  private static final String SPRING_SECURITY_VERSION = "6.4.6";
+  private static final String SPRING_VERSION = SpringModuleConstants.SPRING_VERSION;
+  private static final String SPRING_SECURITY_VERSION = SpringModuleConstants.SPRING_SECURITY_VERSION;
   private static final String SPRING_GROUP_ID = "org.springframework";
   private static final String SPRING_SECURITY_GROUP_ID = "org.springframework.security";
 
