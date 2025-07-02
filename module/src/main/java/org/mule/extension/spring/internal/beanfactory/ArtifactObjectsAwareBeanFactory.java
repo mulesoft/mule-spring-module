@@ -48,7 +48,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
  */
 public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory {
 
-  private final ObjectProvider artifactObjectProvider;
+  private final transient ObjectProvider artifactObjectProvider;
   private boolean destroying = false;
 
   public ArtifactObjectsAwareBeanFactory(BeanFactory parentBeanFactory, ObjectProvider artifactObjectProvider) {
@@ -57,7 +57,6 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
   }
 
   @Override
-  @SuppressWarnings({"java:S2589", "java:S2583", "java:S6201"})
   public Object doResolveDependency(DependencyDescriptor descriptor, String beanName, Set<String> autowiredBeanNames,
                                     TypeConverter typeConverter)
       throws BeansException {
@@ -79,9 +78,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
       Map<String, ?> objects = artifactObjectProvider.getObjectsByType(dependencyType);
       if (springDependency instanceof Collection) {
         List collectionValue = new ArrayList();
-        if (springDependency != null) {
-          collectionValue.addAll((Collection) springDependency);
-        }
+        collectionValue.addAll((Collection) springDependency);
         collectionValue.addAll(objects.values());
         return collectionValue;
       }
@@ -164,6 +161,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     // Setting custom pre and post authentication checks
     authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
     authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
+
 
     // Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
     // loggerField.setAccessible(true);// NOSONAR
