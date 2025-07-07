@@ -162,11 +162,6 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     authProvider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
     authProvider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
 
-
-    // Field loggerField = AbstractUserDetailsAuthenticationProvider.class.getDeclaredField("logger");
-    // loggerField.setAccessible(true);// NOSONAR
-    // loggerField.set(authProvider, LogFactory.getLog(AbstractUserDetailsAuthenticationProvider.class));
-
     return authProvider;
   }
 
