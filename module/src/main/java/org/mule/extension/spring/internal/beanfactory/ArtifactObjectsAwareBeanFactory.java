@@ -103,7 +103,7 @@ public class ArtifactObjectsAwareBeanFactory extends DefaultListableBeanFactory 
     if (containsBean(name) || !artifactObjectProvider.containsObject(name) || destroying) {
       return super.doGetBean(name, requiredType, args, typeCheckOnly);
     } else {
-      return (T) artifactObjectProvider.getObject(name).get(); // NOSONAR
+      return (T) artifactObjectProvider.getObject(name).get();
     }
   }
 
