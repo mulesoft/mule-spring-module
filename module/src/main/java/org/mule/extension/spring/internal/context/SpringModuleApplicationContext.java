@@ -1,5 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
@@ -9,12 +9,12 @@ package org.mule.extension.spring.internal.context;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 import static org.springframework.context.annotation.AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME;
 
-import java.io.IOException;
-
 import org.mule.extension.spring.api.ArtifactPropertiesPlaceholder;
 import org.mule.extension.spring.internal.beanfactory.ArtifactObjectsAwareBeanFactory;
 import org.mule.extension.spring.internal.inject.MuleAwareObjectsInjectorProcessor;
 import org.mule.runtime.api.ioc.ObjectProviderConfiguration;
+
+import java.io.IOException;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
@@ -34,7 +34,7 @@ import org.springframework.core.io.Resource;
  * <p/>
  * In addition, it adds some {@link org.springframework.beans.factory.config.BeanPostProcessor} to add interoperability with
  * features in the runtime as the mechanism to process placeholders.
- * 
+ *
  * @since 1.0
  */
 public class SpringModuleApplicationContext extends ClassPathXmlApplicationContext {
@@ -98,8 +98,8 @@ public class SpringModuleApplicationContext extends ClassPathXmlApplicationConte
   }
 
   @Override
-  public void destroy() {
+  public void close() {
     beanFactory.markForDestroy();
-    super.destroy();
+    super.close();
   }
 }

@@ -1,18 +1,19 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
 package org.mule.extension.spring.api;
 
+import static org.mule.runtime.api.util.Preconditions.checkState;
+import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
+
 import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toMap;
-import static org.mule.runtime.api.util.Preconditions.checkState;
-import static org.mule.runtime.core.api.util.ClassUtils.withContextClassLoader;
 
 import org.mule.extension.spring.internal.context.SpringModuleApplicationContext;
 import org.mule.extension.spring.internal.util.CompositeClassLoader;
@@ -77,11 +78,11 @@ public class SpringConfig extends AbstractComponent
   }
 
   /**
-   * Find RegionClassLoader based on ArtifactClassLoader.
-   * If RegionClassLoader is not found on ArtifactClassLoader's hierarchy ArtifactClassLoader will be returned instead.
-   * This ensure Spring module only access to exported classes and resources.
+   * Find RegionClassLoader based on ArtifactClassLoader. If RegionClassLoader is not found on ArtifactClassLoader's hierarchy
+   * ArtifactClassLoader will be returned instead. This ensure Spring module only access to exported classes and resources.
    *
    * Using Thread.currentContext.getContextClassLoader() enables access to NOT exported classes.
+   *
    * @return RegionClassLoader
    */
   private ClassLoader getRegionClassLoader() {
@@ -92,9 +93,10 @@ public class SpringConfig extends AbstractComponent
   /**
    * Try to find RegionClassLoader based on <code>current</code> argument.
    *
-   * @param base Default classLoader to be returned if RegionClassLoader is not found on <code>current</code> argument
+   * @param base    Default classLoader to be returned if RegionClassLoader is not found on <code>current</code> argument
    * @param current The initial ClassLoader.
-   * @return RegionClassLoader or <code>base</code> argument if RegionClassLoader is not found on <code>current</code> argument classloader's hierarchy
+   * @return RegionClassLoader or <code>base</code> argument if RegionClassLoader is not found on <code>current</code> argument
+   *         classloader's hierarchy
    */
   private ClassLoader getRegionClassLoader(ClassLoader base, ClassLoader current) {
     if (current instanceof RegionClassLoader) {

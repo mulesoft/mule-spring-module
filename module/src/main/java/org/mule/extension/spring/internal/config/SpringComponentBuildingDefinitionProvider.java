@@ -1,13 +1,11 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
 package org.mule.extension.spring.internal.config;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 import static org.mule.extension.spring.internal.config.SpringXmlNamespaceInfoProvider.SPRING_NAMESPACE;
 import static org.mule.runtime.dsl.api.component.AttributeDefinition.Builder.fromChildCollectionConfiguration;
 import static org.mule.runtime.dsl.api.component.AttributeDefinition.Builder.fromReferenceObject;
@@ -15,6 +13,8 @@ import static org.mule.runtime.dsl.api.component.AttributeDefinition.Builder.fro
 import static org.mule.runtime.dsl.api.component.AttributeDefinition.Builder.fromSimpleReferenceParameter;
 import static org.mule.runtime.dsl.api.component.AttributeDefinition.Builder.fromUndefinedSimpleAttributes;
 import static org.mule.runtime.dsl.api.component.TypeDefinition.fromType;
+
+import static java.util.Arrays.asList;
 
 import org.mule.extension.spring.api.SpringConfig;
 import org.mule.extension.spring.api.security.SpringProviderAdapter;
@@ -85,7 +85,8 @@ public class SpringComponentBuildingDefinitionProvider implements ComponentBuild
         .withTypeDefinition(fromType(AuthorizationFilter.class))
         .withConstructorParameterDefinition(fromSimpleParameter("requiredAuthorities",
                                                                 (value) -> asList(((String) value).split(",")).stream()
-                                                                    .map(String::trim).collect(toList())).build())
+                                                                    .map(String::trim).toList())
+            .build())
         .build());
     return componentBuildingDefinitions;
   }

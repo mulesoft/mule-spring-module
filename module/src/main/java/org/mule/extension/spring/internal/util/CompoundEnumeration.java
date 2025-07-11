@@ -1,5 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 /***
  * An enumeration of enumerations.
- * 
+ *
  * @param <E>
  *
  * @since 4.2.0
@@ -39,6 +39,7 @@ public class CompoundEnumeration<E> implements Enumeration<E> {
 
   /**
    * Checks if the enumeration has more elements.
+   *
    * @return true if there are still elements, false otherwise.
    */
   public boolean hasMoreElements() {

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mule.modules</groupId>
         <artifactId>mule-spring-module-parent</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>mule-spring-module</artifactId>
     <packaging>mule-extension</packaging>
@@ -22,11 +22,10 @@
 
     <mavenResourcesVersion>3.0.2</mavenResourcesVersion>
 
-    <jacoco.version>0.8.12</jacoco.version>
-    <sdk.api.version>0.7.0</sdk.api.version>
     <http.connector.version>1.9.3</http.connector.version>
-    <mule.java.module.version>1.2.13</mule.java.module.version>
-    <mule.sockets.connector.version>1.2.5</mule.sockets.connector.version>
+    <mule.java.module.version>2.0.0</mule.java.module.version>
+    <mule.sockets.connector.version>1.2.6</mule.sockets.connector.version>
+    <templating.maven.plugin.version>3.0.0</templating.maven.plugin.version>
   </properties>
 
   <build>
@@ -41,6 +40,9 @@
             <goals>
               <goal>jar</goal>
             </goals>
+            <configuration>
+              <classifier>classes</classifier>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -71,6 +73,24 @@
             </replacement>
           </replacements>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>templating-maven-plugin</artifactId>
+        <version>${templating.maven.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>filter-src</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>filter-sources</goal>
+            </goals>
+            <configuration>
+              <sourceDirectory>${project.basedir}/src/main/templates</sourceDirectory>
+              <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>com.mulesoft.munit</groupId>
@@ -167,6 +187,28 @@
             <classifier>mule-plugin</classifier>
           </dependency>
         </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>connector-analyze</id>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <failOnWarning>false</failOnWarning>
+              <ignoredUnusedDeclaredDependencies>
+                <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-config</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-web</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-ldap</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework:spring-expression</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework:spring-aop</ignoredUnusedDeclaredDependency>
+              </ignoredUnusedDeclaredDependencies>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -269,7 +311,7 @@
     <dependency>
       <groupId>org.mule.sdk</groupId>
       <artifactId>mule-sdk-api</artifactId>
-      <version>${sdk.api.version}</version>
+      <version>${mule.sdk.api.version}</version>
     </dependency>
   </dependencies>
 </project>

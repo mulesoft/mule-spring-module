@@ -1,12 +1,11 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
 package org.mule.extension.spring.internal;
 
-import static java.lang.String.format;
 import static org.mule.metadata.java.api.JavaTypeLoader.JAVA;
 import static org.mule.runtime.api.meta.Category.COMMUNITY;
 import static org.mule.runtime.api.meta.ExpressionSupport.NOT_SUPPORTED;
@@ -18,6 +17,9 @@ import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Ha
 import static org.mule.runtime.core.api.exception.Errors.ComponentIdentifiers.Handleable.SERVER_SECURITY;
 import static org.mule.runtime.extension.api.stereotype.MuleStereotypes.APP_CONFIG;
 
+import static java.lang.String.format;
+
+import org.mule.extension.spring.internal.SpringModuleConstants;
 import org.mule.metadata.api.ClassTypeLoader;
 import org.mule.metadata.api.annotation.TypeAliasAnnotation;
 import org.mule.metadata.api.builder.BaseTypeBuilder;
@@ -63,14 +65,14 @@ public class SpringModuleExtensionModelGenerator implements ExtensionLoadingDele
   public static final String PREFIX_NAME = "spring";
   public static final String EXTENSION_DESCRIPTION = "Spring Module Plugin";
   public static final String VENDOR = "Mulesoft";
-  public static final String VERSION = "1.6.0-SNAPSHOT";
-  public static final MuleVersion MIN_MULE_VERSION = new MuleVersion("4.0");
+  public static final String VERSION = SpringModuleConstants.VERSION;
+  public static final MuleVersion MIN_MULE_VERSION = new MuleVersion("4.9");
   public static final String XSD_FILE_NAME = "mule-spring.xsd";
   private static final String UNESCAPED_LOCATION_PREFIX = "http://";
   private static final String SCHEMA_LOCATION = "www.mulesoft.org/schema/mule/spring";
   private static final String SCHEMA_VERSION = "current";
-  private static final String SPRING_VERSION = "5.3.34";
-  private static final String SPRING_SECURITY_VERSION = "5.8.12";
+  private static final String SPRING_VERSION = SpringModuleConstants.SPRING_VERSION;
+  private static final String SPRING_SECURITY_VERSION = SpringModuleConstants.SPRING_SECURITY_VERSION;
   private static final String SPRING_GROUP_ID = "org.springframework";
   private static final String SPRING_SECURITY_GROUP_ID = "org.springframework.security";
 

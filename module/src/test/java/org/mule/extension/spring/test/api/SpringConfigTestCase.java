@@ -1,5 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
@@ -7,9 +7,10 @@
 package org.mule.extension.spring.test.api;
 
 import static java.lang.Thread.currentThread;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -27,14 +28,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
 import io.qameta.allure.Story;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
 
 @Feature(AllureConstants.SpringFeature.SPRING_EXTENSION)
 @Story(AllureConstants.SpringFeature.ArtifactAndSpringModuleInteroperabilityStory.ARTIFACT_AND_SPRING_MODULE_INTEROPERABILITY)
@@ -65,11 +68,11 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
     // Mock class loader
     URLClassLoader fakeClassLoader = mock(URLClassLoader.class);
     when(fakeClassLoader.getResources(anyString()))
-        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgumentAt(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.getResources(inv.getArgument(0, String.class)));
     when(fakeClassLoader.getResourceAsStream("other-cl-" + FILE_NAME))
         .thenAnswer(inv -> originalClassLoader.getResourceAsStream(FILE_NAME));
     when(fakeClassLoader.loadClass(anyString()))
-        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgumentAt(0, String.class)));
+        .thenAnswer(inv -> originalClassLoader.loadClass(inv.getArgument(0, String.class)));
     currentThread().setContextClassLoader(fakeClassLoader);
 
     // Set parameters
@@ -121,6 +124,109 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
     assertThat("customer name", is(((Customer) customer.get()).getName()));
   }
 
+  @Test
+  @Description("getObjectByType should return bean when it exists in application context")
+  public void getObjectByTypeShouldReturnBeanWhenExists() {
+    // Setup spring config with beans.xml
+    setupSpringConfig();
+
+    // Test getting Customer by type
+    Optional<Object> result = config.getObjectByType(Customer.class);
+
+    assertThat("Should return Optional with Customer instance", result.isPresent(), is(true));
+    assertThat("Should return correct Customer instance", result.get() instanceof Customer, is(true));
+    assertThat("Customer should have correct name", ((Customer) result.get()).getName(), is("customer name"));
+  }
+
+  @Test
+  @Description("getObjectByType should return empty Optional when bean type doesn't exist")
+  public void getObjectByTypeShouldReturnEmptyWhenBeanDoesntExist() {
+    // Setup spring config with beans.xml
+    setupSpringConfig();
+
+    // Test getting non-existent bean type
+    Optional<Object> result = config.getObjectByType(String.class);
+
+    assertThat("Should return empty Optional for non-existent bean type", result.isPresent(), is(false));
+  }
+
+  @Test
+  @Description("getObjectByType should return empty Optional for Spring internal types with org.springframework prefix")
+  public void getObjectByTypeShouldReturnEmptyForSpringInternalTypes() {
+    // Setup spring config with beans.xml
+    setupSpringConfig();
+
+    // Test with ApplicationContext which starts with org.springframework
+    Optional<Object> result = config.getObjectByType(ApplicationContext.class);
+
+    assertThat("Should return empty Optional for Spring internal types", result.isPresent(), is(false));
+  }
+
+  @Test
+  @Description("getObjectByType should return empty Optional for BeanPostProcessor types")
+  public void getObjectByTypeShouldReturnEmptyForBeanPostProcessor() {
+    // Setup spring config with beans.xml
+    setupSpringConfig();
+
+    // Test with BeanPostProcessor type
+    Optional<Object> result = config.getObjectByType(BeanPostProcessor.class);
+
+    assertThat("Should return empty Optional for BeanPostProcessor types", result.isPresent(), is(false));
+  }
+
+  @Test
+  @Description("getObjectByType should return empty Optional for BeanFactoryPostProcessor types")
+  public void getObjectByTypeShouldReturnEmptyForBeanFactoryPostProcessor() {
+    // Setup spring config with beans.xml
+    setupSpringConfig();
+
+    // Test with BeanFactoryPostProcessor type
+    Optional<Object> result = config.getObjectByType(BeanFactoryPostProcessor.class);
+
+    assertThat("Should return empty Optional for BeanFactoryPostProcessor types", result.isPresent(), is(false));
+  }
+
+  @Test
+  @Description("getObjectByType should return empty Optional for custom BeanPostProcessor implementation")
+  public void getObjectByTypeShouldReturnEmptyForCustomBeanPostProcessor() {
+    // Setup spring config with beans.xml
+    setupSpringConfig();
+
+    // Test with custom BeanPostProcessor implementation
+    Optional<Object> result = config.getObjectByType(CustomBeanPostProcessor.class);
+
+    assertThat("Should return empty Optional for custom BeanPostProcessor implementations", result.isPresent(), is(false));
+  }
+
+  @Test
+  @Description("getObjectByType should return empty Optional for custom BeanFactoryPostProcessor implementation")
+  public void getObjectByTypeShouldReturnEmptyForCustomBeanFactoryPostProcessor() {
+    // Setup spring config with beans.xml
+    setupSpringConfig();
+
+    // Test with custom BeanFactoryPostProcessor implementation
+    Optional<Object> result = config.getObjectByType(CustomBeanFactoryPostProcessor.class);
+
+    assertThat("Should return empty Optional for custom BeanFactoryPostProcessor implementations", result.isPresent(), is(false));
+  }
+
+  /**
+   * Helper method to setup SpringConfig with the test beans.xml configuration
+   */
+  private void setupSpringConfig() {
+    Map<String, String> parameters = new HashMap<>();
+    parameters.put(NAME, CONFIG_NAME);
+    parameters.put(FILES, FILE_NAME);
+    config.setParameters(parameters);
+
+    ConfigurationProperties configurationProperties = mock(ConfigurationProperties.class);
+    ObjectProvider artifactObjectProvider = mock(ObjectProvider.class);
+    ObjectProviderConfiguration configuration =
+        new ImmutableObjectProviderConfiguration(configurationProperties, artifactObjectProvider);
+
+    config.configure(configuration);
+  }
+
   public static class Customer {
 
     private String name;
@@ -160,6 +266,24 @@ public class SpringConfigTestCase extends AbstractMuleTestCase {
       return configurationProperties;
     }
 
+  }
+
+  /**
+   * Custom BeanPostProcessor implementation for testing
+   */
+  public static class CustomBeanPostProcessor implements BeanPostProcessor {
+    // Empty implementation for testing purposes
+  }
+
+  /**
+   * Custom BeanFactoryPostProcessor implementation for testing
+   */
+  public static class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+
+    @Override
+    public void postProcessBeanFactory(org.springframework.beans.factory.config.ConfigurableListableBeanFactory beanFactory) {
+      // Ignore Implementation
+    }
   }
 }
 

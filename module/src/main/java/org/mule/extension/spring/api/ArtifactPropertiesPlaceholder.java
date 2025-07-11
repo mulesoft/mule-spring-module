@@ -1,5 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
@@ -9,14 +9,14 @@ package org.mule.extension.spring.api;
 import org.mule.extension.spring.internal.util.ExcludeFromGeneratedCoverage;
 import org.mule.runtime.api.component.ConfigurationProperties;
 
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-
 import java.util.Properties;
+
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 /**
  * {@link PropertyPlaceholderConfigurer} implementation that resolves properties against the mule artifact properties where the
  * spring module is defined.
- * 
+ *
  * @since 1.0
  */
 public class ArtifactPropertiesPlaceholder extends PropertyPlaceholderConfigurer {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
@@ -23,10 +23,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 
-
 /**
  * <code>SpringProviderAdapter</code> is a wrapper for a Spring Security provider to use with the SecurityManager
- * 
+ *
  * @since 1.0
  */
 public class SpringProviderAdapter extends AbstractSecurityProvider implements AuthenticationProvider {

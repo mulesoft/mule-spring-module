@@ -29,3 +29,7 @@ testdir/
 hostkey.ser
 *.h2.db
 *.factorypath
+.codegenie/
+.cursor/
+.vscode/
+.idea/

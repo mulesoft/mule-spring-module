@@ -1,5 +1,5 @@
 /*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * Copyright 2025 Salesforce, Inc. All rights reserved.
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
@@ -11,11 +11,10 @@ import org.mule.runtime.api.security.SecurityContext;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-
 /**
  * <code>SpringSecurityContext</code> is a SecurityContext wrapper used to interface with an Spring's
  * {@link org.springframework.security.core.context.SecurityContext}.
- * 
+ *
  * @since 1.0
  */
 public class SpringSecurityContext implements SecurityContext {

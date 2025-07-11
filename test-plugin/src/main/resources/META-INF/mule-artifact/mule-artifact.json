@@ -1,6 +1,6 @@
 {
   "name":"SpringTest",
-  "minMuleVersion":"4.0.0",
+  "minMuleVersion":"4.9.0",
   "bundleDescriptorLoader": {
     "id": "mule",
     "attributes": {

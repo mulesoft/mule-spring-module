@@ -1,8 +1,3 @@
 projectType: extension
-additionalTestConfigs:
-  jdk11:
-    testJdkTool: OPEN-JDK11
-    mavenAdditionalArgs: -Dtest=none -DfailIfNoTests=false -DruntimeVersion=4.8.5 # TODO: Remove this runtimeVersion once we have a new parent version with MTF
-  jdk17:
-    testJdkTool: OPEN-JDK17
-    mavenAdditionalArgs: -Dtest=none -DfailIfNoTests=false -DminVersion=4.6.0
+jdkTool: OPEN-JDK17
+mavenAdditionalArgs: -DincludeSnapshots=false -DmunitMinMuleVersion=4.9.0 -DruntimeVersion=4.9.1
